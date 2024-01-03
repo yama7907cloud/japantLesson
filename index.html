@@ -8,10 +8,53 @@
 <body>
   <h1>これはテストです</h1>
   <p>1度編集しました</p>
-  <pre>
-    <code>
-      <h1>これはテストです</h1>
-    </code>
-  </pre>
+<pre>
+  <code>
+    最初
+    With Application
+        .Calculation = xlCalculationManual
+        .ScreenUpdating = False
+    End With
+    最後
+    With Application
+        .Calculation = xlCalculationAutomatic
+        .ScreenUpdating = True
+    End With
+    １まずシートを削除する
+    Application.DisplayAlerts = False
+    With w_book1
+        .Sheets(sh_name1).Delete
+        .Sheets(sh_pcture).Delete
+    End With
+    Application.DisplayAlerts = True
+    ２シートをコピーする
+    WB_p.Sheets(sh_name1).Copy before:=w_book1.Sheets(1)
+    w_book1.Sheets(sh_name1).Visible = False
+
+    読み取り専用ではなく開くfname = 開きたくないブック名
+    Function Isbookopen(bookname) As Boolean
+    Dim bk As Workbook
+    Isbookopen = False
+    For Each bk In Workbooks
+    If bk.Name = bookname Then
+    Isbookopen = True
+    Exit For
+    End If
+    Next
+    End Function
+                        If Isbookopen(fname) = False Then
+                          Application.ScreenUpdating = False
+                            Set WB_p = Workbooks.Open(Filename:=pass, ReadOnly:=False, UpdateLinks:=False)
+                            With WB_p
+                                If .ReadOnly Then
+                                    .Close False
+                                    MsgBox "他のpcで使用中です 再度お願いします", vbCritical
+                                    Exit Sub
+                                End If
+                            End With
+                        End If
+  </code>
+</pre>
+  
 </body>
 </html>
