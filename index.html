@@ -6,53 +6,214 @@
   <title>upload</title>
 </head>
 <body>
-  <h1>これはテストです</h1>
-  <p>1度編集しました</p>
+  <h1>名前で保存する</h1>
 <pre>
   <code>
-    最初
+    Private Sub key_end_Click()
+
+    Dim list_cou As Long, list_ro() As Long, tf() As String, man As String
+    Dim ws As Worksheet, d_main As Workbook, pat As String
+    Dim myRange As Range, myObj1 As Range, myCell As Range, e_row As Long, bun_k As Variant
+    Dim myRange_val As Range, myObj1_val As Range, bun_k1 As Variant
+    Dim new_ma As Variant
+    
+    Const pass_row = 2
+    Const pass_col = "J"
+    
     With Application
         .Calculation = xlCalculationManual
         .ScreenUpdating = False
     End With
-    最後
+    
+    Set ws = ThisWorkbook.Sheets(main_sh)
+    
+    Set uf_wb = ThisWorkbook
+        Set uf_ws = uf_wb.Sheets(main_sh)
+    ''''''''画像の削除を実施する
+                For Each pictu In uf_ws.Shapes
+                    If pictu.Type = 13 Then
+                        pictu.Delete
+                    End If
+                Next
+    
+    
+    If Not (Me.TextBox12.Text = "") Then ''''''''保存が必要の場合の処理
+        list_cou = Me.ListBox2.ListCount
+        If list_cou >= 1 Then
+            ReDim list_ro(list_cou)
+            ReDim tf(list_cou)
+            new_ma = Split(Me.TextBox12.Text, vbCrLf)
+    
+    If UBound(new_ma) > 0 Then
+        new_man = new_ma(1)
+        man = Replace(new_man, " ", "")
+        man = Replace(man, "　", "")
+    Else
+        man = Replace(Me.TextBox12.Text, " ", "")
+        man = Replace(man, "　", "")
+    End If
+            
+            ii = 0
+            For i = 0 To list_cou - 1
+                ii = ii + 1
+                list_ro(ii) = Me.ListBox2.List(i, 0)
+                tf(ii) = Me.ListBox2.List(i, 1)
+            Next i
+        
+            If ws.Cells(pass_row, pass_col).Value <> "" Then
+                pat = ws.Cells(pass_row, pass_col).Value
+                If Dir(pat) <> "" Then
+                    Application.ScreenUpdating = False
+                    f_cou = 0
+    rep:
+                        If Isbookopen(fname) = False Then
+                           Set d_main = Workbooks.Open(Filename:=pat, ReadOnly:=False, IgnoreReadOnlyRecommended:=True)
+                           With d_main
+                                If .ReadOnly Then
+                                    .Close False
+                                        f_cou = f_cou + 1
+                                         If f_cou >= 3 Then
+                                            With Application
+                                                .Calculation = xlCalculationAutomatic
+                                                .ScreenUpdating = True
+                                            End With
+                                                MsgBox "他のpcで使用中です。再度、実行願います。", vbExclamation, "保存作業中断"
+                                            Exit Sub
+                                         Else
+                                            GoTo rep
+                                         End If
+                                Else
+                                
+                                '''''''保存の処理
+    
+                                Set myRange = d_main.Sheets(que_sh).Rows(1)
+                                Set myObj1 = myRange.Find(man, LookAt:=xlWhole)
+    
+                                    If myObj1 Is Nothing Then
+                                        '''''新規ユーザーの追加処理
+                                        e_row = d_main.Sheets(que_sh).UsedRange.Columns(d_main.Sheets(que_sh).UsedRange.Columns.Count).Column + 1
+                                        With d_main.Sheets(que_sh)
+                                        .Cells(1, e_row).Value = man
+                                        .Cells(1, e_row + 1).Value = Me.TextBox14.Text
+                                                For iii = 1 To ii
+                                                    Set myRange_val = d_main.Sheets(que_sh).Columns(2)
+                                                    Set myObj1_val = myRange_val.Find(list_ro(iii), LookAt:=xlWhole)
+                                                        If Not myObj1_val Is Nothing Then
+                                                            .Cells(myObj1_val.Row, e_row).Value = tf(iii)
+                                                                If tf(iii) = "○" Then
+                                                                    .Cells(myObj1_val.Row, e_row + 1).Value = 100
+                                                                Else
+                                                                    .Cells(myObj1_val.Row, e_row + 1).Value = 0
+                                                                End If
+                                                        Else
+                                                            MsgBox "【問題No-" & list_ro(ii) & "】　が参照できませんでした", vbExclamation, "問題リスト照合エラー"
+                                                        End If
+                                                Next iii
+                                        End With
+                                        
+                                            d_main.Close savechanges:=True
+            With ActiveWindow
+                .ScrollRow = 1
+                .ScrollColumn = 1
+            End With
+                                            MsgBox man & "さんの実施情報を新規で登録しました。", vbInformation, "新規登録完了"
+                                        End
+                                    Else
+                                    
+                                        '''''''''''リピーターの追加処理-①次検索値を検出を続ける
+                                        Set myCell = myObj1
+                                            i = 0
+                                            Do
+                                                i = i + 1
+                                                If i > 1 Then
+                                                    d_main.Close savechanges:=False
+                                                        With Application
+                                                            .Calculation = xlCalculationAutomatic
+                                                            .ScreenUpdating = True
+                                                        End With
+                                                    MsgBox man & ":複数存在します。" & vbCrLf & "確認が必要です", vbExclamation, "ユーザー名重複エラー"
+                                                    Exit Sub
+                                                End If
+                                            Set myCell = myRange.FindNext(myCell)
+                                            Loop While myCell.Column <> myObj1.Column
+                                        
+                                        '''''②ユーザー名がひとつだった際のうわがき処理
+                                        With d_main.Sheets(que_sh)
+                                            For iii = 1 To ii
+                                                Set myRange_val = d_main.Sheets(que_sh).Columns(2)
+                                                    Set myObj1_val = myRange_val.Find(list_ro(iii), LookAt:=xlWhole)
+                                                    
+                                                        If Not myObj1_val Is Nothing Then
+                                                            .Cells(1, myObj1.Column + 1).Value = Me.TextBox14.Text
+                                                                If .Cells(myObj1_val.Row, myObj1.Column).Value <> "" Then
+                                                                    If Len(Replace(.Cells(myObj1_val.Row, myObj1.Column).Value, "/", "")) >= 5 Then
+                                                                    '''''ここ記述
+                                                                        bun_k = Split(.Cells(myObj1_val.Row, myObj1.Column).Value, "/")
+                                                                        
+                                                                        .Cells(myObj1_val.Row, myObj1.Column).Value = bun_k(1) & "/" & bun_k(2) & "/" & bun_k(3) & "/" & bun_k(4) & "/" & tf(iii)
+                                                                            If tf(iii) = "○" Then
+                                                                                tp_key = 100
+                                                                            Else
+                                                                                tp_key = 0
+                                                                            End If
+                                                                            bun_k1 = Split(.Cells(myObj1_val.Row, myObj1.Column + 1).Value, "/")
+                                                                            .Cells(myObj1_val.Row, myObj1.Column + 1).Value = bun_k1(1) & "/" & bun_k1(2) & "/" & bun_k1(3) & "/" & bun_k1(4) & "/" & Int((bun_k1(4) + tp_key) / 2)
+                                                                    Else
+                                                                        .Cells(myObj1_val.Row, myObj1.Column).Value = .Cells(myObj1_val.Row, myObj1.Column).Value & "/" & tf(iii)
+                                                                            If tf(iii) = "○" Then
+                                                                                tp_key = 100
+                                                                            Else
+                                                                                tp_key = 0
+                                                                            End If
+                                                                            bun_k1 = Split(.Cells(myObj1_val.Row, myObj1.Column + 1).Value, "/")
+                                                                            a = UBound(bun_k1)
+                                                                            .Cells(myObj1_val.Row, myObj1.Column + 1).Value = .Cells(myObj1_val.Row, myObj1.Column + 1).Value & "/" & Int((bun_k1(a) + tp_key) / 2)
+                                                                    End If
+                                                                Else
+                                                                    .Cells(myObj1_val.Row, myObj1.Column).Value = tf(iii)
+                                                                    If tf(iii) = "○" Then
+                                                                        .Cells(myObj1_val.Row, myObj1.Column + 1).Value = 100
+                                                                    Else
+                                                                        .Cells(myObj1_val.Row, myObj1.Column + 1).Value = 0
+                                                                    End If
+                                                                End If
+                                                        Else
+                                                            MsgBox "【問題No-" & list_ro(ii) & "】　が参照できませんでした", vbExclamation, "問題の参照エラー"
+                                                        End If
+                                            Next iii
+                                            d_main.Close savechanges:=True
+                                                With Application
+                                                    .Calculation = xlCalculationAutomatic
+                                                    .ScreenUpdating = True
+                                                End With
+                                                With ActiveWindow
+                                                    .ScrollRow = 1
+                                                    .ScrollColumn = 1
+                                                End With
+                                            MsgBox man & ":実施状況を更新しました。"
+                                            End
+                                        End With
+                                    End If
+                               End If
+                           End With
+                        End If
+                Else
+                    MsgBox "DB参照ファイル情報が参照できません。", vbCritical, "DB参照ファイル情報参照エラー"
+                End If
+            Else
+                MsgBox "DB参照ファイル情報が入力されていません。", vbCritical, "DB参照ファイル情報未入力エラー"
+            End If
+        Else
+            MsgBox "学科練習問題を終了しました。", vbInformation, "学科模擬試験"
+        End If
+    End If
+    
     With Application
         .Calculation = xlCalculationAutomatic
         .ScreenUpdating = True
     End With
-    １まずシートを削除する
-    Application.DisplayAlerts = False
-    With w_book1
-        .Sheets(sh_name1).Delete
-        .Sheets(sh_pcture).Delete
-    End With
-    Application.DisplayAlerts = True
-    ２シートをコピーする
-    WB_p.Sheets(sh_name1).Copy before:=w_book1.Sheets(1)
-    w_book1.Sheets(sh_name1).Visible = False
-
-    読み取り専用ではなく開くfname = 開きたくないブック名
-    Function Isbookopen(bookname) As Boolean
-    Dim bk As Workbook
-    Isbookopen = False
-    For Each bk In Workbooks
-    If bk.Name = bookname Then
-    Isbookopen = True
-    Exit For
-    End If
-    Next
-    End Function
-                        If Isbookopen(fname) = False Then
-                          Application.ScreenUpdating = False
-                            Set WB_p = Workbooks.Open(Filename:=pass, ReadOnly:=False, UpdateLinks:=False)
-                            With WB_p
-                                If .ReadOnly Then
-                                    .Close False
-                                    MsgBox "他のpcで使用中です 再度お願いします", vbCritical
-                                    Exit Sub
-                                End If
-                            End With
-                        End If
+    
+    End Sub
   </code>
 </pre>
   
