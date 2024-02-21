@@ -9,265 +9,502 @@
   <h1>名前で保存する</h1>
 <pre>
   <code>
-    Private Sub key_end_Click()
+    Const shname_kaihatu = "開発カレンダー"
+Sub main()
+Const all_f = "開発スケジュール"
+Const all_s = "リソースシート"
+Const ro = 6
+Const co = 4
+Const shm = "MAIN"
+Const shs = "計画表原紙"
+Const key_path = "C:\Users\yama7\Desktop\ジャパネット\データベース.xlsx"
+Const sh_name1 = "情報"
+Const num_cul = 1
+Const manth_cul = 2
+Const status_cul = 3
+Const status_cul_num = 4
+Const status2_cul = 5
+Const yotei_st_cul = 6
+Const yotei_en_cul = 7
+Const jiss_st_cul = 8
+Const jiss_en_cul = 9
+Const naiyou_cul = 10
 
-    Dim list_cou As Long, list_ro() As Long, tf() As String, man As String
-Dim ws As Worksheet, d_main As Workbook, pat As String
-Dim myRange As Range, myObj1 As Range, myCell As Range, e_row As Long, bun_k As Variant
-Dim myRange_val As Range, myObj1_val As Range, bun_k1 As Variant
-Dim new_ma As Variant
+Const insertRow = 10
+Const insertNum = 1
 
-Const pass_row = 2
-Const pass_col = "J"
-Const titleRow = 1
+
+
+Dim sh As Worksheet, sh_name As Variant, wb As Workbook
+Dim WB_p As Workbook
+Dim num() As Long
+Dim utiwake() As String, kubunn() As String, kubunn_num() As Long, annkennnenngetu() As Date, naiyou() As String, jyoutai_1() As String, jyoutai_2() As String
+Dim keikakuhi() As Date, keikakujikan() As Date, syuuryouhi() As Date, syuurokujikan() As Date
+Dim keikakukutiwake() As String, syuuryouutiwake() As String, gaiyou() As String, endRow As Long
+Dim i As Long, p As Long, j As Long, writeRow As Long
+Dim column_num As Long, row_num As Long, jisseki As Variant, jisseki1 As Variant, jisseki2 As Variant, jissekibi As Date
+Dim jisseki_v As Variant
 
 With Application
     .Calculation = xlCalculationManual
     .ScreenUpdating = False
 End With
 
-Set ws = ThisWorkbook.Sheets(main_sh)
 
 
-If Not (Me.TextBox12.Text = "") And TextBox18.Text <> "" And Me.ListBox1.ListIndex <> -1 And Me.ListBox2.ListIndex <> -1 And Me.ListBox3.ListIndex <> -1 Then ''''''''①保存が必要の場合の処理
+On Error Resume Next
+Set wb = ThisWorkbook
+Set sh = wb.Sheets(ActiveSheet.Name)
+With sh
 
-                man = Replace(Me.TextBox12.Text, vbCrLf, "")
-                man = Replace(man, " ", "")
-                man = Replace(man, "　", "") ''''''''名前を変数に入れる
+    If .Cells(ro, co).Value = "" Then
+        Exit Sub
+    End If
+'----------------------必要なシート以外を削除しましょう
+    For Each sh_name In Worksheets            'シートすべてに実行する
+        If sh_name.Name <> shm And sh_name.Name <> shs Then
+            Application.DisplayAlerts = False
+                With wb
+                    .Sheets(sh_name.Name).Delete
+                End With
+            Application.DisplayAlerts = True
+        End If
+    Next
+            wb.Sheets(shs).Visible = True
+    wb.Sheets(shs).Copy after:=wb.Sheets(shm)
+    ActiveSheet.Name = shname_kaihatu
+            wb.Sheets(shs).Visible = False
 
 
-        ew_text = Me.TextBox18.Text ''''''''自分の説明を変数に入れる
+'----------------------情報の原紙をコピーしてくる
+Set WB_p = Workbooks.Open(Filename:=key_path, ReadOnly:=True, UpdateLinks:=False)
         
-        shName = Me.ListBox1.List(Me.ListBox1.ListIndex, 0) ''''''''シート名を変数に入れる
-    coumokuLarge = Me.ListBox2.List(Me.ListBox2.ListIndex, 0) ''''''''大項目を変数に入れる
-    coumokuMidle = Me.ListBox2.List(Me.ListBox2.ListIndex, 0) '''''''中告目を変数に入れる
-        
-        If Dir(pat) <> "" Then
-                Application.ScreenUpdating = False
-                f_cou = 0
-                    If Isbookopen(fname) = False Then
-rep:
-                       Set d_main = Workbooks.Open(Filename:=pat, ReadOnly:=False, IgnoreReadOnlyRecommended:=True)
-                       With d_main
-                            If .ReadOnly Then
-                                .Close False
-                                    f_cou = f_cou + 1
-                                     If f_cou >= 4 Then
-                                        With Application
-                                            .Calculation = xlCalculationAutomatic
-                                            .ScreenUpdating = True
-                                        End With
-                                            MsgBox "再度、時間を置いて保存作業を実施して下さい。", vbExclamation, "保存作業中断"
-                                        Exit Sub
-                                     Else
-                                        GoTo rep
-                                     End If
-                            Else
-
-                            '''''''保存の処理
-
-                            
-
-
-                            Set myRange = d_main.Sheets(shName).Rows(titleRow)
-                            Set myObj1 = myRange.Find(man, LookAt:=xlWhole)
-                            
-                            If Err.Number = 0 Then ''''''''シートの存在を確認
-                            
-                            
-                                If myObj1 Is Nothing Then
-                                    '''''新規ユーザーの追加処理
-                                    e_column = d_main.Sheets(que_sh).UsedRange.Columns(d_main.Sheets(que_sh).UsedRange.Columns.Count).Column + 1
-                                    With d_main.Sheets(shName)
-                                        .Cells(titleRow, e_row).Value = man
-                                    
-                                    
-                                        Set myRangeLerge = d_main.Sheets(shName).Columns(2)
-                                        Set myObjLerge = myRangeLerge.Find(coumokuLarge, LookAt:=xlWhole)
-                                            If myObjLerge Is Nothing Then
-                                                d_main.Close savechanges:=False
-                                                MsgBox shName & "大項目が参照できませんでした。", vbCritical, "大項目参照エラー"
-                                                Exit Sub
-                                            Else
-                                                If .Cells(myObjLerge.Row, 4).Value = coumokuMidle Then
-                                                    .Cells(myObjLerge.Row, e_column).Value = ew_text
-                                                    d_main.Close savechanges:=True
-                                                    With Application
-                                                        .Calculation = xlCalculationAutomatic
-                                                        .ScreenUpdating = True
-                                                    End With
-                                                    MsgBox man & "さんの実施情報を新規で登録しました。", vbInformation, "データ保存完了"
-                                                Else
-                                                '''''''次を検索
-                                                    
-                                                    Set myCellLerge = myObjLerge
-                                                    i = 0
-                                                    Do
-                                                    
-                                                        If .Cells(myCellLerge.Row, 4).Value = coumokuMidle Then
-                                                            .Cells(myObjLerge.Row, e_column).Value = ew_text
-                                                            d_main.Close savechanges:=True
-                                                            With Application
-                                                                .Calculation = xlCalculationAutomatic
-                                                                .ScreenUpdating = True
-                                                            End With
-                                                                MsgBox man & "さんの実施情報を新規で登録しました。", vbInformation, "データ保存完了"
-                                                        
-                                                            Exit Sub
-                                                        End If
-                                                    Set myCellLerge = myRangeLerge.FindNext(myCellLerge)
-                                                    Loop While myCellLerge.Row <> myObjLerge.Row
-                                                
-                                                
-                                                
-                                                    d_main.Close savechanges:=False
-                                                    With Application
-                                                        .Calculation = xlCalculationAutomatic
-                                                        .ScreenUpdating = True
-                                                    End With
+            WB_p.Sheets(sh_name1).Copy before:=wb.Sheets(1)
             
-                                                    MsgBox man & "中古項目の参照ができませんでした。", vbCritical, "中項目参照エラー"
-                                                
-                                                End If
-                                            
-                                            
-                                            
+            wb.Sheets(sh_name1).Visible = False
+            WB_p.Close savechanges:=False
+                If Err.Number <> 0 Then
+                    End
+                End If
 
-                                            End If
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                              
+    ''''''''''並び替えをおこなう
+    With wb.Sheets(sh_name1)
+        column_num = .Cells(1, Columns.Count).End(xlToLeft).Column
+        row_num = .Cells(Rows.Count, 1).End(xlUp).Row
+        
+        .Range(.Cells(2, 1), .Cells(row_num, column_num)).Sort Key1:=.Cells(1, status2_cul), Order1:=xlAscending, Key2:=.Cells(1, status_cul_num), Order2:=xlAscending, Header:=xlNo
+    End With
+    
 
-                                        d_main.Close savechanges:=True
-                                        With Application
-                                            .Calculation = xlCalculationAutomatic
-                                            .ScreenUpdating = True
-                                        End With
 
-                                        MsgBox man & "さんの実施情報を新規で登録しました。", vbInformation, "データ保存完了"
-                                    Exit Sub
-                                    
-                                    
-                                    End With
-                                    
+    If .Cells(ro, co).Value = all_f Then
+        MsgBox all_f
+        
+        
+        
+        
+    ElseIf .Cells(ro, co).Value = all_s Then
+        ''''まずはここから作成していってますよ
+With wb.Sheets(sh_name1)
+    endRow = .Cells(Rows.Count, 1).End(xlUp).Row
+    ReDim num(endRow)
+    ReDim utiwake(endRow) As String, kubunn(endRow) As String, kubunn_num(endRow) As Long, annkennnenngetu(endRow) As Date, naiyou(endRow) As String, jyoutai_1(endRow) As String, jyoutai_2(endRow) As String
+    ReDim keikakuhi(endRow) As Date, keikakujikan(endRow) As Date, syuuryouhi(endRow) As Date, syuurokujikan(endRow) As Date
+    ReDim keikakukutiwake(endRow) As String, syuuryouutiwake(endRow) As String, gaiyou(endRow) As String
+ 
+
+    If endRow = 1 Then
+        End
+    End If
+    i = 2
+    p = 1
+                            Do While .Cells(i, num_cul).Value <> ""
+                                If sh.Cells(3, 2).Value = "完了以外を表示" Then
+                                    If .Cells(i, yotei_en_cul).Value <> "完了" And .Cells(i, yotei_en_cul).Value <> "終了" Or .Cells(i, status2_cul).Value >= Format(Now, "yyyy/mm/01") Then
+                                        num(p) = .Cells(i, num_cul).Value
+                                        utiwake(p) = .Cells(i, manth_cul).Value
+                                        kubunn(p) = .Cells(i, status_cul).Value
+                                        kubunn_num(p) = .Cells(i, status_cul_num).Value
+                                        annkennnenngetu(p) = .Cells(i, status2_cul).Value
+                                        naiyou(p) = .Cells(i, yotei_st_cul).Value
+                                        jyoutai_1(p) = .Cells(i, yotei_en_cul).Value
+                                        jyoutai_2(p) = .Cells(i, jiss_st_cul).Value
+                                        keikakuhi(p) = .Cells(i, jiss_en_cul).Value
+                                        keikakujikan(p) = .Cells(i, naiyou_cul).Value
+                                        syuuryouhi(p) = .Cells(i, naiyou_cul + 1).Value
+                                        syuurokujikan(p) = .Cells(i, naiyou_cul + 2).Value
+                                        keikakukutiwake(p) = .Cells(i, naiyou_cul + 3).Value
+                                        syuuryouutiwake(p) = .Cells(i, naiyou_cul + 4).Value
+                                        gaiyou(p) = .Cells(i, naiyou_cul + 5).Value
+                                    End If
                                 Else
-                                    
-                                                e_column = myObj1.Column
-                                    With d_main.Sheets(shName)
-                                        .Cells(titleRow, e_row).Value = man
-                                    
-                                    
-                                        Set myRangeLerge = d_main.Sheets(shName).Columns(2)
-                                        Set myObjLerge = myRangeLerge.Find(coumokuLarge, LookAt:=xlWhole)
-                                            If myObjLerge Is Nothing Then
-                                                d_main.Close savechanges:=False
-                                                MsgBox shName & "大項目が参照できませんでした。", vbCritical, "大項目参照エラー"
-                                                Exit Sub
-                                            Else
-                                                If .Cells(myObjLerge.Row, 4).Value = coumokuMidle Then
-                                                    .Cells(myObjLerge.Row, e_column).Value = ew_text
-                                                    d_main.Close savechanges:=True
-                                                    With Application
-                                                        .Calculation = xlCalculationAutomatic
-                                                        .ScreenUpdating = True
-                                                    End With
-                                                    MsgBox man & "さんの実施情報を新規で登録しました。", vbInformation, "データ保存完了"
-                                                Else
-                                                '''''''次を検索
-                                                    
-                                                    Set myCellLerge = myObjLerge
-                                                    i = 0
-                                                    Do
-                                                    
-                                                        If .Cells(myCellLerge.Row, 4).Value = coumokuMidle Then
-                                                            .Cells(myObjLerge.Row, e_column).Value = ew_text
-                                                            d_main.Close savechanges:=True
-                                                            With Application
-                                                                .Calculation = xlCalculationAutomatic
-                                                                .ScreenUpdating = True
-                                                            End With
-                                                                MsgBox man & "さんの実施情報を新規で登録しました。", vbInformation, "データ保存完了"
-                                                        
-                                                            Exit Sub
-                                                        End If
-                                                    Set myCellLerge = myRangeLerge.FindNext(myCellLerge)
-                                                    Loop While myCellLerge.Row <> myObjLerge.Row
-                                                
-                                                
-                                                
-                                                    d_main.Close savechanges:=False
-                                                    With Application
-                                                        .Calculation = xlCalculationAutomatic
-                                                        .ScreenUpdating = True
-                                                    End With
-            
-                                                    MsgBox man & "中古項目の参照ができませんでした。", vbCritical, "中項目参照エラー"
-                                                
-                                                End If
-                                            
-                                            
-                                            
-
-                                            End If
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                              
-
-                                        d_main.Close savechanges:=True
-                                        With Application
-                                            .Calculation = xlCalculationAutomatic
-                                            .ScreenUpdating = True
-                                        End With
-
-                                        MsgBox man & "さんの実施情報を新規で登録しました。", vbInformation, "データ保存完了"
-                                    Exit Sub
-                                    
-                                    
-                                    End With
-                                    
-                                    
-                                    
+                                    num(p) = .Cells(i, num_cul).Value
+                                    utiwake(p) = .Cells(i, manth_cul).Value
+                                    kubunn(p) = .Cells(i, status_cul).Value
+                                    kubunn_num(p) = .Cells(i, status_cul_num).Value
+                                    annkennnenngetu(p) = .Cells(i, status2_cul).Value
+                                    naiyou(p) = .Cells(i, yotei_st_cul).Value
+                                    jyoutai_1(p) = .Cells(i, yotei_en_cul).Value
+                                    jyoutai_2(p) = .Cells(i, jiss_st_cul).Value
+                                    keikakuhi(p) = .Cells(i, jiss_en_cul).Value
+                                    keikakujikan(p) = .Cells(i, naiyou_cul).Value
+                                    syuuryouhi(p) = .Cells(i, naiyou_cul + 1).Value
+                                    syuurokujikan(p) = .Cells(i, naiyou_cul + 2).Value
+                                    keikakukutiwake(p) = .Cells(i, naiyou_cul + 3).Value
+                                    syuuryouutiwake(p) = .Cells(i, naiyou_cul + 4).Value
+                                    gaiyou(p) = .Cells(i, naiyou_cul + 5).Value
                                 End If
+                                p = p + 1
+                                i = i + 1
+                            Loop
+
+                                With ThisWorkbook.Sheets(shname_kaihatu)
+                                For j = 1 To p - 1
+                                    
                                 
+                                        If annkennnenngetu(j) <> "0:00:00" Then
+                                            Range(.Rows(insertRow), .Rows(insertRow + insertNum)).Copy
+                                            writeRow = .Cells(Rows.Count, "P").End(xlUp).Row + 1
+                                            Range(.Rows(writeRow), .Rows(writeRow + insertNum)).Insert
+                                            Application.CutCopyMode = False
+                                        
+                                        
+                                            .Cells(writeRow, "B").Value = num(j)
+                                            .Cells(writeRow, "C").Value = utiwake(j)
+                                            .Cells(writeRow, "D").Value = kubunn(j)
+                                            .Cells(writeRow, "Q").Value = annkennnenngetu(j)
+                                            .Cells(writeRow, "E").Value = naiyou(j)
+                                            
+                                            .Cells(writeRow, "R").Value = jyoutai_1(j)
+                                            .Cells(writeRow, "S").Value = jyoutai_2(j)
+                                            If keikakuhi(j) <> "0:00:00" Then
+                                                .Cells(writeRow, "J").Value = keikakuhi(j) & " " & keikakujikan(j)
+                                                .Cells(writeRow, "K").Value = syuuryouhi(j) & " " & syuurokujikan(j)
+                                                .Cells(writeRow, "V").Value = keikakuhi(j)
+                                                .Cells(writeRow, "W").Value = syuuryouhi(j)
+                                                
+                                                
+                                                StartDate = .Cells(writeRow, "J").Value
+                                                EndDate = .Cells(writeRow, "K").Value
+                                                If StartDate <= Now Then
+                                                    .Cells(writeRow, "L").Value = (DateDiff("s", StartDate, Now) / DateDiff("s", StartDate, EndDate)) * 100
+                                                    If .Cells(writeRow, "L").Value > 100 Then
+                                                        .Cells(writeRow, "L").Font.ColorIndex = 3
+                                                    End If
+                                                End If
+                                                .Cells(writeRow, "M").Value = DateDiff("h", Now, EndDate)
+                                                    
+                                                
+                                                
+                                            End If
+                                            .Cells(writeRow, "T").Value = keikakukutiwake(j)
+                                            .Cells(writeRow, "U").Value = syuuryouutiwake(j)
+                                            .Cells(writeRow, "Z").Value = kubunn_num(j)
+                                            If gaiyou(j) <> "" Then
+                                                With .Cells(writeRow, "E").AddComment
+                                                    .Text Text:=gaiyou(j)
+                                                    .Visible = False
+                                                End With
+                                            End If
+                                            
+                                            If .Cells(writeRow, "U").Value <> "" Then
+                                                jisseki = Split(.Cells(writeRow, "U").Value, ",")
+                                                'jisseki_v = jisseki(0)
+                                                
+                                                jisseki1 = Split(jisseki(0), "&")
+                                                'jisseki_v = jisseki1
+                                                jisseki2 = Split(jisseki1(0), "-")
+                                                
+                                                jissekibi = jisseki2(0)
+                                                
+                                                .Cells(writeRow, "X").Value = jissekibi
+                                                .Cells(writeRow, "N").Value = jissekibi
+                                                    aa = Split(.Cells(writeRow, "T").Value, "/")
+                                                    aaa = UBound(aa)
+                                                    bb = Split(.Cells(writeRow, "U").Value, ",")
+                                                    bbb = Split(bb(aaa), "&")
+                                                    cc = Split(bbb(0), "-")
+                                                    If Err.Number = 0 Then
+                                                        .Cells(writeRow, "O").Value = jisseki2(1)
+                                                        .Cells(writeRow, "Y").Value = jisseki2(1)
+                                                        
+                                                        
+                                                        '''背景色をへんこうする
+                                                        .Range(.Cells(writeRow, "B"), .Cells(writeRow, "O")).Interior.ColorIndex = 15
+                                                        .Cells(writeRow, "L").Value = ""
+                                                        .Cells(writeRow, "M").Value = ""
+                                                    End If
+                                                
+                                            End If
+                                           
+                                        End If
                                 
+                                Next j
                                 
-                                
-                                
-                                
-                                
-                                
-                            Else
-                                d_main.Close savechanges:=False
-                                MsgBox shName & "シートが参照できませんでした。", vbCritical, "DBシート参照エラー"
-                                Exit Sub
-                            End If
+                                        
+                                        'Call Rept
+                                        'Call 日更新
+                                        
+                                    'End If
+                                End With
+End With
+End If
+End With
+
+With Application
+    .Calculation = xlCalculationAutomatic
+    .ScreenUpdating = True
+End With
+
+End Sub
+Sub Rept()
+
+Dim wb As Workbook, sh As Worksheet, i As Long, keikau As Variant, j As Long, keikau_val As Variant, writeRow As Long
+Dim total_time As Long, StartDate As Date, EndDate As Date, waru As Double, addTime As Date
+Dim wr_row As Long, s_time As Long, jisseki As Variant, jisseki2 As Variant, jisseki3 As Variant
+
+Dim main_row As Long, jisseki1 As Variant, jugflg As Long
+
+Set wb = ThisWorkbook
+Set sh = wb.Sheets(shname_kaihatu)
+
+
+With sh
+i = .Cells(Rows.Count, 2).End(xlUp).Row
+Do While i > 11
+jugflg = 0
+main_row = i
+If .Cells(i, "T").Value <> "" Then
+
+keikau = Split(.Cells(i, "T").Value, "/")
+jisseki = Split(.Cells(i, "U").Value, ",")
+'wr_row = i + 2
+StartDate = .Cells(i, "J").Value
+EndDate = .Cells(i, "K").Value
+total_time = DateDiff("s", StartDate, EndDate)
+For j = LBound(keikau) To UBound(keikau)
+  
+    Range(.Rows(10), .Rows(11)).Copy
+    'writeRow = .Cells(Rows.Count, "P").End(xlUp).Row + 1
+    main_row = main_row + 2
+    Range(.Rows(main_row), .Rows(main_row + 1)).Insert
+    Application.CutCopyMode = False
+        keikau_val = Split(keikau(j), "-")
+        .Cells(main_row, "I").Value = keikau_val(0)
+        .Cells(main_row, "H").Value = keikau_val(1)
+        waru = "0." & keikau_val(2)
+        s_time = total_time * waru
+        EndDate = DateAdd("s", s_time, StartDate)
+        .Cells(main_row, "J").Value = StartDate
+        .Cells(main_row, "K").Value = EndDate
+        .Cells(main_row, "V").Value = StartDate
+        .Cells(main_row, "W").Value = EndDate
+        
+        If StartDate <= Now Then
+            .Cells(main_row, "L").Value = (DateDiff("s", StartDate, Now) / DateDiff("s", StartDate, EndDate)) * 100
+            If .Cells(main_row, "L").Value > 100 Then
+                .Cells(main_row, "L").Font.ColorIndex = 3
             End If
-        Else
-            MsgBox "DBファイルがありません。", vbCritical, "DBファイル参照エラー"
+        End If
+        .Cells(main_row, "M").Value = DateDiff("h", Now, EndDate)
+        StartDate = EndDate
+        
+        
+        If InStr(.Cells(i, "U").Value, ",") > 0 And jugflg = 0 Then
+            If jisseki(j) <> "" Then
+                jisseki1 = Split(jisseki(j), "&")
+                If jisseki1(0) <> "" Then
+                    jisseki2 = Split(jisseki1(0), "-")
+                    .Cells(main_row, "X").Value = jisseki2(0)
+                    .Cells(main_row, "N").Value = jisseki2(0)
+                        If jisseki1(1) <> "" Then
+                            jisseki3 = Split(jisseki1(1), "-")
+                            .Cells(main_row, "O").Value = jisseki3(0)
+                            .Cells(main_row, "Y").Value = jisseki3(0)
+                            '''背景色をへんこうする
+                                .Range(.Cells(main_row, "B"), .Cells(main_row + 1, "O")).Interior.ColorIndex = 15
+                                .Cells(main_row, "L").Value = ""
+                                .Cells(main_row, "M").Value = ""
+                        End If
+                End If
+            Else
+                jugflg = 1
+            End If
         End If
         
         
         
-        
-        
+Next j
+
+
 End If
+
+    i = i - 2
+Loop
+
+End With
+
+End Sub
+Sub 日更新()
+Dim mb As Workbook, ms As Worksheet, st_1 As Long, st_2 As Date, st_3 As Date, key_41 As Date
+Dim range_1 As Range, keyword As Variant, smal_d As Date, max_d As Date
+Dim BeginX As Single, BeginY As Single, EndX As Single, EndY As Single, keywordt As Variant
+Dim times_key As Variant
+
+
+Set mb = ThisWorkbook
+Set ms = mb.Sheets(shname_kaihatu)
+
+With ms
+
+Dim datsd As Date
+Dim dated As Date
+Dim datct As Date
+
+Dim ingrw As Long
+Dim inggs As Long
+Dim ingge As Long, kiji As Date
+
+datsd = Application.WorksheetFunction.Min(.Range("J:K"))
+dated = Application.WorksheetFunction.Max(.Range("J:K"))
+
+If Application.WorksheetFunction.Min(.Range("N:O")) < datsd Then
+    datsd = Application.WorksheetFunction.Min(.Range("N:O"))
+End If
+
+If Application.WorksheetFunction.Max(.Range("N:O")) > dated Then
+    dated = Application.WorksheetFunction.Max(.Range("N:O"))
+End If
+
+If dated < Now Then
+    dated = Now
+End If
+
+
+
+i = 27
+For datct = datsd To dated
+.Cells(9, i).Value = datct
+.Cells(9, i).NumberFormatLocal = "mm/dd"
+i = i + 1
+Next
+.Range(.Columns(27), .Columns(i - 1)).ColumnWidth = 4
+
+For ii = 10 To .UsedRange.Rows(.UsedRange.Rows.Count).Row Step 2
+                    If .Cells(ii, "J").Value <> "" And .Cells(ii, "K").Value <> "" Then
+                        If IsDate(.Cells(ii, "J").Value) = True And IsDate(.Cells(ii, "K").Value) = True And .Cells(ii, "K").Value >= .Cells(ii, "J").Value Then
+                            kk = 0
+                            
+                                        For h = 1 To 2
+                                        
+                                        kiji = Format(.Cells(ii, 9 + h).Value, "mm/dd")
+                                        
+                                        Set obj = .Range(.Cells(9, 27), .Cells(9, .Cells(9, Columns.Count).End(xlToLeft).Column))
+                                        Set obj_1 = obj.Find(Format(kiji, "mm/dd"), LookAt:=xlWhole, LookIn:=xlValues)
+                                         If obj_1 Is Nothing Then
+                                         kk = 1
+                                         Else
+                                        
+                                             If h = 1 Then
+                                                sta = obj_1.Column
+                                             Else
+                                                endi = obj_1.Column
+                                             End If
+                                         End If
+                                        Next h
+                           
+                           
+                           If kk = 0 Then
+                           
+                                            BeginX = .Cells(ii, sta).Left '- .Range("AS1").Width
+                                            BeginY = .Cells(ii, sta).Top + .Cells(ii, 1).Height / 2
+                                            
+                                            EndX = .Cells(ii, endi).Left + .Range("AA1").Width
+                                            EndY = .Cells(ii, endi).Top + .Cells(ii, 1).Height / 2
+                                        
+                                            
+                                            
+                                        ''''''''''''''''''''''''''''''''''''''''''''''''''''直線を引く
+                                                With .Shapes.AddConnector(msoConnectorStraight, BeginX, BeginY, EndX, EndY).Line
+                                                    .Style = msoLineSingle
+                                                    .Weight = 5
+                                                End With
+                           
+                           End If
     
-    With Application
-        .Calculation = xlCalculationAutomatic
-        .ScreenUpdating = True
-    End With
+                        End If
+                    End If
+                    '''''''実績を記述していこう
+                    times_key = ""
+                        If .Cells(ii, "N").Value <> "" Then
+                                        
+                                        If .Cells(ii, "O").Value = "" Then
+                                            times_key = Now
+                                        ElseIf IsDate(.Cells(ii, "O").Value) = True And .Cells(ii, "O").Value >= .Cells(ii, "N").Value Then
+                                        Else
+                                            GoTo 999
+                                        End If
+                                        
+                                        
+                        If IsDate(.Cells(ii, "N").Value) = True Then
+                            kk = 0
+                            
+                                        For h = 1 To 2
+                                        If h = 1 Then
+                                            kiji = Format(.Cells(ii, 13 + h).Value, "yyyy/m/d")
+                                        Else
+                                            If times_key = "" Then
+                                            kiji = Format(.Cells(ii, 13 + h).Value, "yyyy/m/d")
+                                            Else
+                                            kiji = Format(times_key, "yyyy/m/d")
+                                            
+                                            End If
+                                        End If
+                                        Set obj = .Range(.Cells(9, 27), .Cells(9, .Cells(9, Columns.Count).End(xlToLeft).Column))
+                                        Set obj_1 = obj.Find(Format(kiji, "mm/dd"), LookAt:=xlWhole, LookIn:=xlValues)
+                                        
+                                         If obj_1 Is Nothing Then
+                                         kk = 1
+                                         Else
+                                        
+                                             If h = 1 Then
+                                                sta = obj_1.Column
+                                             Else
+                                                endi = obj_1.Column
+                                             End If
+                                         End If
+                                        Next h
+                           
+                           
+                           If kk = 0 Then
+                           
+                                            BeginX = .Cells(ii + 1, sta).Left '- .Range("AS1").Width
+                                            BeginY = .Cells(ii + 1, sta).Top + .Cells(ii, 1).Height / 2
+                                            
+                                            EndX = .Cells(ii + 1, endi).Left + .Range("AA1").Width
+                                            EndY = .Cells(ii + 1, endi).Top + .Cells(ii, 1).Height / 2
+                                        
+                                            
+                                        ''''''''''''''''''''''''''''''''''''''''''''''''''''直線を引く
+                                                With .Shapes.AddConnector(msoConnectorStraight, BeginX, BeginY, EndX, EndY).Line
+                                                    .Style = msoLineSingle
+                                                    .Weight = 5
+                                                    .ForeColor.SchemeColor = 2
+                                                End With
+999
+                           End If
     
-    End Sub
+                        End If
+                    End If
+Next ii
+                       
+        .Range(.Cells(9, 27), .Cells(.Cells(Rows.Count, "P").End(xlUp).Row, .Cells(9, Columns.Count).End(xlToLeft).Column)).Borders.LineStyle = xlContinuous
+ 
+End With
+
+End Sub
+
+
   </code>
 </pre>
   
