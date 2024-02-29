@@ -11,7 +11,6 @@
  
 <pre>
   <code>
-
 Sub man()
 Dim inval As Long, myRange As Range, myObj As Range, myCell As Range
 Dim objct As Range, obj_1 As Range
@@ -19,7 +18,7 @@ Set ws = ThisWorkbook.Sheets(shname_kaihatu)
 
 
 With ws
-i = 1
+i = 2
 Do While .Cells(i, "P").Value <> ""
 Key = .Cells(i, "P").Value
 ro = ""
@@ -27,99 +26,88 @@ ro = ""
 Set myRange = .Columns(1)
 Set myObj = myRange.Find(Key, LookAt:=xlWhole)
 
-    If myObj Is Nothing Then
 
+    If myObj Is Nothing Then
 
     Else
 
         Set myCell = myObj
 
         Do
-
             If ro = "" Then
                 ro = myCell.Row
             Else
                 ro = ro & "," & myCell.Row
             End If
-
-            Set myCell = myRange.FindNext(myCell)
+          Set myCell = myRange.FindNext(myCell)
         Loop While myCell.Row <> myObj.Row Or myCell.Column <> myObj.Column
         
         
         ooo = Split(ro, ",")
-        For k = LBound(ooo) To UBound(ooo)
+       For k = LBound(ooo) To UBound(ooo)
+       inv = ""
         If .Cells(ooo(k), "O").Value = "" Then
                     If Format(.Cells(ooo(k), "K").Value, "yyyy/m/d") < Format(Now, "yyyy/m/d") Then
+
                         Set objct = .Range(.Cells(9, 27), .Cells(9, .Cells(9, Columns.Count).End(xlToLeft).Column))
                         Set obj_1 = objct.Find(Format(Now, "mm/dd"), LookAt:=xlWhole, LookIn:=xlValues)
-'                        MsgBox myCell.Row
+
                             If obj_1 Is Nothing Then
 
                              Else
 
                                  If IsNumeric(.Cells(i, obj_1.Column).Value) Then
-                                    inval = .Cells(i, obj_1.Column).Value
-
+                                    .Cells(i, obj_1.Column).Value = .Cells(i, obj_1.Column).Value + 1
+                                 Else
+                                    num = Split(.Cells(i, obj_1.Column).Value, "-")
+                                    inval = num(1) + 1
                                     .Cells(i, obj_1.Column).Value = "★" & "-" & inval
                                  End If
                              End If
                     Else
-                        day_1 = DateDiff("d", Date, .Cells(myCell.Row, "K").Value)
-                        Set objct = .Range(.Cells(9, 27), .Cells(9, .Cells(9, Columns.Count).End(xlToLeft).Column))
-                        Set obj_1 = objct.Find(Format(Now, "mm/dd"), LookAt:=xlWhole, LookIn:=xlValues)
-                            If obj_1 Is Nothing Then
+                        If Format(.Cells(ooo(k), "J").Value, "yyyy/m/d") < Format(Now, "yyyy/m/d") Then
+                            day_1 = DateDiff("d", Date, .Cells(ooo(k), "K").Value)
+                            st_day = Format(Now, "mm/dd")
+                        Else
+                            day_1 = DateDiff("d", .Cells(ooo(k), "J").Value, .Cells(ooo(k), "K").Value)
+                            st_day = Format(.Cells(ooo(k), "J").Value, "mm/dd")
+                        End If
 
-                             Else
-                                For j = 0 To day_1
-                                    If IsNumeric(.Cells(i, obj_1.Column + j).Value) Then
-                                        .Cells(i, obj_1.Column + j).Value = .Cells(i, obj_1.Column + j).Value + 1
-                                    Else
-                                        ku = Split(.Cells(i, obj_1.Column + j).Value, "-")
-                                        kuu = UBound(ku) + 1
-                                       .Cells(i, obj_1.Column + j).Value = "★" And "-" And kuu
-                                    End If
-
-
-                                Next j
-
-
-
-
-
-                             End If
-
-
-
+                            Set objct = .Range(.Cells(9, 27), .Cells(9, .Cells(9, Columns.Count).End(xlToLeft).Column))
+                            Set obj_1 = objct.Find(st_day, LookAt:=xlWhole, LookIn:=xlValues)
+                                If obj_1 Is Nothing Then
+    
+                                 Else
+                                    For j = 0 To day_1
+                                    inval = 0
+                                        If .Cells(ooo(k), "L").Value > 70 Then
+                                            inv = "★"
+                                        End If
+                                        
+                                        If IsNumeric(.Cells(i, obj_1.Column + j).Value) Then
+                                            If inv = "" Then
+                                                .Cells(i, obj_1.Column + j).Value = .Cells(i, obj_1.Column + j).Value + 1
+                                            Else
+                                                .Cells(i, obj_1.Column + j).Value = inv & "-" & (.Cells(i, obj_1.Column + j).Value + 1)
+                                            End If
+                                        Else
+                                                num = Split(.Cells(i, obj_1.Column + j).Value, "-")
+                                                inval = num(1) + 1
+                                                .Cells(i, obj_1.Column + j).Value = "★" & "-" & inval
+                                        End If
+                                    Next j
+                                 End If
                     End If
         End If
         
         Next k
-        
-        
-        
-        
+                
     End If
-
-
-
-
-
-
-
-
 
 i = i + 1
 Loop
 
-
-
 End With
-
-
-
-
-
-
 
 End Sub
 
