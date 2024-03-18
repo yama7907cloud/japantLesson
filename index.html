@@ -29,9 +29,21 @@ floor(カラム名）
 len()
 空白削除（左右）
 ltrim/rtrim
+置換
+replace(カラム名,置換前の値,置換後の値）・・・nullは不可
+文字の抽出
+substring(カラム名,始まりの文字数,終わりの文字数）
+四捨五入
+round(カラム名,-2)※下二桁で四捨五入される
 現時刻を代入
 getdate()
+nullの値の代替値
+select coalesce(カラム名,'nullが置き換わる文字') from tbl_resulets1
 
+
+
+length(trim(カラム名))-1　最後の1文字前
+∟substring(rtrim(mail),len(rtrim(mail))-2,2)
 
 
 型変換
@@ -54,7 +66,8 @@ sql saver exec sp_rename 'テーブル名.[変更前のカラム名]','変更後
 oracle alter table テーブル名 rename column 変更前のカラム名 to 変更後のカラム名
 テーブル名の変更
 exec sp_rename 'tbl_results','tbl_resulets1'
-rename 変更前のテーブル名 to 変更後のテーブル名
+orakuru
+	∟  rename 変更前のテーブル名 to 変更後のテーブル名
 
 begin transaction宣言
 
@@ -69,6 +82,11 @@ declare 変数名@ データ型
 set 変数名@=値
 print 変数名←表示する
 
+select 
+∟case カラム　when 条件　then 処理
+		when 条件　then 処理
+		else 処理
+ end
 
 条件分岐
 if (条件)
@@ -82,9 +100,6 @@ while(条件)
 	begin 
 	∟処理
 	end
-
-
-
   </code>
 </pre>
   
