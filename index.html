@@ -11,105 +11,77 @@
  
 <pre>
   <code>
-Sub man()
-Dim inval As Long, myRange As Range, myObj As Range, myCell As Range
-Dim objct As Range, obj_1 As Range
-Set ws = ThisWorkbook.Sheets(shname_kaihatu)
+use データベース名
+型
+∟date
+∟time
+∟datetime
+∟int
+∟varchar
+∟decimal
 
 
-With ws
-i = 2
-Do While .Cells(i, "P").Value <> ""
-Key = .Cells(i, "P").Value
-ro = ""
+切り上げ
+ceiling(カラム名)
+切り捨て
+floor(カラム名）
+長さを調べる
+len()
+空白削除（左右）
+ltrim/rtrim
+現時刻を代入
+getdate()
 
-Set myRange = .Columns(1)
-Set myObj = myRange.Find(Key, LookAt:=xlWhole)
 
 
-    If myObj Is Nothing Then
+型変換
+cast(列名　as 型）
 
-    Else
+列名 not in (1,2)
 
-        Set myCell = myObj
+select /where exists (select * from tbl_results where id=6)trueまたはfalse が帰ってくる
 
-        Do
-            If ro = "" Then
-                ro = myCell.Row
-            Else
-                ro = ro & "," & myCell.Row
-            End If
-          Set myCell = myRange.FindNext(myCell)
-        Loop While myCell.Row <> myObj.Row Or myCell.Column <> myObj.Column
-        
-        
-        ooo = Split(ro, ",")
-       For k = LBound(ooo) To UBound(ooo)
-       inv = ""
-        If .Cells(ooo(k), "O").Value = "" Then
-                    If Format(.Cells(ooo(k), "K").Value, "yyyy/m/d") < Format(Now, "yyyy/m/d") Then
+insert into
+∟select分を使用するとvaluesは不要
+∟すべてを登録するのであれば、（カラム名）は不要
+∟応用insert into tbl_results select * from tbl_results where point1 + point2 > (select avg(point1+point2) from tbl_results)
 
-                        Set objct = .Range(.Cells(9, 27), .Cells(9, .Cells(9, Columns.Count).End(xlToLeft).Column))
-                        Set obj_1 = objct.Find(Format(Now, "mm/dd"), LookAt:=xlWhole, LookIn:=xlValues)
 
-                            If obj_1 Is Nothing Then
+alter table テーブル名 add カラム名　型
+alter table テーブル名 drop column カラム名
+列名の変更
+sql saver exec sp_rename 'テーブル名.[変更前のカラム名]','変更後のカラム名','column';
+oracle alter table テーブル名 rename column 変更前のカラム名 to 変更後のカラム名
+テーブル名の変更
+exec sp_rename 'tbl_results','tbl_resulets1'
+rename 変更前のテーブル名 to 変更後のテーブル名
 
-                             Else
+begin transaction宣言
 
-                                 If IsNumeric(.Cells(i, obj_1.Column).Value) Then
-                                    .Cells(i, obj_1.Column).Value = .Cells(i, obj_1.Column).Value + 1
-                                 Else
-                                    num = Split(.Cells(i, obj_1.Column).Value, "-")
-                                    inval = num(1) + 1
-                                    .Cells(i, obj_1.Column).Value = "★" & "-" & inval
-                                 End If
-                             End If
-                    Else
-                        If Format(.Cells(ooo(k), "J").Value, "yyyy/m/d") < Format(Now, "yyyy/m/d") Then
-                            day_1 = DateDiff("d", Date, .Cells(ooo(k), "K").Value)
-                            st_day = Format(Now, "mm/dd")
-                        Else
-                            day_1 = DateDiff("d", .Cells(ooo(k), "J").Value, .Cells(ooo(k), "K").Value)
-                            st_day = Format(.Cells(ooo(k), "J").Value, "mm/dd")
-                        End If
+commit
+rollback
 
-                            Set objct = .Range(.Cells(9, 27), .Cells(9, .Cells(9, Columns.Count).End(xlToLeft).Column))
-                            Set obj_1 = objct.Find(st_day, LookAt:=xlWhole, LookIn:=xlValues)
-                                If obj_1 Is Nothing Then
-    
-                                 Else
-                                    For j = 0 To day_1
-                                    inval = 0
-                                        If .Cells(ooo(k), "L").Value > 70 Then
-                                            inv = "★"
-                                        End If
-                                        
-                                        If IsNumeric(.Cells(i, obj_1.Column + j).Value) Then
-                                            If inv = "" Then
-                                                .Cells(i, obj_1.Column + j).Value = .Cells(i, obj_1.Column + j).Value + 1
-                                            Else
-                                                .Cells(i, obj_1.Column + j).Value = inv & "-" & (.Cells(i, obj_1.Column + j).Value + 1)
-                                            End If
-                                        Else
-                                                num = Split(.Cells(i, obj_1.Column + j).Value, "-")
-                                                inval = num(1) + 1
-                                                .Cells(i, obj_1.Column + j).Value = "★" & "-" & inval
-                                        End If
-                                    Next j
-                                 End If
-                    End If
-        End If
-        
-        Next k
-                
-    End If
+begin 
+∟処理
+end
 
-i = i + 1
-Loop
+declare 変数名@ データ型
+set 変数名@=値
+print 変数名←表示する
 
-End With
 
-End Sub
+条件分岐
+if (条件)
+ 	begin 
+	∟処理
+	end
+else
+
+繰り返し
+while(条件)
+	begin 
+	∟処理
+	end
 
 
 
