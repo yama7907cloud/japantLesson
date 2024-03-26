@@ -14,11 +14,36 @@
 js の非同期処理
 jsonファイルで取得
 	  
-async function drowMain(){
-  const re = await fetch('https://dotinstall.github.io/setup/fetchapi/users.json');
-  const ue = await re.json();
-  console.log(ue);
+①async function drowMain(){
+  try{
+    const re = await fetch('https://dotinstall.github.io/setup/fetchapi/users.json');
+    // const re = await fetch('https://dotinstall.github.io/setup/fetchapi/invalid-users.json');
+    const ue = await re.json();
+    console.log(ue);
+  }catch(r){
+    console.log(r);
+  }
 }
+
+②const Mains = async ()=> {
+  try{
+    const re = await fetch('https://dotinstall.github.io/setup/fetchapi/users.json');
+    // const re = await fetch('https://dotinstall.github.io/setup/fetchapi/invalid-users.json');
+    const ue = await re.json();
+    console.log(ue);
+  }catch(r){
+    console.log(r);
+  }
+}
+
+function drowfooter(){
+  console.log('footer');
+}
+drowHeader();
+Mains();
+drowfooter();
+
+	  
   </code>
 </pre>
   
