@@ -48,7 +48,36 @@ jsのforEach だい2引数はインデックス番号を取得してくれる
       console.log(`${ue[index]['userName']}と${ue[index]['score']}`);
    })
 
-	  
+	  ' <%
+' strNow = Now()
+' Response.Write Weekday(strNow)
+' If Weekday(strNow) = 2 Then ' 1 (日曜) ～ 7 (土曜) 
+'   Response.Write WeekDayName(Weekday(strNow))'曜日を出力する
+' End If
+' %>
+<form method="post" action="./test.asp"> 
+<table>
+<tr>
+<th>name</th>
+<td><input type='text' name="username"></td>
+<td><input type='text' name="userts" Value="odorokubeki"></td>
+<td><input type='hidden' name="hidooon" Value="<%=Now()%>"></td>
+</tr>
+<tr>
+<th><input type="submit" value="send"></th>
+</tr>
+</table>
+</form>
+
+<%
+' Response.Write "this is testFile" & "<br>"
+' For Each mai in Request.QueryString
+' Response.Write Request.QueryString(mai) & "<br>"
+' Next
+Response.Write Request.Form("username") & "<br>"
+Response.Write Request.Form("userts") & "<br>"
+Response.Write Request.Form("hidooon") & "<br>"
+%>
   </code>
 </pre>
   
