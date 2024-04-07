@@ -11,73 +11,88 @@
   <p>新しい情報です</p>
 <pre>
   <code>
-js の非同期処理
-jsonファイルで取得
-	  
-①async function drowMain(){
-  try{
-    const re = await fetch('https://dotinstall.github.io/setup/fetchapi/users.json');
-    // const re = await fetch('https://dotinstall.github.io/setup/fetchapi/invalid-users.json');
-    const ue = await re.json();
-    console.log(ue);
-  }catch(r){
-    console.log(r);
+(css応用)
+	  li {
+      cursor: pointer;
+    }
+ホバーの際に表示させる
+    li:hover::after {
+      content: '[×]';
+      font-size: 14px;
+      color: #aaa;
+      margin-left: 4px; 
+    }
+ブートストラップアイコン
+    i {
+      font-size: 100px;
+    }
+（JQuery）
+'use strict';
+
+$(() => {
+// セレクターを記入する
+// id属性→$('#○○○○')
+// eqはイコールの略称!!2つめの要素という内容になる→$('ul > li').eq(2).remove();
+
+// .text(値)･･･←値に書き換える
+// .addClass('付与するクラス名')←クラスを付与
+// .remove()←要素を削除
+
+
+// コンスト（定数）の使い方
+const $input = $('input');//定数に$を記述することでJQueryと判断できるようにする
+$input.focus();//セレクターインプットにフォーカスを当てる
+
+
+
+// クリックイベント・アロー関数を仮引数に入れる→処理を記述する
+$('button').click(()=> {
+  // $('p').text('おはようございます');
+  // $('p').addClass('add_class')
+
+  // 連結による記述も可能（メソッドチェーン）
+  // $('p')
+  //   .text('こんにちは')
+  //   .addClass('add_class');
+
+
+  // $('li')
+  //   .eq(2)    //2番目の要素をの意味になる
+  //   .addClass('add_class');
+  //違う書き方複数のパターン
+  // $('li:nth-child(odd),li:last-child')//偶数番号と最後の子を選択
+  //   .addClass('add_class');
+
+  // セレクター部分に<>を記述することで新規に作成すると判断される
+  // セレクター部分に<>がないと取得と判断される
+  // $('<li>')
+  //   .text('New Item')
+  //   .appendTo('ul');//どのセレクターに追加するのかを記述 親要素
+  //   //他の書き方.appendTo($('ul'))※短縮できる
+
+
+
+
+  // フォームから取得
+  $('<li>')
+    .text($input.val()) //$(セレクタ).val()でフォームの値を取得する
+    .appendTo('ul');
+  
+  $input
+    .val('')//仮引数の値（空文字）をフォームに代入する
+    .focus();//フォーカスを当てる
+});
+
+
+$('ul').click(e =>{
+  if (e.target.nodeName !='LI' || !confirm('Are You Sure??')) {
+    return;// nodeNameは大文字で返値 and 削除するかを問いかける
   }
-}
-
-②const Mains = async ()=> {
-  try{
-    const re = await fetch('https://dotinstall.github.io/setup/fetchapi/users.json');
-    // const re = await fetch('https://dotinstall.github.io/setup/fetchapi/invalid-users.json');
-    const ue = await re.json();
-    console.log(ue);
-  }catch(r){
-    console.log(r);
-  }
-}
-
-function drowfooter(){
-  console.log('footer');
-}
-drowHeader();
-Mains();
-drowfooter();
-
-jsのforEach だい2引数はインデックス番号を取得してくれる
-   ue.forEach((user,index)=>{
-      console.log(`${ue[index]['userName']}と${ue[index]['score']}`);
-   })
-
-	  ' <%
-' strNow = Now()
-' Response.Write Weekday(strNow)
-' If Weekday(strNow) = 2 Then ' 1 (日曜) ～ 7 (土曜) 
-'   Response.Write WeekDayName(Weekday(strNow))'曜日を出力する
-' End If
-' %>
-<form method="post" action="./test.asp"> 
-<table>
-<tr>
-<th>name</th>
-<td><input type='text' name="username"></td>
-<td><input type='text' name="userts" Value="odorokubeki"></td>
-<td><input type='hidden' name="hidooon" Value="<%=Now()%>"></td>
-</tr>
-<tr>
-<th><input type="submit" value="send"></th>
-</tr>
-</table>
-</form>
-
-<%
-' Response.Write "this is testFile" & "<br>"
-' For Each mai in Request.QueryString
-' Response.Write Request.QueryString(mai) & "<br>"
-' Next
-Response.Write Request.Form("username") & "<br>"
-Response.Write Request.Form("userts") & "<br>"
-Response.Write Request.Form("hidooon") & "<br>"
-%>
+ // e.target.remove();//e.targetがクリックした要素を参照している
+  //JQuery要素で変換した削除の仕方ふわっと削除する
+  $(e.target).fadeOut();
+});
+});	  
   </code>
 </pre>
   
