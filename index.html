@@ -44,7 +44,23 @@ For o = LBound(uu) To UBound(uu)
 Next o
 
 Cells(1, "J").Value = b
+Dim filePath As String
+    Dim fileNo As Integer
+    
+    '作成するファイルパスを指定
+    filePath = "C:\Users\yama7\Desktop\yamatxt.txt"
 
+    '使用可能なファイル番号を取得
+    fileNo = FreeFile
+    
+    'テキストファイルを開く(既にファイルが存在する場合は追記)
+    Open filePath For Append As #fileNo
+    
+    '書き込み ※改行あり
+    Print #fileNo, b
+
+    'テキストファイルを閉じる
+    Close #fileNo
 End Sub
 vba
 
