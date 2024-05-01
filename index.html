@@ -11,6 +11,48 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+vba
+Sub test()
+
+
+ll = 3
+
+Sql = ""
+
+'変数1
+Sql = Sql & Cells(1, 1).Value & "\"
+'変数2
+For i = 1 To 3
+Sql = Sql & "[" & Cells(i, 2).Value & "]" & vbLf
+Next i
+Sql = Sql & "\"
+'変数3
+For k = 1 To ll
+    If k = 1 Then
+     Sql = Sql & "where " & Cells(k, 2).Value & "= V_" & Cells(k, 2).Value & vbLf
+    Else
+        Sql = Sql & "and " & Cells(k, 2).Value & "= V_" & Cells(k, 2).Value & vbLf
+    End If
+Next k
+
+
+b = Cells(1, "E").Value
+
+uu = Split(Sql, "\")
+For o = LBound(uu) To UBound(uu)
+    b = Replace(b, "バインド" & o, uu(o))
+Next o
+
+Cells(1, "J").Value = b
+
+End Sub
+vba
+
+	  
+
+
+
+	  
 (css応用)
 	  li {
       cursor: pointer;
