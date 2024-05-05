@@ -12,55 +12,41 @@
 <pre>
   <code>
 vba
-Sub test()
+Sub read()
+Dim r As Range, ws As Worksheet, key As String, r_v As Long, c_v As Long, keyw As Variant
+Dim i As Long, sp As Variant, deo As Long, ceo As Long
+Set ws = ThisWorkbook.Sheets(ActiveSheet.Name)
 
-
-ll = 3
-
-Sql = ""
-
-'変数1
-Sql = Sql & Cells(1, 1).Value & "\"
-'変数2
-For i = 1 To 3
-Sql = Sql & "[" & Cells(i, 2).Value & "]" & vbLf
-Next i
-Sql = Sql & "\"
-'変数3
-For k = 1 To ll
-    If k = 1 Then
-     Sql = Sql & "where " & Cells(k, 2).Value & "= V_" & Cells(k, 2).Value & vbLf
-    Else
-        Sql = Sql & "and " & Cells(k, 2).Value & "= V_" & Cells(k, 2).Value & vbLf
+For Each r In Selection
+    If r.Row > 1 And r.Column < 3 Then
+        If r.Column = 1 Then
+            key = key & r.Row & "," & r.Column & "," & r & "," & r.Offset(, 1) & "_"
+        Else
+            key = key & r.Row & "," & r.Column & "," & r & "," & r.Offset(, -1) & "_"
+        End If
     End If
-Next k
+Next
+
+If key = "" Then
+    Exit Sub
+End If
+key = Left(key, Len(key) - 1)
+
+keyw = Split(key, "_")
+
+For i = LBound(keyw) To UBound(keyw)
+    sp = Split(keyw(i), ",")
+    deo = sp(1)
+        If sp(1) = 1 Then
+            ceo = 2
+        Else
+            ceo = 1
+        End If
+        ws.Cells(sp(0), Val(deo)).Value = sp(3)
+        ws.Cells(sp(0), ceo).Value = sp(2)
+Next i
 
 
-b = Cells(1, "E").Value
-
-uu = Split(Sql, "\")
-For o = LBound(uu) To UBound(uu)
-    b = Replace(b, "バインド" & o, uu(o))
-Next o
-
-Cells(1, "J").Value = b
-Dim filePath As String
-    Dim fileNo As Integer
-    
-    '作成するファイルパスを指定
-    filePath = "C:\Users\yama7\Desktop\yamatxt.txt"
-
-    '使用可能なファイル番号を取得
-    fileNo = FreeFile
-    
-    'テキストファイルを開く(既にファイルが存在する場合は追記)
-    Open filePath For Append As #fileNo
-    
-    '書き込み ※改行あり
-    Print #fileNo, b
-
-    'テキストファイルを閉じる
-    Close #fileNo
 End Sub
 vba
 
