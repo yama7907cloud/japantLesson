@@ -12,41 +12,34 @@
 <pre>
   <code>
 vba
-Sub read()
-Dim r As Range, ws As Worksheet, key As String, r_v As Long, c_v As Long, keyw As Variant
-Dim i As Long, sp As Variant, deo As Long, ceo As Long
-Set ws = ThisWorkbook.Sheets(ActiveSheet.Name)
+Sub ttt()
 
-For Each r In Selection
-    If r.Row > 1 And r.Column < 3 Then
-        If r.Column = 1 Then
-            key = key & r.Row & "," & r.Column & "," & r & "," & r.Offset(, 1) & "_"
-        Else
-            key = key & r.Row & "," & r.Column & "," & r & "," & r.Offset(, -1) & "_"
+'Dim fp As String, fp_path As String
+'fp = "C:\Users\yama7\Desktop\re-dottoinnsuto-ru\MyhumbergerMenu"
+'
+'If Dir(fp & "\test", vbDirectory) = "" Then
+'    fp_path = fp & "\test"
+'   MkDir fp_path
+'Else
+'    MsgBox "存在します"
+'End If
+
+
+
+
+
+End Sub
+Sub sample()
+    Dim sShell As Object
+    Set sShell = CreateObject("Shell.Application")
+     
+    Dim sWindow As Object
+    '■Shell関数ですべてのウィンドウに対してチェック
+    For Each sWindow In sShell.Windows
+        If sWindow.LocationName = "test" Then
+            sWindow.Quit
         End If
-    End If
-Next
-
-If key = "" Then
-    Exit Sub
-End If
-key = Left(key, Len(key) - 1)
-
-keyw = Split(key, "_")
-
-For i = LBound(keyw) To UBound(keyw)
-    sp = Split(keyw(i), ",")
-    deo = sp(1)
-        If sp(1) = 1 Then
-            ceo = 2
-        Else
-            ceo = 1
-        End If
-        ws.Cells(sp(0), Val(deo)).Value = sp(3)
-        ws.Cells(sp(0), ceo).Value = sp(2)
-Next i
-
-
+    Next
 End Sub
 vba
 
