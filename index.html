@@ -12,34 +12,34 @@
 <pre>
   <code>
 vba
-Sub ttt()
+Dim timer As Variant
+Sub auto_off()
+ On Error Resume Next
+ 
+    Application.OnTime EarliestTime:=timer, Procedure:="auto_on", Schedule:=False
 
-'Dim fp As String, fp_path As String
-'fp = "C:\Users\yama7\Desktop\re-dottoinnsuto-ru\MyhumbergerMenu"
-'
-'If Dir(fp & "\test", vbDirectory) = "" Then
-'    fp_path = fp & "\test"
-'   MkDir fp_path
-'Else
-'    MsgBox "存在します"
-'End If
-
-
-
-
+On Error GoTo 0
 
 End Sub
-Sub sample()
-    Dim sShell As Object
-    Set sShell = CreateObject("Shell.Application")
-     
-    Dim sWindow As Object
-    '■Shell関数ですべてのウィンドウに対してチェック
-    For Each sWindow In sShell.Windows
-        If sWindow.LocationName = "test" Then
-            sWindow.Quit
-        End If
-    Next
+Sub auto_on()
+Dim Times As Date
+
+    Times = CDate("00:00:03")
+
+    ''''''''''''''''''''''''''更新時間の設定
+    timer = Now + TimeValue(Times)
+
+    Application.OnTime EarliestTime:=timer, Procedure:="auto_on"
+    
+    Call test
+
+End Sub
+Sub test()
+Set a = ThisWorkbook.Sheets("原紙")
+With a
+.Cells(.Cells(Rows.Count, 1).End(xlUp).Row + 1, 1).Value = Now
+End With
+
 End Sub
 vba
 
