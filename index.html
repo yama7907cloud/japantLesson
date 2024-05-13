@@ -12,6 +12,87 @@
 <pre>
   <code>
 vba
+Const pass = "C:\Users\yama7\Desktop\re-dottoinnsuto-ru\"
+Sub macro7()
+Dim n As Integer, i As Integer, txtLine As String, sp As Variant
+msgtb = ""
+msgpk = ""
+endRow = Cells(Rows.Count, 1).End(xlUp).Row
+For i = 1 To endRow
+Sql = ""
+keyword = ""
+    If Cells(i, 1).Value <> "" Then
+        Table = pass & Cells(i, 1).Value & "\yama_" & Cells(i, 1).Value & ".txt"
+            If Dir(Table) = "" Then
+                If msgtb = "" Then
+                    msgtb = "フォルダーなしテーブル" & vbCrLf & Cells(i, 1).Value & vbCrLf
+                Else
+                    msgtb = msgtb & Cells(i, 1).Value & vbCrLf
+                End If
+                GoTo u
+            End If
+        
+        keyword = Cells(i, 2).Value
+        
+            If keyword = "" Then
+                If msg = "" Then
+                    msgpk = "キー指定なし" & vbCrLf & Cells(i, 1).Value & vbCrLf
+                Else
+                    msgpk = msgpk & Cells(i, 1).Value & vbCrLf
+                End If
+                GoTo u
+            End If
+        keyword = Replace(keyword, vbLf, "")
+        ij = Split(keyword, ",")
+        For j = LBound(ij) To UBound(ij)
+            Sql = Sql & "[" & ij(j) & "] asc " & vbLf
+        Next j
+        
+        n = FreeFile
+        Open Table For Input As #n
+        
+        Do While Not EOF(n)
+            iii = iii + 1
+            Line Input #n, txtLine
+        Loop
+        
+        Close #n
+        
+        sp = Split(txtLine, "where")
+        hh = Cells(1, "h").Value
+        hh = Replace(hh, "バインド0", Sql)
+        
+        hh = sp(0) & hh
+        
+        Dim filePath As String
+        Dim fileNo As Integer
+        
+        '作成するファイルパスを指定
+        filePath = pass & Cells(i, 1).Value & "\yama_" & Cells(i, 1).Value & "_pk"
+
+        '使用可能なファイル番号を取得
+        fileNo = FreeFile
+        
+        'テキストファイルを開く(既にファイルが存在する場合は追記)
+        Open filePath For Append As #fileNo
+        
+        '書き込み ※改行あり
+        Print #fileNo, hh
+    
+        'テキストファイルを閉じる
+        Close #fileNo
+    End If
+u:
+Next i
+
+        If msgtb <> "" Or msgpk <> "" Then
+            MsgBox msgtb & bcrlf & msgpk
+        End If
+End Sub
+
+
+
+	  
 Dim timer As Variant
 Sub auto_off()
  On Error Resume Next
