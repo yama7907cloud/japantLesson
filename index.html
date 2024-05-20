@@ -11,32 +11,51 @@
   <p>新しい情報です</p>
 <pre>
   <code>
-sql
-sp_help Custum
+	  vba
+Sub test()
 
+Set sh = ThisWorkbook.Sheets(ActiveSheet.Name)
+If sh.Cells(1, 1).Value <> "" Then
+    a = sh.Cells(1, 1).Value
+    a = Replace(a, "　", " ")
+    a = Split(a, " ")
+    
+    msg = ""
+    With sh
+        For Each ash In ThisWorkbook.Worksheets            'シートすべてに実行する
+            If ash.Name <> "test" Then
+                Set myRange = ash.Columns(5)
+                Set myObj = myRange.Find(a(0), LookAt:=xlPart)
+                    If myObj Is Nothing Then
+                        
+                    Else
+                        Set myCell = myObj
+                        Do
+                                main_val = ash.Cells(myObj.Row, myObj.Column).Value
+                                ans = 0
+                                For i = LBound(a) To UBound(a)
+                                    If InStr(ash.Cells(myObj.Row, myObj.Column).Value, a(i)) = False Then
+                                        GoTo n
+                                    End If
+                        
+                                Next i
 
---pkを外す
-ALTER TABLE Custum DROP CONSTRAINT PK__Custum__A4AE64B8D95BBD84;--constraint_name
-
---定義を変更する
-alter table Custum alter column Job varchar(50) not null;
-
-
-ALTER TABLE Custum (MODIFY CustomerID DROP IDENTITY);--IDENTITYをどうするのか？うまくいっていない
-alter table Custum alter column CustomerID int null;
-
-
---プライマリーキーを設定するまえにnot nullに変更して下記クエリやること
-ALTER TABLE sample_tb ADD CONSTRAINT pk_sample_tb PRIMARY KEY(age); --pk_テーブル名
-
-
---データを追加※無かったカラムの値は、何かしら付与する
-insert into sample_mao select user_id,name,age,0,22,sex from sample_tb
-
-
-
-sql
-
+                                    msg = msg & ash.Name & "_" & ash.Cells(myCell.Row, myCell.Column - 3).Value & "_" & ash.Cells(myCell.Row, myCell.Column - 1).Value & vbLf
+n:
+                            Set myCell = myRange.FindNext(myCell)
+                        Loop While myCell.Row <> myObj.Row
+   
+                    End If
+            End If
+        Next
+        '転記処理
+        If msg <> "" Then
+            .Cells(1, "I").Value = msg
+        End If
+    End With
+End If
+End Sub
+vba
 	  
 
 
