@@ -25,8 +25,18 @@ C#
 　∟startosition…ディスプレイ上の表示位置
 　∟autosize…文字の長さで自動調整
 　∟textbox・・・backcolor(control入力できない視覚的表現)multline(複数行入力可能)readonly(書き込みできない)
-　∟numericUpDown…数字のみ入力可能value（表示値）maximum（最大値）minimum（最小値）
+　∟numericUpDown…数字のみ入力可能value（表示値）maximum（最大値）minimum（最小値）（int)numericUpDown.Value※デシマル型のため変換すること
 
+型変換
+整数型に変換(int)値
+文字列型に変換 値.ToString()
+
+フォームをまたいで値を渡す
+public int 変数名←渡す側はpublicにすること
+
+
+フォームを隠す
+this.Hide();public値を渡すために隠すことが重要
 
 ランダム値を生成
 Random random = new Random();
@@ -52,6 +62,15 @@ Environment.NewLine
 
 フォームの追加
 ソリューションエクスプローラ>プロジェクト名を選択>右クリック「追加」「新しい項目の追加」C#＞フォーム（Windows フォーム）
+
+フォームの呼び出し
+Form2 f = new Form2();
+f.ShowDialog();←Form2をダイアログで開く←form2にアクティブが移動する
+int 変数　= f.変数←form2のpublic変数を代入
+使い回す場合は事前にpublicで定義しておく
+
+フォームを閉じる
+f.close();←だいにゅうしたらダイアログを閉じる
 
 条件分岐
 if (条件) {
