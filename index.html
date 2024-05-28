@@ -11,51 +11,58 @@
   <p>新しい情報です</p>
 <pre>
   <code>
-	  vba
-Sub test()
+C#
 
-Set sh = ThisWorkbook.Sheets(ActiveSheet.Name)
-If sh.Cells(1, 1).Value <> "" Then
-    a = sh.Cells(1, 1).Value
-    a = Replace(a, "　", " ")
-    a = Split(a, " ")
-    
-    msg = ""
-    With sh
-        For Each ash In ThisWorkbook.Worksheets            'シートすべてに実行する
-            If ash.Name <> "test" Then
-                Set myRange = ash.Columns(5)
-                Set myObj = myRange.Find(a(0), LookAt:=xlPart)
-                    If myObj Is Nothing Then
-                        
-                    Else
-                        Set myCell = myObj
-                        Do
-                                main_val = ash.Cells(myObj.Row, myObj.Column).Value
-                                ans = 0
-                                For i = LBound(a) To UBound(a)
-                                    If InStr(ash.Cells(myObj.Row, myObj.Column).Value, a(i)) = False Then
-                                        GoTo n
-                                    End If
-                        
-                                Next i
+新しいプロジェクトの作成でC#＞.netを選択して作成する
 
-                                    msg = msg & ash.Name & "_" & ash.Cells(myCell.Row, myCell.Column - 3).Value & "_" & ash.Cells(myCell.Row, myCell.Column - 1).Value & vbLf
-n:
-                            Set myCell = myRange.FindNext(myCell)
-                        Loop While myCell.Row <> myObj.Row
-   
-                    End If
-            End If
-        Next
-        '転記処理
-        If msg <> "" Then
-            .Cells(1, "I").Value = msg
-        End If
-    End With
-End If
-End Sub
-vba
+
+表示タブ
+　∟タブオーダー…tabを押した際に移動する順番を設定できる
+
+フォームのプロパティー
+　∟bodertyle…ラベルの境界線
+　∟formboderstyle…フォームの境界線にくぼみ
+　∟startosition…ディスプレイ上の表示位置
+　∟autosize…文字の長さで自動調整
+　∟textbox・・・backcolor(control入力できない視覚的表現)multline(複数行入力可能)readonly(書き込みできない)
+　∟numericUpDown…数字のみ入力可能value（表示値）maximum（最大値）minimum（最小値）
+
+
+ランダム値を生成
+Random random = new Random();
+int i = random.Next(0, 7);←0インデックスから7要素数
+
+ラベルに文字を代入する
+label2.Text = "任意文字";
+
+フォームを閉じる
+this.close();
+
+配列の定義と初期化
+public string[] omikujidesu_1 = { "大吉", "中吉", "小吉", "吉", "末吉", "凶", "大凶" };
+
+メッセージボックスの表示
+MessageBox.Show("おみくじの中身は下記になります。" + Environment.NewLine + s);
+
+改行
+Environment.NewLine
+
+配列の要素数を取得
+配列変数.Length
+
+フォームの追加
+ソリューションエクスプローラ>プロジェクト名を選択>右クリック「追加」「新しい項目の追加」C#＞フォーム（Windows フォーム）
+
+条件分岐
+if (条件) {
+
+}
+
+繰り返し処理
+for (int i = 0; i < omikujidesu.Length; i++)
+{
+    s += omikujidesu[i] + Environment.NewLine;
+}
 	  
 
 
