@@ -12,7 +12,45 @@
 <pre>
   <code>
 C#
+FORM
+ ∟・FormBorderStyle(フォームの仕切り表示)・StartPosition(フォームの表示位置)・Text(フォームのタイトル文字)
+TEXTBOX
+ ∟・BackColor(背景色※Control/入力できないのを視覚的に表現する)・MultiLine(複数行の入力)・ReadOnly(入力不可)
+NUMERICUPDOWN1
+　∟・Maximum/最大値・Minimum/最小値・
 
+
+フォームを閉じる
+　∟this.Close();
+
+ランダム値を算出する
+　∟Random random = new Random();
+　　aswerNumber = random.Next(0,1000)+1;
+
+メッセージを表示する
+　∟ MessageBox.Show("THANK YOU!!");
+
+decimal→int型に変更する
+　∟Decimal.ToInt32(numericUpDown1.Value) または　(int)numericUpDown1.Value
+　数値表現が大→小は暗黙的にデータ型変換が可能。逆（小→大）は不可能
+
+string型に変換する
+　∟maxAnswerCount.ToString();
+
+改行
+　∟Environment.NewLine
+
+★参照されるフォームの変数はpublicにする
+★this.Hide();←this.Closeでは変数を渡せないので渡すまではthis.Hide();で隠す
+★Form2 a = new Form2();
+a.ShowDialog();
+　∟参照元で開く
+a.Close();
+　∟参照先のフォームを閉じる※変数を渡した後に実行する
+★numericUpDown1.Maximum = maxNumber;※最大値も変更すること
+
+
+	  
 新しいプロジェクトの作成でC#＞.netを選択して作成する
 
 
