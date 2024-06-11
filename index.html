@@ -206,7 +206,196 @@ $('ul').click(e =>{
   //JQuery要素で変換した削除の仕方ふわっと削除する
   $(e.target).fadeOut();
 });
-});	  
+});	
+	
+	  
+	  C#
+	  namespace denntaku
+{
+    public partial class textHyouji : Form
+    {
+        private bool flag = false;
+        private decimal kotae = 0;
+        private string enzan_mae = "";
+        private string itiji = "";
+
+        public textHyouji()
+        {
+            InitializeComponent();
+            textBox1.Text = "0";
+        }
+
+        private void suuji0_Click(object sender, EventArgs e)
+        {
+            keisan("0");
+        }
+        private void suuji1_Click(object sender, EventArgs e)
+        {
+            keisan("1");
+        }
+
+        private void suuji2_Click(object sender, EventArgs e)
+        {
+            keisan("2");
+        }
+
+        private void suuji3_Click(object sender, EventArgs e)
+        {
+            keisan("3");
+        }
+        private void suuji4_Click(object sender, EventArgs e)
+        {
+            keisan("4");
+        }
+        private void suuji5_Click(object sender, EventArgs e)
+        {
+            keisan("5");
+        }
+        private void suuji6_Click(object sender, EventArgs e)
+        {
+            keisan("6");
+        }
+        private void suuji7_Click(object sender, EventArgs e)
+        {
+            keisan("7");
+        }
+        private void suuji8_Click(object sender, EventArgs e)
+        {
+            keisan("8");
+        }
+        private void suuji9_Click(object sender, EventArgs e)
+        {
+            keisan("9");
+        }
+        private void keisan(string suuti)
+        {
+            if ((textBox1.Text == "0") || (flag == true))
+            {
+                textBox1.Text = "";
+            }
+            textBox1.Text += suuti;
+            flag = false;
+        }
+
+        private void textsyousuuten_Click(object sender, EventArgs e)
+        {
+
+            if (textBox1.Text == "0" || flag)
+            {
+                textBox1.Text = "0.";
+                flag = false;
+                return;
+            }
+
+            if (textBox1.Text.IndexOf(".")>0)
+            {
+                return;
+            }
+
+            textBox1.Text += ".";
+        }
+
+        private void testclear_Click(object sender, EventArgs e)
+        {
+            textBox1.Text = "0";
+            enzan_mae = "";
+            kotae = 0;
+            return;
+        }
+
+        private void testbuck_Click(object sender, EventArgs e)
+        {
+            if (0<textBox1.Text.Length)
+            {
+                textBox1.Text = textBox1.Text.Substring(0, textBox1.Text.Length - 1);
+            }
+
+            if (0 == textBox1.Text.Length)
+            {
+                textBox1.Text = "0";
+            }
+        }
+
+        private void testpurusu_Click(object sender, EventArgs e)
+        {
+            result("+");
+        }
+
+        private void textMinus_Click(object sender, EventArgs e)
+        {
+            result("-");
+        }
+
+        private void textbatu_Click(object sender, EventArgs e)
+        {
+            result("×");
+        }
+
+        private void textwariann_Click(object sender, EventArgs e)
+        {
+            result("÷");
+        }
+
+        private void textequal_Click(object sender, EventArgs e)
+        {
+            result("=");
+        }
+        private void result(string enzan)
+        {
+            decimal hyoujiatai;
+            if (!(decimal.TryParse(textBox1.Text,out hyoujiatai)))
+            {
+                textBox1.Text = "ERROR";
+                enzan_mae = "";
+                kotae = 0;
+                return;
+            }
+
+            try
+            {
+                switch (enzan_mae)
+                {
+                    case "+":
+                        kotae += hyoujiatai;
+                        break;
+                    case "-":
+                        kotae -= hyoujiatai;
+                        break;
+                    case "×":
+                        kotae *= hyoujiatai;
+                        break;
+                    case "÷":
+                        kotae /= Math.Round(hyoujiatai,12);
+                        break;
+                    default:
+                        kotae = hyoujiatai;
+                        break;
+                }
+            }catch(Exception e)
+            {
+                textBox1.Text = e.Message;
+                enzan_mae = "";
+                kotae = 0;
+                return;
+            }
+
+            flag = true;
+            enzan_mae = enzan;
+
+            if (enzan == "=")
+            {
+                textBox1.Text = kotae.ToString();
+                enzan_mae = "";
+                kotae = 0; 
+            }
+
+
+
+        }
+
+
+    }
+}
   </code>
 </pre>
   
