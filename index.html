@@ -11,6 +11,12 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+SQL年齢算出
+	  select case when DATEADD(yyyy, DATEDIFF(yyyy, birth, GETDATE()), birth) <= GETDATE() then
+        DATEDIFF(yyyy, birth, GETDATE() ) else
+         DATEDIFF(yyyy, birth, GETDATE() ) - 1 end 
+     AS age from players
+	  
 c#
 	  Game
 	  【テキストボックス】
