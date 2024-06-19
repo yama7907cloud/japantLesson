@@ -11,11 +11,69 @@
   <p>新しい情報です</p>
 <pre>
   <code>
-SQL年齢算出
-	  select case when DATEADD(yyyy, DATEDIFF(yyyy, birth, GETDATE()), birth) <= GETDATE() then
-        DATEDIFF(yyyy, birth, GETDATE() ) else
-         DATEDIFF(yyyy, birth, GETDATE() ) - 1 end 
-     AS age from players
+Sub rappuDelete()
+Const skucdCol = 2
+Const colorCol = 3
+Const sizeCol = 4
+
+Dim eRow As Long, mainSh As Worksheet
+Dim i As Long, skucdVal As String, colorVal As String, sizeVal As String
+Dim myRange As Range, myObj As Range, myCell As Range, colori As Long, jugge As Long, Count As Long, temp As Long
+
+
+Set mainSh = ThisWorkbook.Sheets(ActiveSheet.Name)
+With mainSh
+    eRow = .Cells(Rows.Count, skucdCol).End(xlUp).Row
+    .Range(Cells(2, skucdCol), Cells(eRow, sizeCol)).Interior.ColorIndex = xlNone
+    colori = 1
+    jugge = 0
+    For i = 2 To eRow
+        If .Cells(i, skucdCol).Value <> "" And .Cells(i, 1).Value = "" Then
+            Count = 0
+            temp = 0
+            skucdVal = .Cells(i, skucdCol).Value
+            colorVal = .Cells(i, colorCol).Value
+            sizeVal = .Cells(i, sizeCol).Value
+                Set myRange = .Columns(skucdCol)
+                Set myObj = myRange.Find(skucdVal, LookAt:=xlWhole)
+                
+                    If myObj Is Nothing Then
+                
+                    Else
+                
+                        Set myCell = myObj
+                        Do
+                            If .Cells(myCell.Row, colorCol).Value = colorVal And .Cells(myCell.Row, sizeCol).Value = sizeVal Then
+                                If Count = 1 Then
+                                    .Range(Cells(myCell.Row, skucdCol), Cells(myCell.Row, sizeCol)).Interior.ColorIndex = 3
+                                    .Cells(myCell.Row, 1).Value = colori
+                                    .Range(Cells(temp, skucdCol), Cells(temp, sizeCol)).Interior.ColorIndex = 3
+                                    .Cells(temp, 1).Value = colori
+                                    jugge = 1
+                                End If
+                                temp = myCell.Row
+                                Count = 1
+                            End If
+                          Set myCell = myRange.FindNext(myCell)
+                        Loop While myCell.Row <> myObj.Row
+                        
+                        If jugge = 1 Then
+                            colori = colori + 1
+                            jugge = 0
+                        End If
+                        
+                    End If
+        End If
+    Next i
+End With
+
+If colori <> 1 Then
+    MsgBox "商品コードに重複が" & colori - 1 & "件見られます。" & vbCrLf & "確認願います。", vbExclamation
+Else
+    MsgBox "商品コードに重複は見られませんでした。"
+End If
+
+End Sub
 	  
 c#
 	  Game
