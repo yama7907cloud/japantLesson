@@ -11,6 +11,13 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+-------sql-----
+--クラブでグループバイして、中身を表示させる
+use yama
+select club,STRING_AGG( CONVERT(VARCHAR(max), name), ',') AS Result ,count(club) from players with(nolock) group by club 
+
+
+	  
 Sub rappuDelete()
 Const skucdCol = 2
 Const colorCol = 3
