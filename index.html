@@ -11,6 +11,66 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+------java-----クラスの学習
+class Score {
+  private String subject;
+  protected int score;
+
+  Score(String subject, int score) {
+    this.subject = subject;
+    this.score = score;
+  }
+
+  protected String getResult() {
+    return this.score >= 80 ? "Pass" : "Fail";
+  }
+
+  String getScoreString() {
+    return this.subject + ", " + this.score + ", " + this.getResult();
+  }
+}
+
+class MathScore extends Score {
+  MathScore(int score) {
+    super("Math", score);
+  }
+  protected String getResult() {
+    return this.score >= 40 ? "Pass" : "Fail";
+  }
+}
+
+class EnglishScore extends Score {
+  EnglishScore(int score) {
+    super("English", score);
+  }
+
+  protected String getResult() {
+    return this.score >= 90 ? "Pass" : "Fail";
+  }
+}
+
+class User {
+  private String name;
+  private Score score;
+
+  User(String name, Score score) {
+    this.name = name;
+    this.score = score;
+  }
+
+  String getUserString() {
+    return this.name + ", " + this.score.getScoreString();
+  }
+}
+
+public class MyApp {
+  public static void main(String[] args) {
+    User user1 = new User("Taro", new MathScore(70));
+    User user2 = new User("Jiro", new EnglishScore(89));
+
+    System.out.println(user1.getUserString());
+    System.out.println(user2.getUserString());
+  }
 -------sql-----
 --クラブでグループバイして、中身を表示させる
 use yama
