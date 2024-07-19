@@ -12,21 +12,28 @@
 <pre>
   <code>
 ------java-----クラスの学習
-class Score {
+interface Loggable {
+  void log();
+}
+
+abstract class Score implements Loggable {
   private String subject;
   protected int score;
 
   Score(String subject, int score) {
     this.subject = subject;
     this.score = score;
+    this.log();　　　コンストラクタの際に実装
   }
 
-  protected String getResult() {
-    return this.score >= 80 ? "Pass" : "Fail";
-  }
+  protected abstract String getResult();
 
   String getScoreString() {
     return this.subject + ", " + this.score + ", " + this.getResult();
+  }
+
+  public void log(){
+    System.out.println("created" + this.subject);
   }
 }
 
@@ -34,8 +41,11 @@ class MathScore extends Score {
   MathScore(int score) {
     super("Math", score);
   }
+
+  @Override
   protected String getResult() {
-    return this.score >= 40 ? "Pass" : "Fail";
+    System.out.println("MathScore method");
+    return this.score >= 50 ? "Pass" : "Fail";
   }
 }
 
@@ -44,33 +54,42 @@ class EnglishScore extends Score {
     super("English", score);
   }
 
+  @Override
   protected String getResult() {
-    return this.score >= 90 ? "Pass" : "Fail";
+    System.out.println("EnglishScore method");
+    return this.score >= 70 ? "Pass" : "Fail";
   }
 }
 
-class User {
+class User implements Loggable {
   private String name;
   private Score score;
 
   User(String name, Score score) {
     this.name = name;
     this.score = score;
+    this.log();
   }
 
   String getUserString() {
     return this.name + ", " + this.score.getScoreString();
+  }
+
+  public void log(){
+    System.out.println("created" + this.name);
   }
 }
 
 public class MyApp {
   public static void main(String[] args) {
     User user1 = new User("Taro", new MathScore(70));
-    User user2 = new User("Jiro", new EnglishScore(89));
+    User user2 = new User("Jiro", new EnglishScore(80));
 
     System.out.println(user1.getUserString());
     System.out.println(user2.getUserString());
   }
+}
+
 -------sql-----
 --クラブでグループバイして、中身を表示させる
 use yama
