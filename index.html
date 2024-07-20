@@ -11,6 +11,200 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+------COBOL-----
+COBOL
+拡張子…cob
+コメント…*>
+文末…．
+配列のインデックス番号は1から始まる
+文字列の連結…半角スペース
+
+
+
+
+DIVISION　>　SECTION
+DIVISION…順番必須だが、省略可能
+環境部
+ ∟①IDENTIFICATION DIVISION.←記述必須　プログラムID
+　　 PROGRAM-ID. 任意の文字列.
+
+環境部（実行環境・入出力ファイル等を記述）
+ ∟②ENVIRONMENT DIVISION.←省略可能
+　　　　INPUT-OUTPUT SECTION.
+	  FILE-CONTROL.　　←どのファイルに書き込むか
+	    SELECT OUT-FILE※A ASSIGN TO 'ファイル名(例out.txt)'
+　　　　　　  ORGANIZATION IS LINE SEQUETIAL.　改行で書き込む指定する
+
+
+
+
+データ部（変数の定義等を行うエリア）
+ ∟③DATA DIVISION.←省略可能
+記述例）
+DATA DIVISION.
+  WOUKING-STORAGE SECTION.
+    01 変数名 PIC X(20).
+	∟変数のレベル番号・変数名・PIC・
+	∟文字列はX(文字数）又はXを文字数分記述
+	∟代入は手続き部エリアにて実施
+　　01 変数名 PIC 9(桁数) ※VALUE デフォルト値.
+	∟数値は9(桁数)　又は9を文字数分記述
+	∟0埋めされる
+	∟デフォルト値はなくても良い
+
+    01 変数名 PIC 9(桁数)V9(小数点の桁数). 又は9999V99
+	∟小数点はVを付与して記述する
+
+　　01 FILLER PIC X(20). ←文字列20数分の予備領域確保
+		
+
+
+ 	環境部の指定時↓
+　　　　　FILE SECTION. ←ファイルセクションを定義する
+            FD OUT-FILE※A.
+	     01 変数名 PIC 99.
+	  WORKING-STORAGE SECTION.
+	    01 変数名 PIC 99 VALUE 0.
+
+集合項目（※レベル番号は親子関係を表す）
+　01 変数名A.
+    03 変数名B PIC X(10).
+    03 変数名C PIC 9(100).
+ ∟使い方は手続き部にて記述
+
+配列
+　01 配列名AA.
+    03 配列名BB OCCURS 3 PIC X(90). ※OCCURS 領域数
+
+
+
+手続き部
+ ∟④PROCEDURE DIVISION.←記述必須
+       MAIN SECTION.
+	MOVE 文字列 TO 変数名.←変数名に代入する
+	DISPLAY 変数名.
+	*>集合項目↓
+	MOVE 文字列B TO 変数名B.←集合項目代入
+	MOVE 文字列C TO 変数名C.←集合項目代入
+	DISPLAY 変数名A         ←変数名B,Cを出力する
+	DISPLAY 変数名C         ←変数名Cのみ出力する
+	*>配列↓
+	MOVE 文字列BB TO 配列名BB(1).
+	STOP RUN.
+
+指示の内容
+DISPLAY 表示させる指示
+STOP RUN.　プログラム終了
+
+★計算
+データ部
+DATA DIVISION
+  WOUKING-STORAGE SECTION.
+    01 NUM-1
+	03 D1 PIC 9(5) VALUE 0.
+	03 D2 PIC 9(5) VALUE 0.
+	03 D3 PIC 9(5) VALUE 0.
+	03 D4 PIC 9(5) VALUE 0.
+
+手続き部
+足し算
+　∟ADD 5 TO D1. ←D1+5
+　∟ADD 6 TO D1 D3 D4. ←D1+5　D3+5　D4+5
+引き算
+　∟SUBTRACT 4 FROM D1. ←D1-4
+割り算
+　∟DIVIDE D1 BY D2 GIVING D3 REMAINDER D4, ←D1/D2 D3に答え代入（GIVING） D4に余り代入（REMAINDER）
+かけ算
+　∟MULTIPLY D1 BY D2 GIVING D3 ←D1*D2 D3に答え代入（GIVING）
+
+その他の処理
+　∟COMPUTE D3 = D1 * D2. ←かけ算と同じ処理を実施　＋－／＊　**
+
+
+★インプットボックス
+データ部※入力値を格納する変数を定義
+ DATA DIVISION
+  WOUKING-STORAGE SECTION.
+    01 変数名V PIC X(80).
+ 
+手続き部
+  DISPLAY 質問？.
+  ACCEPT 変数名V.
+
+
+★条件分岐
+END-IFの後にのみ.を記述する
+①
+データ部※入力値を格納する変数を定義
+ DATA DIVISION
+  WOUKING-STORAGE SECTION.
+    01 変数名N PIC 9(2).
+
+手続き部
+ IF 変数名N > 60 THEN
+  TRUEの処理
+ ELSE
+　FALSEの処理
+ END-IF.
+
+※
+・= (IS EQUAL TO)
+・NOT = (IS NOT EQUAL TO)
+・> (IS GREATER THEN)
+・>= (IS GREATER THEN OR EQUAL TO)
+・< (IS LESS THAN)
+・<= (IS LESS THEN OR EQUAL TO)
+
+②
+EVALUATE
+END-EVALUATEの後にのみ.を記述する
+データ部※入力値を格納する変数を定義
+ DATA DIVISION
+  WOUKING-STORAGE SECTION.
+    01 変数名X PIC X(2).
+
+手続き部
+  MOVE 文字列 TO 変数名X.
+  EVALUATE 変数名X
+　　WHEN "AAA"
+	処理AAA
+    WHEN "BBB"
+        処理BBB
+    WHEN OTHER
+        当てはまらない処理
+  END-EVALUTE.
+
+
+★繰り返し
+END-PERFORMの後にのみ.を記述する
+①
+データ部※入力値を格納する変数を定義
+ DATA DIVISION
+  WOUKING-STORAGE SECTION.
+    01 変数名N PIC 9(2) VALUE 1.
+
+手続き部
+  PERFORM 10 TIMES  ←10回繰り返す
+    処理
+    ADD 1 TO 変数名N 
+  END-PERFORM.
+
+
+②
+　PERFORM UNTIL 変数名N > 10  ←条件に達したら処理終了
+　　処理
+　　ADD 1 TO 変数名N ←無限を防ぐ
+  END-PERFORM.
+
+③
+　PERFORM VARYING 変数名N FROM 1 BY 1 UNTIL 変数名N > 10
+    処理
+  END-PERFORM.
+  ∟FROM…開始
+　∟BY…づつ
+　∟UNTIL…条件に達するまで
+
+	  
 ------java-----クラスの学習
 interface Loggable {
   void log();
