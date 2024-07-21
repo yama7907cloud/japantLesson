@@ -28,13 +28,22 @@ DIVISION…順番必須だが、省略可能
  ∟①IDENTIFICATION DIVISION.←記述必須　プログラムID
 　　 PROGRAM-ID. 任意の文字列.
 
-環境部（実行環境・入出力ファイル等を記述）
+環境部（実行環境・入出力ファイル等を記述）書き込み
  ∟②ENVIRONMENT DIVISION.←省略可能
 　　　　INPUT-OUTPUT SECTION.
 	  FILE-CONTROL.　　←どのファイルに書き込むか
 	    SELECT OUT-FILE※A ASSIGN TO 'ファイル名(例out.txt)'
 　　　　　　  ORGANIZATION IS LINE SEQUETIAL.　改行で書き込む指定する
 
+環境部（実行環境・入出力ファイル等を記述）読み込み
+ ∟②ENVIRONMENT DIVISION.←省略可能
+　　　　INPUT-OUTPUT SECTION.
+	  FILE-CONTROL.　　←どのファイルに書き込むか
+	    SELECT IN-FILE※A ASSIGN TO 'ファイル名(例in.txt)'
+　　　　　　  ORGANIZATION IS LINE SEQUETIAL.　改行で書き込む指定する
+	      STATUS 変数名B.←ステータスを管理するための変数を定義
+→③データ部に定義DATA DIVISION.
+		  01 変数名B
 
 
 
@@ -59,12 +68,19 @@ DATA DIVISION.
 		
 
 
- 	環境部の指定時↓
+ 	環境部の指定時↓書き込み
 　　　　　FILE SECTION. ←ファイルセクションを定義する
             FD OUT-FILE※A.
 	     01 変数名 PIC 99.
 	  WORKING-STORAGE SECTION.
 	    01 変数名 PIC 99 VALUE 0.
+
+	環境部の指定時↓読み込み
+　　　　　FILE SECTION. ←ファイルセクションを定義する
+            FD IN-FILE※A.
+	     01 変数名 PIC X(20).
+	  WORKING-STORAGE SECTION.
+	    
 
 集合項目（※レベル番号は親子関係を表す）
 　01 変数名A.
@@ -203,6 +219,36 @@ END-PERFORMの後にのみ.を記述する
   ∟FROM…開始
 　∟BY…づつ
 　∟UNTIL…条件に達するまで
+
+
+★ファイルを書き込む
+　∟
+手続き部 OPEN OUTPUT OUT-FILE.※A
+	PERFORM 10 TIMES←ループ文
+	  ADD 1 TO LINE-COUNT
+	  MOVE LINE-COUNT TO 変数名※ファイルセクションを定義した変数名
+	  WRITE 変数名※ファイルセクションを定義した変数名
+	END-PERFORM.
+
+	CLOSE OUT-FILE.※A
+∟ファイルの確認
+ターミナル画面
+　　∟less ファイル名
+
+★ファイルの読み込み
+事前にin.txtが存在する前提
+手続き部 OPEN INPUT IN-FILE.※A
+	PERFORM UNTIL 変数名　NOT = "00"←ループ文 正常なら00が返る　変数はWORKING-STORAGEで定義した変数
+	　READ IN-FILE
+	    AT END　
+		※データが読み終わった際の処理
+ 	    NOT AT END　
+		※データ読み込み途中の処理
+		DISPLAY 変数名※ファイルセクションを定義した際の変数
+	  END-READ
+	END-PERFORM.
+
+	CLOSE IN-FILE.※A
 
 	  
 ------java-----クラスの学習
