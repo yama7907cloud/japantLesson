@@ -11,6 +11,32 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+-------C#------
+【参照関係】
+エクスプローラソリューション＞右クリックから新規プロジェクト追加＞クラスライブラリ.NET FRAMEWORK　プロジェクトで共通プロジェクトを作成
+参照する場合は、参照する側の参照＞参照の追加でプロジェクトにチェックを入れてok
+※参照は片側からのみしか適用されない
+
+
+using namespace名;で宣言→クラス名.メソッド()で実行できる
+
+Ctrl ＋　. で必要なnamespaceを表示してくれる→適用するとusingに追加される
+
+
+int型 は　Messagebox.Showでは表示できない→対応＿変数.ToString()で変換
+デバック
+　∟1行づつ実行F11 /メソッド内部には行かないF10 /メソッドに入った場合抜けるにはShift + F11
+
+データ型
+short shortVal = 0;
+short shortVal2 = short.MaxValue;
+uint uintval = 10;
+
+
+プロパティの変更
+表示位置
+∟StartPosition = FormStartPosition.WindowsDefaultLocation;
+	  
 ------COBOL-----
 COBOL
 拡張子…cob
