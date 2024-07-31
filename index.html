@@ -43,6 +43,20 @@ uint uintval = 10;
 　∟TryPerse　　bool result = int.TryParse(変数名,out 出力される変数)※出力される変数を宣言する必要がある 10.4はfalseになる→ifで制御する
 　∟Convert    Convert.ToInt32(変数名);nullは整数だと0になる
 int = toint32
+
+
+●動的配列
+using System.Collect.Generic;←環境設定
+List<string> 変数 = new List<string>※int等でも良い
+追加
+　∟変数.ADD(値)
+削除
+　∟変数.Remove(値)　値を消す
+　∟変数.RemoveAt(インデックス) インデックスで消す
+　∟変数.Clear()  すべて削除
+
+要素数を数える
+　変数.Count.ToString()
 ------COBOL-----
 COBOL
 拡張子…cob
