@@ -36,7 +36,13 @@ uint uintval = 10;
 プロパティの変更
 表示位置
 ∟StartPosition = FormStartPosition.WindowsDefaultLocation;
-	  
+
+型変換
+　∟キャスト　(int)変数名※切り捨て
+　∟Parse　　　int.Parse(変数名)※10.4は例外・nullは例外→処置　例外を受けるコードにする　try catchで制御
+　∟TryPerse　　bool result = int.TryParse(変数名,out 出力される変数)※出力される変数を宣言する必要がある 10.4はfalseになる→ifで制御する
+　∟Convert    Convert.ToInt32(変数名);nullは整数だと0になる
+int = toint32
 ------COBOL-----
 COBOL
 拡張子…cob
