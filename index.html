@@ -11,6 +11,57 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+-------java------
+JAVA
+データ型
+　∟byte/short/int/long
+　∟float/double
+　∟boolean
+　∟char ''
+　∟String
+　∟配列
+　∟クラス
+
+
+
+
+
+変数
+　∟データ型　定数名
+定数
+　∟final データ型　定数名 = 値※平行で値の代入は必須　定数名は全大文字
+
+配列
+　∟String[] scores = {"maki","toshiharu","mao","haaruyoshi","mitue"};
+　∟System.out.println(scores.length);要素数の取得
+　∟int[][] scores = {{60,55,31},{78,94,87}};配列の中に配列
+
+構文の一例
+System.out.println(String.format("私の名前は%s   %s またの名をあだ名で%s",fName,lName,text));
+
+コンソールインプット
+　∟事前準備　import java.util.Scanner;※classの前に記述する
+　∟数字　new Scanner(System.in).nextInt();
+　∟文字列　new Scanner(System.in).next();
+
+
+比較演算子
+　∟返値変数.equals("red") == true
+
+拡張for文
+　∟for(int 仮引数:配列変数){
+
+条件演算子（三項演算子）※返値が発生する
+　∟条件?trueの処理:falseの処理;
+
+メソッド
+　∟定義
+	private static void test(String a) {
+		System.out.println(String.format("%sこんにちは",a) );
+	}
+　∟実行
+	test("yamashita");
+  
 -------C#------
 【参照関係】
 エクスプローラソリューション＞右クリックから新規プロジェクト追加＞クラスライブラリ.NET FRAMEWORK　プロジェクトで共通プロジェクトを作成
