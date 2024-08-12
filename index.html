@@ -11,6 +11,18 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+
+-------Oracle------
+日本語カラムにするには""で囲う
+INSERT文
+　∟INSERT ALL  -- ALLが必要
+　∟INTO Students VALUES (1, 'Alice', 16)
+　∟INTO Students VALUES (2, 'Bob', 18)
+　∟INTO Evaluations VALUES ('Alice', 'english', 30)
+　∟INTO Evaluations VALUES ('Alice', 'math', 60)
+　∟INTO Evaluations VALUES ('Bob', 'english', 40)
+　∟INTO Evaluations VALUES ('Bob', 'math', 80)
+　∟SELECT * FROM DUAL; --この一文も必要 
 -------java------
 JAVA
 データ型
