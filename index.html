@@ -11,7 +11,49 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+----------jqualy-----------
+ $('button').click(() => {
+    $('p')
+      .text('おはよう！')
+      .addClass('red-text');※styleで事前にクラスを定義
+  });
+$('li')
+    .eq(2)※liの2番目の要素を指定
+ $('<li>')
+      .text('New Item')
+      .appendTo('ul');※ul要素の最後に追加
 
+
+  $('<li>')
+      .text($('input').val())※フォーム値を取得する
+      .appendTo('ul');
+    $('input')
+      .val('')※から文字を代入する
+      .focus();※フォーカスを当てる
+
+$('ul').click(e => {
+    if (e.target.nodeName !== 'LI' || !confirm('Are you sure?')) {※liをクリックすると削除できる
+      return;
+    }
+    e.target.remove();
+  });
+※電波ulを指定した場合、子要素をe.targetで取得できる。ulを取得する方法は e.currentTargetで取得できる
+$(e.target).fadeOut();※e.targetはjqualyでの要素ではないので変換が必要
+
+セレクター
+$('li:nth-child(odd), li:last-child')
+
+
+css
+ li {
+      cursor: pointer;
+    }
+    li:hover::after {
+      content: '[x]';
+      font-size: 14px;
+      color: #aaa;
+      margin-left: 4px;
+    }
 -------Oracle------
 日本語カラムにするには""で囲う
 INSERT文
