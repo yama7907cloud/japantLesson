@@ -11,6 +11,43 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+
+-----------html-----------
+<meta charset="">utf-8,shift_jis,euc-jp
+
+特殊文字
+& &amp;
+< &lt;
+> &gt;
+" &quot;
+  &nbsp;
+c &copy;
+r reg;
+yu-ro &euro;
+
+<a>
+ 同一ページのリンク→リンク元のhref= "#リンク先ID"
+※他ページの遷移後に指定する場合も同様#ID名を最後に追加して記述すること
+電子メールの発信→<a href="mailto:宛先のメールアドレス>こちらへ</a>
+ ∟別途電子メールの設定が必要になってくる
+
+フォーム
+input type="submit" value="送信"
+input type="reset" value="取消"
+
+input type="text" name="" value="初期値" size="幅" maxlength=""※入力最大文字数
+input type="password" name="" value="" size="" maxlength=""
+
+input type="radio" name="" value="送信する値" checked※namaは同じ名前
+input type="checkbox" name="" value="送信する値" checked
+
+<textarea name="" rows="" cols=""> </textarea>
+
+
+<select name="">
+<option value="送信値" selected> </option>
+</select>
+※複数の場合selectに→を指定　 size="" multiple※+ctrl等で複数指定可能
 ----------javascript-----------
 <meta charset="utf-8">→メモ帳UTF-8で保存
 <meta charset="shift_jis">→メモ帳ANSIで保存
