@@ -309,14 +309,16 @@ dis.readUTF();文字列の読み込み
 dis.readInt();整数型の読み込み
 
 【キャラクタストリーム】
+
+import java.io.*;
 FileWriter fw = null
-BufferedWeiter bw = null
+BufferedWriter bw = null
 FileReader fr = null
-VufferedReader = null
+BufferedReader = null
 try{
 fw = new FileWriter(ファイル名)
 bw = new BufferedWeiter(ファイル名)
-bw.write(文字列,0,文字列.length())
+bw.write(文字列,0,文字列.length())第2引数…開始位置　第3引数…文字分
 bw.newLine()
 bw.flush()
 }catch(IOException er){※入出力時のエラー例外処理
@@ -327,7 +329,105 @@ if(bw != null){bw.close()}
 }catch(Exception er){}
 
 読み込み
-　∟br.readline()
+　∟br.readline()1行文のデータを読み込む
+
+例
+// Exercise07_2.java
+
+import java.io.*;
+
+public class Exercise07_2 {
+    public static void main(String[] args) {
+        String fileName = "data07_2.txt";    // ファイル名
+        boolean isReadyToRead = false;       // 出力が成功したかどうかを表す変数
+        FileWriter fw = null;         // 出力ファイル操作用変数
+        BufferedWriter bw = null;         // 出力ファイル操作用変数
+        FileReader fr = null;          // 入力ファイル操作用変数
+        BufferedReader  br = null;          // 入力ファイル操作用変数
+
+        // コマンドラインから受け取った引数の数を確認する
+        if (args.length < 2) {
+            // 引数が指定されていない場合は、エラーメッセージを表示する
+            System.out.println("2つの文字列を指定してください。");
+            System.out.println("使用方法：java Exercise07_2 文字列1 文字列2");
+
+            // プログラムの実行を終了する
+            System.exit(1);
+        }
+
+        // コマンドラインの引数を受け取り、文字数を取得する
+        String str11 = args[0];
+        String str12 = args[1];
+
+        // ファイルにデータを書き込む
+        try {
+            // 出力ストリームの獲得（ファイルのオープン）
+            fw = new FileWriter(fileName);
+            bw = new BufferedWriter(fw);
+
+            // データの書き込み（出力）
+            bw.write(str11, 0, str11.length());
+            bw.newLine( );                            // 行区切り
+            bw.write(str12, 0, str12.length());
+            bw.newLine( );                            // 行区切り
+
+            // バッファの内容を出力してクリアする
+            bw.flush( );
+
+            // 出力したデータの表示
+            System.out.println("wrote : " + str11);
+            System.out.println("wrote : " + str12);
+
+            // 読み込みのための出力が成功したことを設定
+            isReadyToRead = true;
+         } catch (IOException e) {
+            System.err.println 
+                ("Opening error or IO error occurred.");
+        } catch (Exception e) {
+            System.err.println("error occurred."); 
+        } finally {
+            // エラーの有無にかかわらずストリームをクローズする
+            try {
+                if (bw != null) {
+                    bw.close();      // ストリームのクローズ（ファイルのクローズ）
+                }
+            } catch (Exception ex) {   // クローズ処理で例外が発生したときの処理
+            } 
+        }
+
+        if (!isReadyToRead) {
+            System.exit(1);           // 入力するファイルがないので処理を終了
+        }
+
+        // ファイルからデータを読み込む
+        try {
+            // 入力ストリームの獲得（ファイルのオープン）
+            fr = new FileReader(fileName);
+            br = new BufferedReader(fr);
+
+            // データの読み込み（入力）
+            String str21 = br.readLine();
+            String str22 = br.readLine();
+
+            // 読み込んだデータの表示
+            System.out.println("read  : " + str21);
+            System.out.println("read  : " + str22);
+        } catch (IOException e) {
+            System.err.println 
+                ("Opening error or IO error occurred."); 
+        } catch (Exception e) {
+            System.err.println("error occurred."); 
+        } finally {
+            // エラーの有無にかかわらずストリームをクローズする
+            try {
+                if (br != null) {
+                    br.close();      // ストリームのクローズ（ファイルのクローズ）
+                }
+            } catch (Exception ex) {   // クローズ処理で例外が発生したときの処理
+            }
+        }
+    }
+}
 -------Oracle------
 日本語カラムにするには""で囲う
 INSERT文
