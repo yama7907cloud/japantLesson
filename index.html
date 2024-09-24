@@ -12,145 +12,322 @@
 <pre>
   <code>
 
------------html-----------
-<meta charset="">utf-8,shift_jis,euc-jp
-
-特殊文字
-& &amp;
-< &lt;
-> &gt;
-" &quot;
-  &nbsp;
-c &copy;
-r reg;
-yu-ro &euro;
-
-<a>
- 同一ページのリンク→リンク元のhref= "#リンク先ID"
-※他ページの遷移後に指定する場合も同様#ID名を最後に追加して記述すること
-電子メールの発信→< href="-mailto:宛先のメールアドレス>こちらへ</a>
- ∟別途電子メールの設定が必要になってくる
-
-フォーム
-input type="submit" value="送信"
-input type="reset" value="取消"
-
-input type="text" name="" value="初期値" size="幅" maxlength=""※入力最大文字数
-input type="password" name="" value="" size="" maxlength=""
-
-input type="radio" name="" value="送信する値" checked※namaは同じ名前
-input type="checkbox" name="" value="送信する値" checked
-
-<-textarea name="" rows="" cols=""> </textarea>
+-----------java-----------
+【javaのインストールの確認】
+インストールは下記の画面
+https://docs.oracle.com/javase/jp/19/install/overview-jdk-installation.html
+java SEを無料でインストールしたら、確認
+　∟javac -version ※コマンドプロンプトにて実行する
 
 
-<-select name="">
-<-option value="送信値" selected> </option>
-</select>
-※複数の場合selectに→を指定　 size="" multiple※+ctrl等で複数指定可能
-----------javascript-----------
-<meta charset="utf-8">→メモ帳UTF-8で保存
-<meta charset="shift_jis">→メモ帳ANSIで保存
+【ソース作成】
+・コマンドプロンプトを立ち上げる cmd ※exitコマンドで終了
+・cd パス　ディレクトリーを任意の場所に設定する
+・notepad ファイル名.java→存在しない場合は作成するか尋ねられる
+・プログラムを作成
+class Exercise01※ファイル名 {
+
+	public static void main (String[] args){
+		System.out.println("Java World!!");
+
+	}
+}
+
+【コンパイル】
+dir ファイル名.* ※コマンドプロンプトで存在確認
+javac ファイル名.java※コンパイルを実施し、ファイル名.classが作成される
+　∟javac -encoding utf-8 ファイル名.java※エンコーディングを指定して実行ファイル(.class)を作成
+	※ANSIの場合はsjisを記述する
+　※エラーが発生していたら記述される　エラー行数、エラー説明、エラーのコード概要が記述されている
 
 
-HTMLに記述する場合
-<script type="text/javascript">処理</script>
+【実行】
+java ファイル名 ※コマンドプロンプトで実行。拡張子は不要!
 
-varは複数定義できる
-letは複数定義できない
+【データ型】
+byte/short/int/long（末にl）/float（末にf）/double/char（''）/boolean/String("")
 
-データ型を知りたい場合は　typeof 変数
+【定数】
+final データ型 定数　= 値　※全て大文字で記述
 
-配列の要素数を取得　配列名.length
+【型変換キャスト】
+(int)値　(float)値
 
-window.prompt('')でinputboxを入力させたらString型※キャンセルはnull
-　∟Number(値)…number型に変換される
-　∟String(値)…String型変換される
-
-
-for (変数名 in 配列名)
-　∟変数名にはインデックス番号が入ってくる
-　∟ofに変更すると値が入ってくる
-
-
-関数の引数を参照する
-　∟関数定義内でarguments.length(引数の数)　for (変数名 in arguments)でインデックス番号として利用
-
-変数の巻き上げ
-　∟var 変数名←どこで宣言しても、上部で宣言したことになる※初期値は含まれないので注意すること
+宣言→String[] 変数 = new String[要素数]
+代入→変数[0] = 値
+宣言時代入→String[] 変数名 = {"値a","値b","値c"}
+コマンドライン引数…コマンドラインからmainメソッドに引き渡される引数※String[] args→args[0]等で使用できる
+　∟args.length > 1 でコマンドラインの引数によって処理を分岐できる
 
 
-オブジェクトの追加
-　∟オブジェクト変数名.未存在プロパティ名=値※プロパティ名が存在しなければ自動で追加される
-　∟削除はdelete オブジェクト変数名.未存在プロパティ名
-　∟メソッド（関数）も定義可能　※プロパティ名にメソッド名:値にfunction(){ 処理 }※オブジェクト内のプロパティ値を取得したい場合はthis.を記述する
-  ∟メソッドの呼び出しは()をつけること
+if else は　1文であれば簡素化が可能 ※else if
+　∟if (条件式) 処理;
+    else 処理;
 
-オブジェクトと同様にクラス定義も可能
-　∟クラスの定義
-　　class クラス名{}→constructor(仮引数,仮引数){ 処理 }クラス生成時に実行される処理 ※メソッド名(){ 処理 }
+for(int i=0,j=0; i<5; i++, j++){}←変数が複数の記述も可能
 
-　∟let 変数名 = new クラス名(実引数,実引数);
-　クラスメソッドを実行する場合 変数名.メソッド名()
-
-arrayの組み込みオブジェクト(ビルトインオブジェクト)
-　∟配列名.push(値,値)※追加
-　∟配列名.reverce()※配列要素の順番を逆転
-　∟配列名.splice(該当のインデックス,削除する要素数,追加する値,追加する値)
-　∟new Date()現在時刻オブジェクトを生成※new Date(2024,6,21)※6は7月 0月からスタート
-　　※getFullYear()年 getMonth()月 getDate()日 getHours()時間 getMinutes()分
-　　※getSeconds()秒 getDay()※0日曜～6土曜
-
-変数.indexOf(値)
- ∟検索　変数に値が存在するか？存在する場合は、最初のインデックス番号　存在しない-1を返す
-
-変数.substring(開始位置,終了位置（未満値※含まない）※インデックス番号を記述
-
-変数.replace(置換前文字,置換語文字)
-変数.split(区切りたい文字)※区切りたい文字で配列を作成する
-----------jqualy-----------
- $('button').click(() => {
-    $('p')
-      .text('おはよう！')
-      .addClass('red-text');※styleで事前にクラスを定義
-  });
-$('li')
-    .eq(2)※liの2番目の要素を指定
- $('<li>')
-      .text('New Item')
-      .appendTo('ul');※ul要素の最後に追加
+foreach文→for(int i:配列名){}
 
 
-  $('<li>')
-      .text($('input').val())※フォーム値を取得する
-      .appendTo('ul');
-    $('input')
-      .val('')※から文字を代入する
-      .focus();※フォーカスを当てる
-
-$('ul').click(e => {
-    if (e.target.nodeName !== 'LI' || !confirm('Are you sure?')) {※liをクリックすると削除できる
-      return;
-    }
-    e.target.remove();
-  });
-※電波ulを指定した場合、子要素をe.targetで取得できる。ulを取得する方法は e.currentTargetで取得できる
-$(e.target).fadeOut();※e.targetはjqualyでの要素ではないので変換が必要
-
-セレクター
-$('li:nth-child(odd), li:last-child')
+クラス
+ クラス名　オブジェクト変数 = new クラス名()
+  ∟オブジェクト変数 = null;※解放の宣言
 
 
-css
- li {
-      cursor: pointer;
-    }
-    li:hover::after {
-      content: '[x]';
-      font-size: 14px;
-      color: #aaa;
-      margin-left: 4px;
-    }
+コンストラクタ
+　∟クラス名(){}
+
+コンストラクタは記述しなくてもコンパイルエラーにはならない
+が、デフォルトコンストラクタとして何もない状態で処理がされる
+public/protected/private※修飾子がない場合は同一パッケージのみ
+
+
+【継承】
+　∟public class 子クラス名 extends 親クラス{}
+オーバーロード
+　∟引数の違いのみで処理を分岐させる。同じ関数名を指定できる
+
+オーバーライド
+　∟★サブクラスでメソッドを書き換える場合は@Overrideを記述する　記述位置としてはメソッドの上行
+　∟サブクラスから親クラスのメソッドを呼び出す場合super.メソッド名()
+　∟コンストラクタのオーバーライド
+　　　public クラス名※コンストラクタになる(仮引数1, 仮引数2, 仮引数3){
+	super(仮引数1, 仮引数2);※親クラスのコンストラクタを呼び出す
+	変数 = 仮引数3;
+      }
+※サブクラスでコンストラクタを実行すると、親クラスの引数なしのコンストラクタを呼び出そうとするため、
+親クラスには引数なしのコンストラクタが必要になる
+
+引数なしコンストラクタでthis(仮引数1,仮引数2)と記述すると、引数ありのコンストラクタに処理が移る
+
+【キャスト】継承した子クラスでオーバーライドされたメソッドで一元管理する※型は親　インスタンスは子
+スパークラスの継承を利用するメリット【一元化 継承したクラスをそれぞれ一つにまとめることができる
+ただし、子クラスのみで定義したメソッドは実行できない。オーバーライドしたメソッドのみ
+　∟スパークラス型[] 配列名; ※配列を定義
+　配列[0] = new 子クラス型1(実引数)※インスタンス化
+  配列[1] = new 子クラス型2(実引数)※インスタンス化
+
+
+
+パッケージ 構造のひとかたまり
+　∟フォルダー階層と似ている※起点となるフォルダー（現在のディレクトリー）>フォルダー1> フォルダー2 >>class1,class2
+　パッケージ名はフォルダー1.フォルダー2
+　∟package パッケージ名; 
+　∟パッケージ外から読み込まれる場合はpublicを指定する
+　∟パッケージ外を利用する場合はimport文を利用する
+！！パーケージを記述したコードに関しては、コンパイルで作成されるファイル(.class)は階層に対応したフォルダーに配置することが必要
+
+【コンパイル】パッケージ記述あり
+　∟javac -d 起点となるフォルダー（現在のディレクトリー） ファイル名
+　∟.が現在のディレクトリー
+【実行】パッケージ記述あり
+　・カレントディレクトリーに設定
+　java パッケージ名.クラス名※拡張子は不要
+　※パッケージの記述があるコードは実行時にパッケージ名を指定しないとエラーになる（検出およびロードできません）
+
+	
+【他のパッケージの利用】
+　∟import パッケージ名.クラス名;※パッケージ分より後、クラス定義より前に手記述すること
+　∟パッケージ名.*;←パッケージ直下の全てのクラスをインポートできる
+
+
+【Stringオブジェクト例】
+　∟変数.length()文字数を取得
+　∟charAt(数値)数値（インデックス）の場所の一文字を表示する
+　∟indexOf("文字"）文字が含まれていれば、最初に見つかったインデックス番号を表示する。ない場合は-1
+　∟変数1.equals("文字")文字と変数1を比較　true or false　を表示する
+
+【StringBuilder クラス】
+　∟文字列を編集するメソッドが用意されている
+　∟StringBuilder　変数　 = new StringBuilder()
+　∟変数.capacity();表示容量を表示する16～※文字数分が加算されていく
+　∟変数.length;文字数を表示する
+　∟変数.toString();文字列を表示する
+　∟変数.append("文字");文字を変数末尾に追加する
+
+【ラッパー クラス】基本のデータ型不要です！！パッケージ名 java.lang
+ラッパークラス名.メソッド()
+byte Byteクラス
+int Integerクラス
+char Characterクラス
+boolean Booleanクラス
+　∟Integer.parseInt(文字列)文字列を整数値に変換※String i = args[0]　→　int ii = Integer.parseInt(i※文字列)
+　∟Integer.toString(数値)　int型を文字列として表示
+　∟intValue() int型で値を表示する
+
+【パッケージ名の参考】
+　java.lang核となる部品※Object,String,Integer
+  java.io入出力関連の部品
+  java.util汎用的な部品
+
+【エラー】
+システムてきなエラーとアプリケーション（実行時に発生する）Exceptionエラーに分けられる
+変数.getMessage()※戻りはString型
+変数.toString()※戻りはString型
+変数.printStackTrace()※戻りはvoid エラーの原因&エラー発生箇所を表示
+
+【try】
+try{処理}catch(例外の型 変数名){}catch(例外の型 変数名){｝finally{最後に実行される}
+catchブロックは例外が発生した場合に処理される
+※例外の型…～Exception
+全てをとらえる場合は catch(Exception ex){ex.getMessage()}
+catchでのor
+ ∟catch(例外の型 | 例外の型 変数){}
+
+メソッドで例外が発生する場合は呼び出し側に例外を投げる→呼び出し元で処理try catchをしてもらう
+　∟戻り値の型 メソッド名() throws 例外のクラス名, 例外のクラス名{}
+
+引数が足りない
+　∟catch (ArrayIndexOutOfBoundsException ex)
+整数型が違う
+　∟catch (NumberFormatException ex)
+0で割り算を実行
+　∟catch (ArithmeticException ex)
+
+
+【ファイルの入出力】
+書き込み
+FileOutputStream(String name) throws FileNotFoundException
+ ∟FileOutputStream 変数名　= new FileOutputStream(文字列)※文字列→ファイル名拡張子付き
+
+読み込み
+FileIntputStream(String name) throws FileNotFoundException
+　∟FileOutputStream 変数名　= new FileOutputStream(文字列)※文字列→ファイル名拡張子付き
+
+DataOutputStreamのコンストラクタ
+　∟DataOutputStream(OutputStream out)
+DataInputStreamのコンストラクタ
+　∟DataInputSDtream(InputStream in)
+
+
+出力
+FileOutputStream　変数 = new FileOutputStream(ファイル名)
+DataOutputStream  変数 = new DataOutputStream(変数)※FileOutputStream型の変数
+
+入力
+FileInputStream　変数 = new FileInputStream(ファイル名)
+DataInputStream  変数 = new DataInputStream(変数)※FileInputStream型の変数
+
+【バイトストリーム】
+
+FileOutputStream a = null
+DataOutputStream b = null
+FileInputStream  c = null
+DataInputStream  d = null
+
+try{
+a = new FileOutputStream(ファイル名)
+b = new DataOutputStream(a)
+}catch(IOException er){
+}finally{
+try{
+if(b != null){
+b.close()
+}catch(Exception er){
+}
+
+if(false){
+System.exit(1)※引数0…正常　0以外…異常→処理を終了させる
+}
+
+
+※void writeByte(int c) ※int型cをbyte型で書き込む
+　∟void writeChars(String a)※String型aをChar型で書き込む
+　∟void writeBoolean(boolean a)※boolean型aをBoolean型で書き込む
+　∟void writeUTF(String a)※String型aをUTF-8で書き込む
+
+例
+import java.io.*;
+
+class Exercise07_1 {
+
+	public static void main (String[] args){
+		boolean jug = false;
+		FileOutputStream fos = null;
+		DataOutputStream dos = null;
+		FileInputStream  fis = null;
+		DataInputStream  dis = null;
+// 書き込み
+		try{
+			fos = new FileOutputStream("data07_1.dat");
+			dos = new DataOutputStream(fos);
+			dos.writeUTF(args[0]);
+			System.out.println("wrote : " + args[0] + ",  length : " + args[0].length());
+			jug = true;
+		}catch(IOException er){
+			System.err.println("文字列を指定してください。");
+			System.err.println("使用方法：java Exercise07_1 文字列");
+		}catch(Exception ex){
+			System.err.println("エラー対応が必要です");
+			ex.printStackTrace();
+		}finally{
+			try{
+				if(dos != null){
+					dos.close();
+				}
+			}catch(Exception er){
+				System.err.println("出力ファイルのクローズ時にエラーが発生しました");
+				System.err.println(er.getMessage());
+			}
+		}
+		
+		if(!jug){
+			System.err.println("-------end-------");
+			System.exit(1);
+		}
+// 読み込み
+try{
+	fis = new FileInputStream("data07_1.dat");
+	dis = new DataInputStream(fis);
+	String ya = dis.readUTF();
+	System.out.println("read : " + ya + ",  length : " + ya.length());
+}catch (IOException e){
+	System.out.println("エラー対応が必要です--読み込みer--");
+	e.printStackTrace();
+}catch(Exception ex){
+	System.out.println("エラー対応が必要です");
+			ex.printStackTrace();
+		}finally{
+			try{
+				if(dis != null){
+					dis.close();
+				}
+			}catch(Exception er){
+				System.out.println("入力ファイルのクローズ時にエラーが発生しました");
+				System.out.println(er.getMessage());
+			}
+		}
+	}
+}
+
+dos.writeUTF(args[0]);文字列の書き込み
+dos.writeInt(len1);整数値の書き込み
+System.err.printlnエラー時の画面出力
+System.exit(1);プログラム終了
+
+dis.readUTF();文字列の読み込み
+dis.readInt();整数型の読み込み
+
+【キャラクタストリーム】
+FileWriter fw = null
+BufferedWeiter bw = null
+FileReader fr = null
+VufferedReader = null
+try{
+fw = new FileWriter(ファイル名)
+bw = new BufferedWeiter(ファイル名)
+bw.write(文字列,0,文字列.length())
+bw.newLine()
+bw.flush()
+}catch(IOException er){※入出力時のエラー例外処理
+}catch(Exception er){
+}finally{
+try{
+if(bw != null){bw.close()}
+}catch(Exception er){}
+
+読み込み
+　∟br.readline()
 -------Oracle------
 日本語カラムにするには""で囲う
 INSERT文
