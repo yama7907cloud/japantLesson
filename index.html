@@ -12,938 +12,169 @@
 <pre>
   <code>
 
------------java-----------
-【javaのインストールの確認】
-インストールは下記の画面
-https://docs.oracle.com/javase/jp/19/install/overview-jdk-installation.html
-java SEを無料でインストールしたら、確認
-　∟javac -version ※コマンドプロンプトにて実行する
+-----------C#-----------
+ビルドで作成されるファイル拡張子
+　∟コンソールアプリケーションやWINDOWSアプリケーションは「EXE」
+　∟クラスは「DLL」
+※bin>Debug
 
+ローカルウィンドウ
+　∟変数の内容を確認できる
+namespaceは.で区切って記述可能　または　ネスト namespace a {namespace b{定義 }}
 
-【ソース作成】
-・コマンドプロンプトを立ち上げる cmd ※exitコマンドで終了
-・cd パス　ディレクトリーを任意の場所に設定する
-・notepad ファイル名.java→存在しない場合は作成するか尋ねられる
-・プログラムを作成
-class Exercise01※ファイル名 {
+ソリューションエクスプローラの参照でusing　で使用する定義を追加する
+　∟右クリック>参照の追加をクリック
 
-	public static void main (String[] args){
-		System.out.println("Java World!!");
+コメントにはXMLのためのコメントもある
+　∟///<tug>///コメント内容///</tug>※///
 
-	}
-}
-
-【コンパイル】
-dir ファイル名.* ※コマンドプロンプトで存在確認
-javac ファイル名.java※コンパイルを実施し、ファイル名.classが作成される
-　∟javac -encoding utf-8 ファイル名.java※エンコーディングを指定して実行ファイル(.class)を作成
-	※ANSIの場合はsjisを記述する
-　※エラーが発生していたら記述される　エラー行数、エラー説明、エラーのコード概要が記述されている
-
-
-【実行】
-java ファイル名 ※コマンドプロンプトで実行。拡張子は不要!
-
-【データ型】
-byte/short/int/long（末にl）/float（末にf）/double/char（''）/boolean/String("")
 
 【定数】
-final データ型 定数　= 値　※全て大文字で記述
+const 定数名 = 値;
+　∟全て大文字にする
 
-【型変換キャスト】
-(int)値　(float)値
+【データ型】
+参照　string object (=null※参照型)※値型でもデータ型? 変数　= nullを格納できる
 
-宣言→String[] 変数 = new String[要素数]
-代入→変数[0] = 値
-宣言時代入→String[] 変数名 = {"値a","値b","値c"}
-コマンドライン引数…コマンドラインからmainメソッドに引き渡される引数※String[] args→args[0]等で使用できる
-　∟args.length > 1 でコマンドラインの引数によって処理を分岐できる
+int / double / long / float floatはfを末に記述※記述なしだとdobleになってしまう→型変換必要
+char c = 'a'※シングルクォーテーション
+bool
+DateTime 変数 = Datetime.Now ※現在
 
+【日付】
+DateTime.Now.※（置換する）　※Year Month Day Hour Minute　Second
 
-if else は　1文であれば簡素化が可能 ※else if
-　∟if (条件式) 処理;
-    else 処理;
+大きいデータ型から小さいデータ型は変換が必要
 
-for(int i=0,j=0; i<5; i++, j++){}←変数が複数の記述も可能
-
-foreach文→for(int i:配列名){}
-
-
-クラス
- クラス名　オブジェクト変数 = new クラス名()
-  ∟オブジェクト変数 = null;※解放の宣言
+＋　で文字列連結
+文字変数.Length…文字数を取得
+string.Empty　は　"" と同等の意味
+エスケープシーケンス
+　∟\\…\
+　∟\'…'
 
 
-コンストラクタ
-　∟クラス名(){}
-
-コンストラクタは記述しなくてもコンパイルエラーにはならない
-が、デフォルトコンストラクタとして何もない状態で処理がされる
-public/protected/private※修飾子がない場合は同一パッケージのみ
 
 
-【継承】
-　∟public class 子クラス名 extends 親クラス{}
-オーバーロード
-　∟引数の違いのみで処理を分岐させる。同じ関数名を指定できる
+【VS環境構築】
+ソースコードに行番号を表示させる（デバック時の表示行で判断を速くでる）
+　∟メニュー→ツール>オプション>テキストエディタ>C#>行番号(L)
+
+
+【配列】
+int[] 配列変数 = new int[要素数]
+また　
+int[] 配列変数 = ｛値1, 値2｝
+・配列変数.Length　要素数を取得
+多次元配列
+　∟int[,] 配列名 = new [4,2]
+また
+int[,] 配列名 = {{3,54},{63,5},{1,76}}
+・配列変数.GetLength(0)　縦の要素数を取得
+・配列変数.GetLength(1)　横の要素数を取得
+ジャグ配列
+int[][] 変数名 = new int[2][]
+配列変数[0] = new int[2]{10,30}
+配列変数[1] = new int[4]{4,10,30,4}
+
+【動的配列】
+useing System.Collections.Genericが必要
+list<データ型> 変数名 = new list<データ型>
+変数名.Add(値)   ※追加 データ型が合致していること
+変数名.Remove(値)　　※削除　値で削除する
+変数名.RemoveAt(インデックス番号)※削除 インデックスで削除する
+要素数は.Countで取得できる
+
+
+【演算子】
+文字列連結…+
+
+【コンソール出力】
+Console.WriteLine()…空文字列を出力
+
+【型変換】
+int 変数　= (int)値　※値がlong型の場合,値は損なわれるが型変換できる
+　∟ダブル型をintに変換すると小数点以下切り捨てられる
+文字列への変換
+　∟変数名.ToString()※d,D,t,T,C　書式して文字列 引数として可能
+DateTime a = DateTime.Now()
+変数 = a.ToString("d")
+int b = 134
+変数 = b.ToString("C") \付きの文字列
+変数 = b.ToString("F2")小数点桁数を追加した文字列
+変数 = b.ToString("N2")カンマ編集
+
+Parseメソッド…変換できないと例外が発生する
+データ型　変数 = データ型.Parse(文字列)
+string b = "2024/01/03"
+DateTime a = DateTime.Parse(b)
+変数 = int.Parse(文字列);
+
+TryParse ※変換できればtrue　例外が発生しない 
+int hennsuu
+bool　変数　= int.TryParse("20", out hennsuu)←hennsuuにint型の20を格納し、変数にはboolを格納
+　
+
+【if】
+if(){}
+else if(){}
+else{}
+
+【switch】
+switch (条件){ case 値1:処理;break; default: 処理;break;}
+※goto case 値1;で制御を移動させることも可能
+
+
+【while】
+while(条件){}
+do{ 処理}(条件);←１度は処理が実行される
+
+
+【for】
+for(int i=0 ;i<10; i++){}※初期値はブロック前でも宣言可能(;i<10;i++)みたいに記述
+foreach( データ型　変数　in 配列）{}
+ 
+
+【クラス】
+オーバーロード…引数の違うメソッド←引数に合わせて自動で呼び出してくれる
+　∟戻り値が異なるだけ、仮引数の名前が違うだけ　などではコンパイルエラーになる
+
+public string プロパティ名※valueという特殊文字で設定できる
+get
+{return}
+set
+{プロパティ名=value}
+　※プロパティーの数だけ定義する set{}を定義しないと読み取り専用になる
+
+※メソッドの定義が不要
+public string プロパティ名 {get; set;}読み書き両方
+　∟{get; private set;}※読み取り専用setができない
+
+【static】クラスに紐付いた情報
+クラス名.メソッド名※インスタンスしていないでも利用可能
+プロパティ名においても public static データ型　プロパティ名で利用できる
+　∟プロパティの呼び出し　クラス名.プロパティ名
+※static を const　に記述しても同じ意味になる←二つ指定はビルドエラーになる
+※readonly　をフィールド名に対して追加記述すると読み取り専用になる
+　∟static コンストラクタ←static クラス名(){}ここで初期化も可能※const は宣言時のみ初期化が可能
+public static DateTime.Now{get} 現在日時を取得する
+プロパティの呼び出し
+　∟クラス名.プロパティ名
+
+【クラスの継承】　※：派生クラス名が無いと:Objectとなっている
+基本クラスを定義→派生クラス
+※基本クラスのプロパティにprotectedにすると、派生クラスからでもアクセスできる
+派生クラスの定義　class 派生クラス名 :基本クラス名
 
 オーバーライド
-　∟★サブクラスでメソッドを書き換える場合は@Overrideを記述する　記述位置としてはメソッドの上行
-　∟サブクラスから親クラスのメソッドを呼び出す場合super.メソッド名()
-　∟コンストラクタのオーバーライド
-　　　public クラス名※コンストラクタになる(仮引数1, 仮引数2, 仮引数3){
-	super(仮引数1, 仮引数2);※親クラスのコンストラクタを呼び出す
-	変数 = 仮引数3;
-      }
-※サブクラスでコンストラクタを実行すると、親クラスの引数なしのコンストラクタを呼び出そうとするため、
-親クラスには引数なしのコンストラクタが必要になる
+　∟基本クラス　pubic virtual void メソッド名()
+　∟派生クラス　public override void メソッド名()※基本クラスと同じメソッド名だよ
+base.メソッド名　派生クラスから基本クラスのメソッドを呼び出す
+コンストラクタの基本クラスを呼び出す
+　派生クラスコンストラクタ public クラス名 ():base(引数、引数)←基本クラスのコンストラクタを実装する
 
-引数なしコンストラクタでthis(仮引数1,仮引数2)と記述すると、引数ありのコンストラクタに処理が移る
 
-【キャスト】継承した子クラスでオーバーライドされたメソッドで一元管理する※型は親　インスタンスは子
-スパークラスの継承を利用するメリット【一元化 継承したクラスをそれぞれ一つにまとめることができる
-ただし、子クラスのみで定義したメソッドは実行できない。オーバーライドしたメソッドのみ
-　∟スパークラス型[] 配列名; ※配列を定義
-　配列[0] = new 子クラス型1(実引数)※インスタンス化
-  配列[1] = new 子クラス型2(実引数)※インスタンス化
 
-
-
-パッケージ 構造のひとかたまり
-　∟フォルダー階層と似ている※起点となるフォルダー（現在のディレクトリー）>フォルダー1> フォルダー2 >>class1,class2
-　パッケージ名はフォルダー1.フォルダー2
-　∟package パッケージ名; 
-　∟パッケージ外から読み込まれる場合はpublicを指定する
-　∟パッケージ外を利用する場合はimport文を利用する
-！！パーケージを記述したコードに関しては、コンパイルで作成されるファイル(.class)は階層に対応したフォルダーに配置することが必要
-
-【コンパイル】パッケージ記述あり
-　∟javac -d 起点となるフォルダー（現在のディレクトリー） ファイル名
-　∟.が現在のディレクトリー
-【実行】パッケージ記述あり
-　・カレントディレクトリーに設定
-　java パッケージ名.クラス名※拡張子は不要
-　※パッケージの記述があるコードは実行時にパッケージ名を指定しないとエラーになる（検出およびロードできません）
-
-	
-【他のパッケージの利用】
-　∟import パッケージ名.クラス名;※パッケージ分より後、クラス定義より前に手記述すること
-　∟パッケージ名.*;←パッケージ直下の全てのクラスをインポートできる
-
-
-【Stringオブジェクト例】
-　∟変数.length()文字数を取得
-　∟charAt(数値)数値（インデックス）の場所の一文字を表示する
-　∟indexOf("文字"）文字が含まれていれば、最初に見つかったインデックス番号を表示する。ない場合は-1
-　∟変数1.equals("文字")文字と変数1を比較　true or false　を表示する
-
-【StringBuilder クラス】
-　∟文字列を編集するメソッドが用意されている
-　∟StringBuilder　変数　 = new StringBuilder()
-　∟変数.capacity();表示容量を表示する16～※文字数分が加算されていく
-　∟変数.length;文字数を表示する
-　∟変数.toString();文字列を表示する
-　∟変数.append("文字");文字を変数末尾に追加する
-
-【ラッパー クラス】基本のデータ型不要です！！パッケージ名 java.lang
-ラッパークラス名.メソッド()
-byte Byteクラス
-int Integerクラス
-char Characterクラス
-boolean Booleanクラス
-　∟Integer.parseInt(文字列)文字列を整数値に変換※String i = args[0]　→　int ii = Integer.parseInt(i※文字列)
-　∟Integer.toString(数値)　int型を文字列として表示
-　∟intValue() int型で値を表示する
-
-【パッケージ名の参考】
-　java.lang核となる部品※Object,String,Integer
-  java.io入出力関連の部品
-  java.util汎用的な部品
-
-【エラー】
-システムてきなエラーとアプリケーション（実行時に発生する）Exceptionエラーに分けられる
-変数.getMessage()※戻りはString型
-変数.toString()※戻りはString型
-変数.printStackTrace()※戻りはvoid エラーの原因&エラー発生箇所を表示
-
-【try】
-try{処理}catch(例外の型 変数名){}catch(例外の型 変数名){｝finally{最後に実行される}
-catchブロックは例外が発生した場合に処理される
-※例外の型…～Exception
-全てをとらえる場合は catch(Exception ex){ex.getMessage()}
-catchでのor
- ∟catch(例外の型 | 例外の型 変数){}
-
-メソッドで例外が発生する場合は呼び出し側に例外を投げる→呼び出し元で処理try catchをしてもらう
-　∟戻り値の型 メソッド名() throws 例外のクラス名, 例外のクラス名{}
-
-引数が足りない
-　∟catch (ArrayIndexOutOfBoundsException ex)
-整数型が違う
-　∟catch (NumberFormatException ex)
-0で割り算を実行
-　∟catch (ArithmeticException ex)
-
-
-【ファイルの入出力】
-書き込み
-FileOutputStream(String name) throws FileNotFoundException
- ∟FileOutputStream 変数名　= new FileOutputStream(文字列)※文字列→ファイル名拡張子付き
-
-読み込み
-FileIntputStream(String name) throws FileNotFoundException
-　∟FileOutputStream 変数名　= new FileOutputStream(文字列)※文字列→ファイル名拡張子付き
-
-DataOutputStreamのコンストラクタ
-　∟DataOutputStream(OutputStream out)
-DataInputStreamのコンストラクタ
-　∟DataInputSDtream(InputStream in)
-
-
-出力
-FileOutputStream　変数 = new FileOutputStream(ファイル名)
-DataOutputStream  変数 = new DataOutputStream(変数)※FileOutputStream型の変数
-
-入力
-FileInputStream　変数 = new FileInputStream(ファイル名)
-DataInputStream  変数 = new DataInputStream(変数)※FileInputStream型の変数
-
-【バイトストリーム】
-
-FileOutputStream a = null
-DataOutputStream b = null
-FileInputStream  c = null
-DataInputStream  d = null
-
-try{
-a = new FileOutputStream(ファイル名)
-b = new DataOutputStream(a)
-}catch(IOException er){
-}finally{
-try{
-if(b != null){
-b.close()
-}catch(Exception er){
-}
-
-if(false){
-System.exit(1)※引数0…正常　0以外…異常→処理を終了させる
-}
-
-
-※void writeByte(int c) ※int型cをbyte型で書き込む
-　∟void writeChars(String a)※String型aをChar型で書き込む
-　∟void writeBoolean(boolean a)※boolean型aをBoolean型で書き込む
-　∟void writeUTF(String a)※String型aをUTF-8で書き込む
-
-例
-import java.io.*;
-
-class Exercise07_1 {
-
-	public static void main (String[] args){
-		boolean jug = false;
-		FileOutputStream fos = null;
-		DataOutputStream dos = null;
-		FileInputStream  fis = null;
-		DataInputStream  dis = null;
-// 書き込み
-		try{
-			fos = new FileOutputStream("data07_1.dat");
-			dos = new DataOutputStream(fos);
-			dos.writeUTF(args[0]);
-			System.out.println("wrote : " + args[0] + ",  length : " + args[0].length());
-			jug = true;
-		}catch(IOException er){
-			System.err.println("文字列を指定してください。");
-			System.err.println("使用方法：java Exercise07_1 文字列");
-		}catch(Exception ex){
-			System.err.println("エラー対応が必要です");
-			ex.printStackTrace();
-		}finally{
-			try{
-				if(dos != null){
-					dos.close();
-				}
-			}catch(Exception er){
-				System.err.println("出力ファイルのクローズ時にエラーが発生しました");
-				System.err.println(er.getMessage());
-			}
-		}
-		
-		if(!jug){
-			System.err.println("-------end-------");
-			System.exit(1);
-		}
-// 読み込み
-try{
-	fis = new FileInputStream("data07_1.dat");
-	dis = new DataInputStream(fis);
-	String ya = dis.readUTF();
-	System.out.println("read : " + ya + ",  length : " + ya.length());
-}catch (IOException e){
-	System.out.println("エラー対応が必要です--読み込みer--");
-	e.printStackTrace();
-}catch(Exception ex){
-	System.out.println("エラー対応が必要です");
-			ex.printStackTrace();
-		}finally{
-			try{
-				if(dis != null){
-					dis.close();
-				}
-			}catch(Exception er){
-				System.out.println("入力ファイルのクローズ時にエラーが発生しました");
-				System.out.println(er.getMessage());
-			}
-		}
-	}
-}
-
-dos.writeUTF(args[0]);文字列の書き込み
-dos.writeInt(len1);整数値の書き込み
-System.err.printlnエラー時の画面出力
-System.exit(1);プログラム終了
-
-dis.readUTF();文字列の読み込み
-dis.readInt();整数型の読み込み
-
-【キャラクタストリーム】
-
-import java.io.*;
-FileWriter fw = null
-BufferedWriter bw = null
-FileReader fr = null
-BufferedReader = null
-try{
-fw = new FileWriter(ファイル名)
-bw = new BufferedWeiter(ファイル名)
-bw.write(文字列,0,文字列.length())第2引数…開始位置　第3引数…文字分
-bw.newLine()
-bw.flush()
-}catch(IOException er){※入出力時のエラー例外処理
-}catch(Exception er){
-}finally{
-try{
-if(bw != null){bw.close()}
-}catch(Exception er){}
-
-読み込み
-　∟br.readline()1行文のデータを読み込む
-
-例
-// Exercise07_2.java
-
-import java.io.*;
-
-public class Exercise07_2 {
-    public static void main(String[] args) {
-        String fileName = "data07_2.txt";    // ファイル名
-        boolean isReadyToRead = false;       // 出力が成功したかどうかを表す変数
-        FileWriter fw = null;         // 出力ファイル操作用変数
-        BufferedWriter bw = null;         // 出力ファイル操作用変数
-        FileReader fr = null;          // 入力ファイル操作用変数
-        BufferedReader  br = null;          // 入力ファイル操作用変数
-
-        // コマンドラインから受け取った引数の数を確認する
-        if (args.length < 2) {
-            // 引数が指定されていない場合は、エラーメッセージを表示する
-            System.out.println("2つの文字列を指定してください。");
-            System.out.println("使用方法：java Exercise07_2 文字列1 文字列2");
-
-            // プログラムの実行を終了する
-            System.exit(1);
-        }
-
-        // コマンドラインの引数を受け取り、文字数を取得する
-        String str11 = args[0];
-        String str12 = args[1];
-
-        // ファイルにデータを書き込む
-        try {
-            // 出力ストリームの獲得（ファイルのオープン）
-            fw = new FileWriter(fileName);
-            bw = new BufferedWriter(fw);
-
-            // データの書き込み（出力）
-            bw.write(str11, 0, str11.length());
-            bw.newLine( );                            // 行区切り
-            bw.write(str12, 0, str12.length());
-            bw.newLine( );                            // 行区切り
-
-            // バッファの内容を出力してクリアする
-            bw.flush( );
-
-            // 出力したデータの表示
-            System.out.println("wrote : " + str11);
-            System.out.println("wrote : " + str12);
-
-            // 読み込みのための出力が成功したことを設定
-            isReadyToRead = true;
-         } catch (IOException e) {
-            System.err.println 
-                ("Opening error or IO error occurred.");
-        } catch (Exception e) {
-            System.err.println("error occurred."); 
-        } finally {
-            // エラーの有無にかかわらずストリームをクローズする
-            try {
-                if (bw != null) {
-                    bw.close();      // ストリームのクローズ（ファイルのクローズ）
-                }
-            } catch (Exception ex) {   // クローズ処理で例外が発生したときの処理
-            } 
-        }
-
-        if (!isReadyToRead) {
-            System.exit(1);           // 入力するファイルがないので処理を終了
-        }
-
-        // ファイルからデータを読み込む
-        try {
-            // 入力ストリームの獲得（ファイルのオープン）
-            fr = new FileReader(fileName);
-            br = new BufferedReader(fr);
-
-            // データの読み込み（入力）
-            String str21 = br.readLine();
-            String str22 = br.readLine();
-
-            // 読み込んだデータの表示
-            System.out.println("read  : " + str21);
-            System.out.println("read  : " + str22);
-        } catch (IOException e) {
-            System.err.println 
-                ("Opening error or IO error occurred."); 
-        } catch (Exception e) {
-            System.err.println("error occurred."); 
-        } finally {
-            // エラーの有無にかかわらずストリームをクローズする
-            try {
-                if (br != null) {
-                    br.close();      // ストリームのクローズ（ファイルのクローズ）
-                }
-            } catch (Exception ex) {   // クローズ処理で例外が発生したときの処理
-            }
-        }
-    }
-}
--------Oracle------
-日本語カラムにするには""で囲う
-INSERT文
-　∟INSERT ALL  -- ALLが必要
-　∟INTO Students VALUES (1, 'Alice', 16)
-　∟INTO Students VALUES (2, 'Bob', 18)
-　∟INTO Evaluations VALUES ('Alice', 'english', 30)
-　∟INTO Evaluations VALUES ('Alice', 'math', 60)
-　∟INTO Evaluations VALUES ('Bob', 'english', 40)
-　∟INTO Evaluations VALUES ('Bob', 'math', 80)
-　∟SELECT * FROM DUAL; --この一文も必要 
--------java------
-JAVA
-データ型
-　∟byte/short/int/long
-　∟float/double
-　∟boolean
-　∟char ''
-　∟String
-　∟配列
-　∟クラス
-
-
-
-
-
-変数
-　∟データ型　定数名
-定数
-　∟final データ型　定数名 = 値※平行で値の代入は必須　定数名は全大文字
-
-配列
-　∟String[] scores = {"maki","toshiharu","mao","haaruyoshi","mitue"};
-　∟System.out.println(scores.length);要素数の取得
-　∟int[][] scores = {{60,55,31},{78,94,87}};配列の中に配列
-
-構文の一例
-System.out.println(String.format("私の名前は%s   %s またの名をあだ名で%s",fName,lName,text));
-
-コンソールインプット
-　∟事前準備　import java.util.Scanner;※classの前に記述する
-　∟数字　new Scanner(System.in).nextInt();
-　∟文字列　new Scanner(System.in).next();
-
-
-比較演算子
-　∟返値変数.equals("red") == true
-
-拡張for文
-　∟for(int 仮引数:配列変数){
-
-条件演算子（三項演算子）※返値が発生する
-　∟条件?trueの処理:falseの処理;
-
-メソッド
-　∟定義
-	private static void test(String a) {
-		System.out.println(String.format("%sこんにちは",a) );
-	}
-　∟実行
-	test("yamashita");
-  
-ジェネリクス※自動でデータ型を置き換えてくれる
-　∟private static <T> void showThreeTimes(T n) {
--------C#------
-【参照関係】
-エクスプローラソリューション＞右クリックから新規プロジェクト追加＞クラスライブラリ.NET FRAMEWORK　プロジェクトで共通プロジェクトを作成
-参照する場合は、参照する側の参照＞参照の追加でプロジェクトにチェックを入れてok
-※参照は片側からのみしか適用されない
-
-
-using namespace名;で宣言→クラス名.メソッド()で実行できる
-
-Ctrl ＋　. で必要なnamespaceを表示してくれる→適用するとusingに追加される
-
-
-int型 は　Messagebox.Showでは表示できない→対応＿変数.ToString()で変換
-デバック
-　∟1行づつ実行F11 /メソッド内部には行かないF10 /メソッドに入った場合抜けるにはShift + F11
-
-データ型
-short shortVal = 0;
-short shortVal2 = short.MaxValue;
-uint uintval = 10;
-
-
-プロパティの変更
-表示位置
-∟StartPosition = FormStartPosition.WindowsDefaultLocation;
-
-型変換
-　∟キャスト　(int)変数名※切り捨て
-　∟Parse　　　int.Parse(変数名)※10.4は例外・nullは例外→処置　例外を受けるコードにする　try catchで制御
-　∟TryPerse　　bool result = int.TryParse(変数名,out 出力される変数)※出力される変数を宣言する必要がある 10.4はfalseになる→ifで制御する
-　∟Convert    Convert.ToInt32(変数名);nullは整数だと0になる
-int = toint32
-
-
-●動的配列
-using System.Collect.Generic;←環境設定
-List<string> 変数 = new List<string>※int等でも良い
-追加
-　∟変数.ADD(値)
-削除
-　∟変数.Remove(値)　値を消す
-　∟変数.RemoveAt(インデックス) インデックスで消す
-　∟変数.Clear()  すべて削除
-
-要素数を数える
-　変数.Count.ToString()
-------COBOL-----
-COBOL
-拡張子…cob
-コメント…*>
-文末…．
-配列のインデックス番号は1から始まる
-文字列の連結…半角スペース
-
-
-
-
-DIVISION　>　SECTION
-DIVISION…順番必須だが、省略可能
-環境部
- ∟①IDENTIFICATION DIVISION.←記述必須　プログラムID
-　　 PROGRAM-ID. 任意の文字列.
-
-環境部（実行環境・入出力ファイル等を記述）書き込み
- ∟②ENVIRONMENT DIVISION.←省略可能
-　　　　INPUT-OUTPUT SECTION.
-	  FILE-CONTROL.　　←どのファイルに書き込むか
-	    SELECT OUT-FILE※A ASSIGN TO 'ファイル名(例out.txt)'
-　　　　　　  ORGANIZATION IS LINE SEQUETIAL.　改行で書き込む指定する
-
-環境部（実行環境・入出力ファイル等を記述）読み込み
- ∟②ENVIRONMENT DIVISION.←省略可能
-　　　　INPUT-OUTPUT SECTION.
-	  FILE-CONTROL.　　←どのファイルに書き込むか
-	    SELECT IN-FILE※A ASSIGN TO 'ファイル名(例in.txt)'
-　　　　　　  ORGANIZATION IS LINE SEQUETIAL.　改行で書き込む指定する
-	      STATUS 変数名B.←ステータスを管理するための変数を定義
-→③データ部に定義DATA DIVISION.
-		  01 変数名B
-
-
-
-データ部（変数の定義等を行うエリア）
- ∟③DATA DIVISION.←省略可能
-記述例）
-DATA DIVISION.
-  WOUKING-STORAGE SECTION.
-    01 変数名 PIC X(20).
-	∟変数のレベル番号・変数名・PIC・
-	∟文字列はX(文字数）又はXを文字数分記述
-	∟代入は手続き部エリアにて実施
-　　01 変数名 PIC 9(桁数) ※VALUE デフォルト値.
-	∟数値は9(桁数)　又は9を文字数分記述
-	∟0埋めされる
-	∟デフォルト値はなくても良い
-
-    01 変数名 PIC 9(桁数)V9(小数点の桁数). 又は9999V99
-	∟小数点はVを付与して記述する
-
-　　01 FILLER PIC X(20). ←文字列20数分の予備領域確保
-		
-
-
- 	環境部の指定時↓書き込み
-　　　　　FILE SECTION. ←ファイルセクションを定義する
-            FD OUT-FILE※A.
-	     01 変数名 PIC 99.
-	  WORKING-STORAGE SECTION.
-	    01 変数名 PIC 99 VALUE 0.
-
-	環境部の指定時↓読み込み
-　　　　　FILE SECTION. ←ファイルセクションを定義する
-            FD IN-FILE※A.
-	     01 変数名 PIC X(20).
-	  WORKING-STORAGE SECTION.
-	    
-
-集合項目（※レベル番号は親子関係を表す）
-　01 変数名A.
-    03 変数名B PIC X(10).
-    03 変数名C PIC 9(100).
- ∟使い方は手続き部にて記述
-
-配列
-　01 配列名AA.
-    03 配列名BB OCCURS 3 PIC X(90). ※OCCURS 領域数
-
-
-
-手続き部
- ∟④PROCEDURE DIVISION.←記述必須
-       MAIN SECTION.
-	MOVE 文字列 TO 変数名.←変数名に代入する
-	DISPLAY 変数名.
-	*>集合項目↓
-	MOVE 文字列B TO 変数名B.←集合項目代入
-	MOVE 文字列C TO 変数名C.←集合項目代入
-	DISPLAY 変数名A         ←変数名B,Cを出力する
-	DISPLAY 変数名C         ←変数名Cのみ出力する
-	*>配列↓
-	MOVE 文字列BB TO 配列名BB(1).
-	STOP RUN.
-
-指示の内容
-DISPLAY 表示させる指示
-STOP RUN.　プログラム終了
-
-★計算
-データ部
-DATA DIVISION
-  WOUKING-STORAGE SECTION.
-    01 NUM-1
-	03 D1 PIC 9(5) VALUE 0.
-	03 D2 PIC 9(5) VALUE 0.
-	03 D3 PIC 9(5) VALUE 0.
-	03 D4 PIC 9(5) VALUE 0.
-
-手続き部
-足し算
-　∟ADD 5 TO D1. ←D1+5
-　∟ADD 6 TO D1 D3 D4. ←D1+5　D3+5　D4+5
-引き算
-　∟SUBTRACT 4 FROM D1. ←D1-4
-割り算
-　∟DIVIDE D1 BY D2 GIVING D3 REMAINDER D4, ←D1/D2 D3に答え代入（GIVING） D4に余り代入（REMAINDER）
-かけ算
-　∟MULTIPLY D1 BY D2 GIVING D3 ←D1*D2 D3に答え代入（GIVING）
-
-その他の処理
-　∟COMPUTE D3 = D1 * D2. ←かけ算と同じ処理を実施　＋－／＊　**
-
-
-★インプットボックス
-データ部※入力値を格納する変数を定義
- DATA DIVISION
-  WOUKING-STORAGE SECTION.
-    01 変数名V PIC X(80).
- 
-手続き部
-  DISPLAY 質問？.
-  ACCEPT 変数名V.
-
-
-★条件分岐
-END-IFの後にのみ.を記述する
-①
-データ部※入力値を格納する変数を定義
- DATA DIVISION
-  WOUKING-STORAGE SECTION.
-    01 変数名N PIC 9(2).
-
-手続き部
- IF 変数名N > 60 THEN
-  TRUEの処理
- ELSE
-　FALSEの処理
- END-IF.
-
-※
-・= (IS EQUAL TO)
-・NOT = (IS NOT EQUAL TO)
-・> (IS GREATER THEN)
-・>= (IS GREATER THEN OR EQUAL TO)
-・< (IS LESS THAN)
-・<= (IS LESS THEN OR EQUAL TO)
-
-②
-EVALUATE
-END-EVALUATEの後にのみ.を記述する
-データ部※入力値を格納する変数を定義
- DATA DIVISION
-  WOUKING-STORAGE SECTION.
-    01 変数名X PIC X(2).
-
-手続き部
-  MOVE 文字列 TO 変数名X.
-  EVALUATE 変数名X
-　　WHEN "AAA"
-	処理AAA
-    WHEN "BBB"
-        処理BBB
-    WHEN OTHER
-        当てはまらない処理
-  END-EVALUTE.
-
-
-★繰り返し
-END-PERFORMの後にのみ.を記述する
-①
-データ部※入力値を格納する変数を定義
- DATA DIVISION
-  WOUKING-STORAGE SECTION.
-    01 変数名N PIC 9(2) VALUE 1.
-
-手続き部
-  PERFORM 10 TIMES  ←10回繰り返す
-    処理
-    ADD 1 TO 変数名N 
-  END-PERFORM.
-
-
-②
-　PERFORM UNTIL 変数名N > 10  ←条件に達したら処理終了
-　　処理
-　　ADD 1 TO 変数名N ←無限を防ぐ
-  END-PERFORM.
-
-③
-　PERFORM VARYING 変数名N FROM 1 BY 1 UNTIL 変数名N > 10
-    処理
-  END-PERFORM.
-  ∟FROM…開始
-　∟BY…づつ
-　∟UNTIL…条件に達するまで
-
-
-★ファイルを書き込む
-　∟
-手続き部 OPEN OUTPUT OUT-FILE.※A
-	PERFORM 10 TIMES←ループ文
-	  ADD 1 TO LINE-COUNT
-	  MOVE LINE-COUNT TO 変数名※ファイルセクションを定義した変数名
-	  WRITE 変数名※ファイルセクションを定義した変数名
-	END-PERFORM.
-
-	CLOSE OUT-FILE.※A
-∟ファイルの確認
-ターミナル画面
-　　∟less ファイル名
-
-★ファイルの読み込み
-事前にin.txtが存在する前提
-手続き部 OPEN INPUT IN-FILE.※A
-	PERFORM UNTIL 変数名　NOT = "00"←ループ文 正常なら00が返る　変数はWORKING-STORAGEで定義した変数
-	　READ IN-FILE
-	    AT END　
-		※データが読み終わった際の処理
- 	    NOT AT END　
-		※データ読み込み途中の処理
-		DISPLAY 変数名※ファイルセクションを定義した際の変数
-	  END-READ
-	END-PERFORM.
-
-	CLOSE IN-FILE.※A
-
-	  
-------java-----クラスの学習
-interface Loggable {
-  void log();
-}
-
-abstract class Score implements Loggable {　　テンプレみたいなもの子クラスで実装する　　implements Loggable←インターフェイスを行うよ
-  private String subject;
-  protected int score;
-
-  Score(String subject, int score) {
-    this.subject = subject;
-    this.score = score;
-    this.log();　　　コンストラクタの際に実装
-  }
-
-  protected abstract String getResult();
-
-  String getScoreString() {
-    return this.subject + ", " + this.score + ", " + this.getResult();
-  }
-
-  public void log(){
-    System.out.println("created" + this.subject);
-  }
-}
-
-class MathScore extends Score {
-  MathScore(int score) {
-    super("Math", score);
-  }
-
-  @Override
-  protected String getResult() {
-    System.out.println("MathScore method");
-    return this.score >= 50 ? "Pass" : "Fail";
-  }
-}
-
-class EnglishScore extends Score {
-  EnglishScore(int score) {
-    super("English", score);
-  }
-
-  @Override
-  protected String getResult() {
-    System.out.println("EnglishScore method");
-    return this.score >= 70 ? "Pass" : "Fail";
-  }
-}
-
-class User implements Loggable {
-  private String name;
-  private Score score;
-
-  User(String name, Score score) {
-    this.name = name;
-    this.score = score;
-    this.log();
-  }
-
-  String getUserString() {
-    return this.name + ", " + this.score.getScoreString();
-  }
-
-  public void log(){
-    System.out.println("created" + this.name);
-  }
-}
-
-public class MyApp {
-  public static void main(String[] args) {
-    User user1 = new User("Taro", new MathScore(70));
-    User user2 = new User("Jiro", new EnglishScore(80));
-
-    System.out.println(user1.getUserString());
-    System.out.println(user2.getUserString());
-  }
-}
-
--------sql-----
---クラブでグループバイして、中身を表示させる
-use yama
-select club,STRING_AGG( CONVERT(VARCHAR(max), name), ',') AS Result ,count(club) from players with(nolock) group by club 
-
-
-	  
-Sub rappuDelete()
-Const skucdCol = 2
-Const colorCol = 3
-Const sizeCol = 4
-
-Dim eRow As Long, mainSh As Worksheet
-Dim i As Long, skucdVal As String, colorVal As String, sizeVal As String
-Dim myRange As Range, myObj As Range, myCell As Range, colori As Long, jugge As Long, Count As Long, temp As Long
-
-
-Set mainSh = ThisWorkbook.Sheets(ActiveSheet.Name)
-With mainSh
-    eRow = .Cells(Rows.Count, skucdCol).End(xlUp).Row
-    .Range(Cells(2, skucdCol), Cells(eRow, sizeCol)).Interior.ColorIndex = xlNone
-    colori = 1
-    jugge = 0
-    For i = 2 To eRow
-        If .Cells(i, skucdCol).Value <> "" And .Cells(i, 1).Value = "" Then
-            Count = 0
-            temp = 0
-            skucdVal = .Cells(i, skucdCol).Value
-            colorVal = .Cells(i, colorCol).Value
-            sizeVal = .Cells(i, sizeCol).Value
-                Set myRange = .Columns(skucdCol)
-                Set myObj = myRange.Find(skucdVal, LookAt:=xlWhole)
-                
-                    If myObj Is Nothing Then
-                
-                    Else
-                
-                        Set myCell = myObj
-                        Do
-                            If .Cells(myCell.Row, colorCol).Value = colorVal And .Cells(myCell.Row, sizeCol).Value = sizeVal Then
-                                If Count = 1 Then
-                                    .Range(Cells(myCell.Row, skucdCol), Cells(myCell.Row, sizeCol)).Interior.ColorIndex = 3
-                                    .Cells(myCell.Row, 1).Value = colori
-                                    .Range(Cells(temp, skucdCol), Cells(temp, sizeCol)).Interior.ColorIndex = 3
-                                    .Cells(temp, 1).Value = colori
-                                    jugge = 1
-                                End If
-                                temp = myCell.Row
-                                Count = 1
-                            End If
-                          Set myCell = myRange.FindNext(myCell)
-                        Loop While myCell.Row <> myObj.Row
-                        
-                        If jugge = 1 Then
-                            colori = colori + 1
-                            jugge = 0
-                        End If
-                        
-                    End If
-        End If
-    Next i
-End With
-
-If colori <> 1 Then
-    MsgBox "商品コードに重複が" & colori - 1 & "件見られます。" & vbCrLf & "確認願います。", vbExclamation
-Else
-    MsgBox "商品コードに重複は見られませんでした。"
-End If
-
-End Sub
-	  
-c#
-	  Game
-	  【テキストボックス】
-progressbar メモリmaximum minimum value 
-		autosize labelで大きさを変化
-panel
-
-【ソース】
-F_Main fmain = new F_Main();formにつけた名前オブジェクト
-fmain.Show(this);←開く※開くと処理が次のフォームに移管する
-
-this.Hide();現在のフォームを隠す
-	∟Owner.Show();←閉じられた際に開く
-	
-	  
-C#
 FORM
  ∟・FormBorderStyle(フォームの仕切り表示)・StartPosition(フォームの表示位置)・Text(フォームのタイトル文字)
 TEXTBOX
@@ -982,352 +213,20 @@ a.Close();
 ★numericUpDown1.Maximum = maxNumber;※最大値も変更すること
 
 
-	  
-新しいプロジェクトの作成でC#＞.netを選択して作成する
-
-
-表示タブ
-　∟タブオーダー…tabを押した際に移動する順番を設定できる
-
-フォームのプロパティー
-　∟bodertyle…ラベルの境界線
-　∟formboderstyle…フォームの境界線にくぼみ
-　∟startosition…ディスプレイ上の表示位置
-　∟autosize…文字の長さで自動調整
-　∟textbox・・・backcolor(control入力できない視覚的表現)multline(複数行入力可能)readonly(書き込みできない)
-　∟numericUpDown…数字のみ入力可能value（表示値）maximum（最大値）minimum（最小値）（int)numericUpDown.Value※デシマル型のため変換すること
-
-型変換
-整数型に変換(int)値
-文字列型に変換 値.ToString()
-
-フォームをまたいで値を渡す
-public int 変数名←渡す側はpublicにすること
-
-
-フォームを隠す
-this.Hide();public値を渡すために隠すことが重要
-
-ランダム値を生成
-Random random = new Random();
-int i = random.Next(0, 7);←0インデックスから7要素数
-
-ラベルに文字を代入する
-label2.Text = "任意文字";
-
-フォームを閉じる
-this.close();
-
-配列の定義と初期化
-public string[] omikujidesu_1 = { "大吉", "中吉", "小吉", "吉", "末吉", "凶", "大凶" };
-
-メッセージボックスの表示
-MessageBox.Show("おみくじの中身は下記になります。" + Environment.NewLine + s);
-
-改行
-Environment.NewLine
-
-配列の要素数を取得
-配列変数.Length
-
-フォームの追加
-ソリューションエクスプローラ>プロジェクト名を選択>右クリック「追加」「新しい項目の追加」C#＞フォーム（Windows フォーム）
-
-フォームの呼び出し
-Form2 f = new Form2();
-f.ShowDialog();←Form2をダイアログで開く←form2にアクティブが移動する
-int 変数　= f.変数←form2のpublic変数を代入
-使い回す場合は事前にpublicで定義しておく
-
-フォームを閉じる
-f.close();←だいにゅうしたらダイアログを閉じる
-
-条件分岐
-if (条件) {
-
+○input Boxを利用する場合は参照設定が必要
+　∟参照の追加→アセンブリ→MicrosoftVisualBasicにチェックを入れる
+string input = Microsoft.VisualBasic.Interaction.InputBox(
+                    "値を入力してください。",
+                    "値の入力",
+                    "yama",
+                    -1,
+                    -1);
+○数値を判定するロジック
+int d;
+if (int.TryParse(input, out d) == false){
+    return;
 }
 
-繰り返し処理
-for (int i = 0; i < omikujidesu.Length; i++)
-{
-    s += omikujidesu[i] + Environment.NewLine;
-}
-	  
-
-
-
-	  
-(css応用)
-	  li {
-      cursor: pointer;
-    }
-ホバーの際に表示させる
-    li:hover::after {
-      content: '[×]';
-      font-size: 14px;
-      color: #aaa;
-      margin-left: 4px; 
-    }
-ブートストラップアイコン
-    i {
-      font-size: 100px;
-    }
-（JQuery）
-'use strict';
-
-$(() => {
-// セレクターを記入する
-// id属性→$('#○○○○')
-// eqはイコールの略称!!2つめの要素という内容になる→$('ul > li').eq(2).remove();
-
-// .text(値)･･･←値に書き換える
-// .addClass('付与するクラス名')←クラスを付与
-// .remove()←要素を削除
-
-
-// コンスト（定数）の使い方
-const $input = $('input');//定数に$を記述することでJQueryと判断できるようにする
-$input.focus();//セレクターインプットにフォーカスを当てる
-
-
-
-// クリックイベント・アロー関数を仮引数に入れる→処理を記述する
-$('button').click(()=> {
-  // $('p').text('おはようございます');
-  // $('p').addClass('add_class')
-
-  // 連結による記述も可能（メソッドチェーン）
-  // $('p')
-  //   .text('こんにちは')
-  //   .addClass('add_class');
-
-
-  // $('li')
-  //   .eq(2)    //2番目の要素をの意味になる
-  //   .addClass('add_class');
-  //違う書き方複数のパターン
-  // $('li:nth-child(odd),li:last-child')//偶数番号と最後の子を選択
-  //   .addClass('add_class');
-
-  // セレクター部分に<>を記述することで新規に作成すると判断される
-  // セレクター部分に<>がないと取得と判断される
-  // $('<li>')
-  //   .text('New Item')
-  //   .appendTo('ul');//どのセレクターに追加するのかを記述 親要素
-  //   //他の書き方.appendTo($('ul'))※短縮できる
-
-
-
-
-  // フォームから取得
-  $('<li>')
-    .text($input.val()) //$(セレクタ).val()でフォームの値を取得する
-    .appendTo('ul');
-  
-  $input
-    .val('')//仮引数の値（空文字）をフォームに代入する
-    .focus();//フォーカスを当てる
-});
-
-
-$('ul').click(e =>{
-  if (e.target.nodeName !='LI' || !confirm('Are You Sure??')) {
-    return;// nodeNameは大文字で返値 and 削除するかを問いかける
-  }
- // e.target.remove();//e.targetがクリックした要素を参照している
-  //JQuery要素で変換した削除の仕方ふわっと削除する
-  $(e.target).fadeOut();
-});
-});	
-	
-	  
-	  C#
-	  namespace denntaku
-{
-    public partial class textHyouji : Form
-    {
-        private bool flag = false;
-        private decimal kotae = 0;
-        private string enzan_mae = "";
-        private string itiji = "";
-
-        public textHyouji()
-        {
-            InitializeComponent();
-            textBox1.Text = "0";
-        }
-
-        private void suuji0_Click(object sender, EventArgs e)
-        {
-            keisan("0");
-        }
-        private void suuji1_Click(object sender, EventArgs e)
-        {
-            keisan("1");
-        }
-
-        private void suuji2_Click(object sender, EventArgs e)
-        {
-            keisan("2");
-        }
-
-        private void suuji3_Click(object sender, EventArgs e)
-        {
-            keisan("3");
-        }
-        private void suuji4_Click(object sender, EventArgs e)
-        {
-            keisan("4");
-        }
-        private void suuji5_Click(object sender, EventArgs e)
-        {
-            keisan("5");
-        }
-        private void suuji6_Click(object sender, EventArgs e)
-        {
-            keisan("6");
-        }
-        private void suuji7_Click(object sender, EventArgs e)
-        {
-            keisan("7");
-        }
-        private void suuji8_Click(object sender, EventArgs e)
-        {
-            keisan("8");
-        }
-        private void suuji9_Click(object sender, EventArgs e)
-        {
-            keisan("9");
-        }
-        private void keisan(string suuti)
-        {
-            if ((textBox1.Text == "0") || (flag == true))
-            {
-                textBox1.Text = "";
-            }
-            textBox1.Text += suuti;
-            flag = false;
-        }
-
-        private void textsyousuuten_Click(object sender, EventArgs e)
-        {
-
-            if (textBox1.Text == "0" || flag)
-            {
-                textBox1.Text = "0.";
-                flag = false;
-                return;
-            }
-
-            if (textBox1.Text.IndexOf(".")>0)
-            {
-                return;
-            }
-
-            textBox1.Text += ".";
-        }
-
-        private void testclear_Click(object sender, EventArgs e)
-        {
-            textBox1.Text = "0";
-            enzan_mae = "";
-            kotae = 0;
-            return;
-        }
-
-        private void testbuck_Click(object sender, EventArgs e)
-        {
-            if (0<textBox1.Text.Length)
-            {
-                textBox1.Text = textBox1.Text.Substring(0, textBox1.Text.Length - 1);
-            }
-
-            if (0 == textBox1.Text.Length)
-            {
-                textBox1.Text = "0";
-            }
-        }
-
-        private void testpurusu_Click(object sender, EventArgs e)
-        {
-            result("+");
-        }
-
-        private void textMinus_Click(object sender, EventArgs e)
-        {
-            result("-");
-        }
-
-        private void textbatu_Click(object sender, EventArgs e)
-        {
-            result("×");
-        }
-
-        private void textwariann_Click(object sender, EventArgs e)
-        {
-            result("÷");
-        }
-
-        private void textequal_Click(object sender, EventArgs e)
-        {
-            result("=");
-        }
-        private void result(string enzan)
-        {
-            decimal hyoujiatai;
-            if (!(decimal.TryParse(textBox1.Text,out hyoujiatai)))
-            {
-                textBox1.Text = "ERROR";
-                enzan_mae = "";
-                kotae = 0;
-                return;
-            }
-
-            try
-            {
-                switch (enzan_mae)
-                {
-                    case "+":
-                        kotae += hyoujiatai;
-                        break;
-                    case "-":
-                        kotae -= hyoujiatai;
-                        break;
-                    case "×":
-                        kotae *= hyoujiatai;
-                        break;
-                    case "÷":
-                        kotae /= Math.Round(hyoujiatai,12);
-                        break;
-                    default:
-                        kotae = hyoujiatai;
-                        break;
-                }
-            }catch(Exception e)
-            {
-                textBox1.Text = e.Message;
-                enzan_mae = "";
-                kotae = 0;
-                return;
-            }
-
-            flag = true;
-            enzan_mae = enzan;
-
-            if (enzan == "=")
-            {
-                textBox1.Text = kotae.ToString();
-                enzan_mae = "";
-                kotae = 0; 
-            }
-
-
-
-        }
-
-
-    }
-}
   </code>
 </pre>
   
