@@ -181,12 +181,37 @@ catch(例外名　変数名){}※複数記述可能
 finally{}
 	・変数名.Messageメッセージを出力する
 ・変数名.Sourceオブジェクトの名前
-・変数名.ToString詳細情報を出力する
+・変数名.ToString詳細情報を出力する　
 
 OverflowException…許容範囲以外の数値の場合
 FormatExcenption…数値に変換できない（空文字　文字列）
+DivideByZeroException…0で割り算をした場合
+IndexOutOfRangeExxeption…配列の範囲外にアクセスした場合
+NullReferenceException…null参照の場合に発生
+Data.SqlClient.SqlException…SQL Serverでエラーが通知された際に発生
+InvaidCastException…キャストが不適切の場合に発生
+
 
 string.IsNullOrEmpty(値)…null 、空ならtrue
+
+【例外　throw】
+
+throw new 空Exception();
+
+※catch(～Exception 変数名)の内部　※ex(変数)はオブジェクトになる
+　∟throw;そのままスロー
+　∟throw ex ; その場所が例外の起点になる
+　∟throw new ～Exception("エラーメッセージ",ex);
+
+
+【その他】
+TextBox.Textはstringなので数値にする場合は数値型に変換する
+数字を文字列にする場合は変換する
+　∟int 変数;
+　∟int.TryParse(～TextBox.Text, out 変数)
+　∟～.Text = 値.ToString();
+
+this.Close()でフォームを閉じる
 
 
 FORM
