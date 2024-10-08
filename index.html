@@ -11,7 +11,432 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+---------------------COBOL---------------------
+拡張子…cob
+コメント…*>
+文末…．
+　∟ピリオドの位置で処理が異なってくる
+配列のインデックス番号は1から始まる
+文字列の連結…半角スペース
 
+↓プログラムの記述形式
+【固定形式】
+左から1～6列は記述不可
+左7列はコメント（*）を記述する
+8列からプログラムを記述していく
+　∟_______*DIVISION....みたいな※_は6スペース確保している
+【自由形式】
+どこから書いてもいいが、コメントが違う
+　∟*>
+
+
+【領域】
+入力領域…入力してきたレコード値を保存する領域
+出力領域…出力するレコード値を保存する領域
+作業領域…編集・加工項目を保存する領域
+編集領域…プリントレイアウトを記憶する
+
+
+レベル番号 ※01～49が可能範囲
+レコード名は01
+各カラムを02
+01が一番上位の階層になる。番号によって　階層関係になる
+※レコード名のような全体を集団項目・各カラムのような最小単位を基本項目
+
+
+
+DIVISION　>　SECTION
+DIVISION…順番必須だが、省略可能
+【見出し部】
+ ∟①IDENTIFICATION DIVISION.←記述必須　プログラムID
+　　 	PROGRAM-ID. 任意の文字列(プログラム名).
+
+【環境部】
+環境部（実行環境・入出力ファイル等を記述）書き込み
+ ∟②ENVIRONMENT DIVISION.←省略可能
+　　 INPUT-OUTPUT SECTION.
+     FILE-CONTROL.　　←どのファイルに書き込むか
+	 SELECT OUT-FILE※A ASSIGN TO 'ファイル名(例out.txt)'
+　　　　 		ORGANIZATION IS LINE SEQUETIAL.　改行で書き込む指定する
+※環境部の例
+　SELECT URIAGE_F（※ファイル名） ASSIGN TO DISK.
+  SELECT PRINT_F  ASSIGN TO PRINTER.
+
+
+環境部（実行環境・入出力ファイル等を記述）読み込み
+ ∟②ENVIRONMENT DIVISION.←省略可能
+　　　　INPUT-OUTPUT SECTION.
+	  	FILE-CONTROL.　　←どのファイルに書き込むか
+	    	SELECT IN-FILE※A ASSIGN TO 'ファイル名(例in.txt)'
+　　　　　　  	ORGANIZATION IS LINE SEQUETIAL.　改行で書き込む指定する
+	      	STATUS 変数名B.←ステータスを管理するための変数を定義
+→③データ部に定義DATA DIVISION.
+		  01 変数名B
+
+
+【データ部】
+データ部（変数の定義等を行うエリア）
+ ∟③DATA DIVISION.←省略可能
+記述例）
+DATA DIVISION.
+　　FILE SECTION.←ファイル節
+	FD ファイル名.　※ファイル名は環境部と同じファイル名
+	レコード記述項.
+  	WOUKING-STORAGE SECTION.←作業場所節。作業領域を記述
+    	01 変数名 PIC X(20).
+	∟変数のレベル番号・変数名・PIC・
+	∟文字列はX(文字数）又はXを文字数分記述
+	∟代入は手続き部エリアにて実施
+　　	01 変数名 PIC 9(桁数) ※VALUE デフォルト値.
+	∟数値は9(桁数)　又は9を文字数分記述
+	∟0埋めされる
+	∟デフォルト値はなくても良い
+
+    	01 変数名 PIC 9(桁数)V9(小数点の桁数). 又は9999V99
+	∟小数点はVを付与して記述する
+
+　　	01 FILLER PIC X(20). ←文字列20数分の予備領域確保
+		
+
+
+ 	環境部の指定時↓書き込み
+　　　　　FILE SECTION. ←ファイルセクションを定義する
+            FD OUT-FILE※A.
+	     01 変数名 PIC 99.
+	  WORKING-STORAGE SECTION.
+	    01 変数名 PIC 99 VALUE 0.
+
+	環境部の指定時↓読み込み
+　　　　　FILE SECTION. ←ファイルセクションを定義する
+            FD IN-FILE※A.
+	     01 変数名 PIC X(20).
+	  WORKING-STORAGE SECTION.
+例
+FD URIAGE_F.※入力レコードの領域
+　O1 URIAGE_REC.
+	02 U-NAME   PIC X(10).
+	02 U-JUICE  PIC 9(06).
+FD PRINT_F.※出力レコードの領域
+　O1 PRINT_REC.
+	02 P-NAME   PIC X(10).
+	02 P-JUICE  PIC 9(06).
+WOUKING-STORAGE SECTION.←作業場所節
+  O1 MEISAI_REC.
+	02 FILLER PIC X(04) VALUE SPACE.※VALUEは作業場所節のみで使用可能　SPACEはスペースで4範囲格納
+	02 P-NAME PIX X(10)←レコードの最小単位の名前
+	※FILLER…無記名項目という名前が不要な項目
+SPACE　一つ以上の空白
+ZERO　　一つ以上の0
+HIGH-VALUE 
+LOW-VALUE
+
+
+
+
+集合項目（※レベル番号は親子関係を表す）
+　01 変数名A.
+    03 変数名B PIC X(10).
+    03 変数名C PIC 9(100).
+ ∟使い方は手続き部にて記述
+
+配列
+　01 配列名AA.
+    03 配列名BB OCCURS 3 PIC X(90). ※OCCURS 領域数
+
+
+【手続き部】
+手続き部
+ ∟④PROCEDURE DIVISION.←記述必須
+       MAIN SECTION.※節名称 SECTION
+	MOVE 文字列 TO 変数名.←変数名に代入する
+	DISPLAY 変数名.
+	*>集合項目↓
+	MOVE 文字列B TO 変数名B.←集合項目代入
+	MOVE 文字列C TO 変数名C.←集合項目代入
+	DISPLAY 変数名A         ←変数名B,Cを出力する
+	DISPLAY 変数名C         ←変数名Cのみ出力する
+	*>配列↓
+	MOVE 文字列BB TO 配列名BB(1).
+	STOP RUN.※節名称の終了
+
+指示の内容
+OPEN INPUT ファイル名A　　　←入力用
+     OUTPUT ファイル名B.※.は一つ←出力用
+READ ファイル名A.　←データ部のファイル名 1レコードの処理を記述できる
+	AT END データ終了時の処理
+	NOT AT END データ存在時の処理
+END-READ.
+
+出力処理
+WRITE レコード名.←データ部のレコード名
+※ WRITE レコード名 FROM 編集領域.　※AFTER PAGE.←改行 AFTER 2.←飛ばし改行
+
+
+DISPLAY 表示させる指示
+
+CLOSE ファイル名A  ファイルを閉じる
+      ファイル名B.
+STOP RUN.　プログラム終了
+
+【代入】
+MOVE 変数1 TO 変数2.
+
+MOVE 変数1 TO 変数2
+              変数3.※変数1を２，３に代入する
+
+※桁数の違い
+小数点の位置に合わせて上位が切り捨てられる
+0埋め
+
+文字は下位が切り捨て
+空白埋め
+
+
+
+
+★計算
+データ部
+DATA DIVISION
+  WOUKING-STORAGE SECTION.
+    01 NUM-1
+	03 D1 PIC 9(5) VALUE 0.
+	03 D2 PIC 9(5) VALUE 0.
+	03 D3 PIC 9(5) VALUE 0.
+	03 D4 PIC 9(5) VALUE 0.
+
+手続き部
+足し算
+　∟ADD 5 TO D1. ←D1+5
+　∟ADD 6 TO D1 D3 D4. ←D1+5　D3+5　D4+5
+引き算
+　∟SUBTRACT 4 FROM D1. ←D1-4
+割り算
+　∟DIVIDE D1 BY D2 GIVING D3 REMAINDER D4, ←D1/D2 D3に答え代入（GIVING） D4に余り代入（REMAINDER）
+かけ算
+　∟MULTIPLY D1 BY D2 GIVING D3 ←D1*D2 D3に答え代入（GIVING）
+
+その他の処理
+　∟COMPUTE D3 = D1 * D2. ←かけ算と同じ処理を実施　＋－／＊　**
+
+COMPUTE 変数 = へんすう + HENNSUU / HENNSUU3 * 5.※間に半角空白が必要
+COMPUTE へんすう ROUNDED = ※少数第一を四捨五入する　ないと切り捨て
+
+オーバーフローの対応
+　COMPUTE へんすう　＝
+	ON SIZE ERROR
+		オーバーフロー時の処理
+	NOT ON SIZE ERROR
+ 		じゃないときの処理
+END-COMPUTE.
+
+
+★インプットボックス
+データ部※入力値を格納する変数を定義
+ DATA DIVISION
+  WOUKING-STORAGE SECTION.
+    01 変数名V PIC X(80).
+ 
+手続き部
+  DISPLAY 質問？.
+  ACCEPT 変数名V.
+
+
+★条件分岐
+END-IFの後にのみ.を記述する
+①
+データ部※入力値を格納する変数を定義
+ DATA DIVISION
+  WOUKING-STORAGE SECTION.
+    01 変数名N PIC 9(2).
+
+手続き部
+【条件分岐】
+ IF 変数名N > 60
+	THEN
+  		TRUEの処理
+ 	ELSE
+　		FALSEの処理
+ END-IF.
+ ※　ELSE CONTINUE…何もしないで次の処理に移動。書かなくても良い
+※ネストは可能。ネストの場合は一番外の処理に．を記述する
+
+【条件分岐2】
+EVALUATE TRUE
+	WHEN 条件 
+		処理
+	WHEN 条件
+		処理
+	WHEN OTHER
+		処理
+END-EVALUATE.
+
+EVALUATE データ値
+	WHEN 値1 THRU 値2 ※範囲指定 値1以上値2以下と同等
+		処理
+	WHEN 値
+		処理
+	WHEN OTHER
+		処理
+END-EVALUATE.
+
+
+【比較演算子】
+・= (IS EQUAL TO)
+・NOT = (IS NOT EQUAL TO)
+・> (IS GREATER THEN)
+・>= (IS GREATER THEN OR EQUAL TO)
+・< (IS LESS THAN)
+・<= (IS LESS THEN OR EQUAL TO)
+
+【論理演算子】
+AND
+OR
+
+
+②
+EVALUATE
+END-EVALUATEの後にのみ.を記述する
+データ部※入力値を格納する変数を定義
+ DATA DIVISION
+  WOUKING-STORAGE SECTION.
+    01 変数名X PIC X(2).
+
+手続き部
+  MOVE 文字列 TO 変数名X.
+  EVALUATE 変数名X
+　　WHEN "AAA"
+	処理AAA
+    WHEN "BBB"
+        処理BBB
+    WHEN OTHER
+        当てはまらない処理
+  END-EVALUTE.
+
+
+★繰り返し
+END-PERFORMの後にのみ.を記述する
+①
+データ部※入力値を格納する変数を定義
+ DATA DIVISION
+  WOUKING-STORAGE SECTION.
+    01 変数名N PIC 9(2) VALUE 1.
+
+手続き部
+  PERFORM 10 TIMES  ←10回繰り返す
+    処理
+    ADD 1 TO 変数名N 
+  END-PERFORM.
+
+
+②
+　PERFORM UNTIL 変数名N > 10  ←条件に達したら処理終了
+　　処理
+　　ADD 1 TO 変数名N ←無限を防ぐ
+  END-PERFORM.
+
+③
+　PERFORM VARYING 変数名N FROM 1 BY 1 UNTIL 変数名N > 10
+    処理
+  END-PERFORM.
+  ∟FROM…開始
+　∟BY…づつ
+　∟UNTIL…条件に達するまで
+
+
+★ファイルを書き込む
+　∟
+手続き部 OPEN OUTPUT OUT-FILE.※A
+	PERFORM 10 TIMES←ループ文
+	  ADD 1 TO LINE-COUNT
+	  MOVE LINE-COUNT TO 変数名※ファイルセクションを定義した変数名
+	  WRITE 変数名※ファイルセクションを定義した変数名
+	END-PERFORM.
+
+	CLOSE OUT-FILE.※A
+∟ファイルの確認
+ターミナル画面
+　　∟less ファイル名
+
+★ファイルの読み込み
+事前にin.txtが存在する前提
+手続き部 OPEN INPUT IN-FILE.※A
+	PERFORM UNTIL 変数名　NOT = "00"←ループ文 正常なら00が返る　変数はWORKING-STORAGEで定義した変数
+	　READ IN-FILE
+	    AT END　
+		※データが読み終わった際の処理
+ 	    NOT AT END　
+		※データ読み込み途中の処理
+		DISPLAY 変数名※ファイルセクションを定義した際の変数
+	  END-READ
+	END-PERFORM.
+
+	CLOSE IN-FILE.※A
+
+
+
+
+【例題】
+IDENTIFICATION DIVISION.
+PROGRAM-ID. プログラム名.
+
+ENVIRONMENT DIVISION.
+INPUT-OUTPUT SECTION.
+FILE-CONTROL.　　
+	 SELECT 読み込みファイル名 ASSIGN TO DISK.
+         SELECT 書き込みファイル名 ASSIGN TO PRINTER.	
+
+DATA DIVISION.
+FILE SECTION.←ファイル節
+FD 読み込みファイル名.
+01 URIAGE-REC.
+	02 U-NAME PIC X(10).　←入力領域は各カラムの値
+	02 U-JUICE PIC 9(06).
+	02 U-TEA PIC 9(06).
+	02 U-COFFEE PIC 9(06).
+FD 書き込みファイル名.   ←出力領域は全ての結果を羅列
+01 PRINT-REC PIC X(60).
+
+WOUKING-STORAGE SECTION.←作業場所節。作業領域を記述
+01 MEISAI-REC.
+	02 FILTER PIC X(04) VALUE SPACE.　←編集領域
+	02 P-NAME PIC X(10).
+	02 FILTER PIC X(03) VALUE SPACE.
+	02 P-JUICE PIC X(06).
+	02 FILTER PIC X(03) VALUE SPACE.
+	02 P-TEA PIC X(06).
+	02 FILTER PIC X(03) VALUE SPACE.
+	02 P-COFFEE PIC X(06).
+
+01 W-TOTAL PIC 9(07).  ←作業領域
+
+PROCEDURE DIVISION.
+PROGRAM-START.
+	OPEN INPUT 読み込みファイル名
+	　　 OUTPUT 書き込みファイル名.
+	READ 読み込みファイル名.
+	COMPUTE W-TOTAL = U-JUCE + U-TEA + U-COFFEE.
+	
+	IF W-TOTAL >= 40000 THEN
+		MOVE "good" TO P-GRADE
+	ELSE
+		MOVE "bad" TO P-GRADE
+	END-IF.
+	
+	MOVE U-NAME TO P-NAME
+	MOVE U-JUICE TO P-JUICE
+	MOVE U-TEA TO P-TEA
+	MOVE U-COFFEE TO P-COFFEE
+	MOVE W-TOTAL TO P-TOTAL
+	WRITE PRINT-REC FROM MEISAI-REC
+
+	CLOSE 読み込みファイル名
+	      書き込みファイル名.
+	STOP RUN.
+
+
+
+
+	  
 -----------C#-----------
 ビルドで作成されるファイル
 　∟コンソールアプリケーションやWINDOWSアプリケーションは「EXE」
