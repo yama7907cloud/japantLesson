@@ -11,6 +11,151 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+===================VBA===================
+データベース
+スキーマ設計
+　∟データベースの構造設計（データ型やサイズ等）
+インデックスを設定する例
+　∟条件に頻繁に利用される
+　∟結合（外部キー）等に利用される
+　∟複合主キー
+　∟ORDER BY / GROUP BY
+
+
+
+
+【ER図】
+　∟IE記法	
+　∟IDEF1X記法
+
+参照設定
+　∟MICROSOFT ACTIVE X DATA OBJECTS /// LIBRARY
+Sub GetSQLData()
+ 
+  On Error GoTo ERR_HANDLER
+    
+    Dim db1 As ADODB.Connection
+    Dim rs1 As ADODB.Recordset
+    
+    '------------------------
+    ' DB接続
+    '------------------------
+    Const strServer = "LAPTOP-IKB12B37\MSSQLSERVER01"
+    Const strDb = "YAMA"
+    Const strUser = "sa"
+    Const strPass = "yama7907T"
+    
+    Dim strConn As String
+    strConn = "Provider=Sqloledb;" & _
+              "Data Source=" & strServer & ";" & _
+              "Initial Catalog=" & strDb & ";" & _
+              "User ID=" & strUser & ";" & _
+              "Password=" & strPass & ";" & _
+              "Connect Timeout=30;"
+    Set db1 = New ADODB.Connection
+    db1.Open strConn
+    
+    '------------------------
+    ' SQL実行
+    '------------------------
+    Dim sql As String
+    sql = ""
+    sql = sql & "SELECT t.object_id AS オブジェクトID, t.name AS テーブル名, c.column_id AS カラムID, c.name AS 項目名,type_name(user_type_id) AS 属性, max_length AS 長さ, CASE WHEN is_nullable = 1 THEN 'DEFAULT' ELSE 'NOT NULL' END AS NULL許可"
+    sql = sql & " FROM sys.objects t INNER JOIN sys.columns c ON t.object_id = c.object_id WHERE t.type = 'U' AND t.name in ('goals')  ORDER BY t.object_id, c.column_id"
+'    sql = sql & " SELECT"
+'    sql = sql & "   id"
+'    sql = sql & "  ,goal_time"
+'    sql = sql & " FROM"
+'    sql = sql & "   goals"
+    
+    Set rs1 = New ADODB.Recordset
+    rs1.Open sql, db1, adOpenStatic, adLockReadOnly
+    
+    '------------------------
+    ' SQL結果 セルへ貼り付け
+    '------------------------
+    Do Until rs1.EOF
+'        ThisWorkbook.Worksheets("Sheet1").Cells(1 + cnt, 1) = rs1("id")
+'        ThisWorkbook.Worksheets("Sheet1").Cells(1 + cnt, 2) = rs1("goal_time")
+        ThisWorkbook.Worksheets("Sheet1").Cells(1 + cnt, 1) = rs1("オブジェクトID")
+        ThisWorkbook.Worksheets("Sheet1").Cells(1 + cnt, 2) = rs1("カラムID")
+        ThisWorkbook.Worksheets("Sheet1").Cells(1 + cnt, 3) = rs1("属性")
+        rs1.MoveNext
+        cnt = cnt + 1
+    Loop
+    
+    '------------------------
+    'データベース閉じる
+    '------------------------
+    rs1.Close
+    Set rs1 = Nothing
+    
+    db1.Close
+    Set db1 = Nothing
+    
+ERR_HANDLER:
+    
+    '------------------------
+    'データベース閉じる
+    '------------------------
+    
+    If Not rs1 Is Nothing Then
+        If rs1.State = adStateOpen Then
+            rs1.Close
+            Set rs1 = Nothing
+        End If
+    End If
+    
+    If Not db1 Is Nothing Then
+        If db1.State = adStateOpen Then
+            db1.Close
+            Set db1 = Nothing
+        End If
+    End If
+     
+End Sub
+
+
+
+
+
+
+
+
+LAPTOP-IKB12B37\MSSQLSERVER01
+sa
+yama7907T
+
+
+USE YAMA
+SELECT * FROM GOALS WITH(NOLOCK)
+
+----sql serverの定義を取得するクエリ----
+SELECT
+    t.object_id             AS オブジェクトID,
+	t.name                  AS テーブル名,
+    c.column_id             AS カラムID,
+	c.name                  AS 項目名,
+	type_name(user_type_id) AS 属性,
+	max_length              AS 長さ,
+	CASE
+		WHEN
+			is_nullable = 1
+		THEN
+			'DEFAULT'
+		ELSE
+			'NOT NULL'
+	END AS NULL許可
+FROM
+	sys.objects t
+    INNER JOIN sys.columns c ON t.object_id = c.object_id
+WHERE
+    -- オブジェクトの種類(U:テーブル(ユーザー定義))
+	t.type = 'U'
+     AND t.name in ('goals') --と指定すれば特定のテーブルのみ検索可能
+ORDER BY
+	t.object_id, c.column_id
+	  
 ---------------------COBOL---------------------
 拡張子…cob
 コメント…*>
