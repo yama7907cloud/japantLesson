@@ -115,7 +115,91 @@ ERR_HANDLER:
      
 End Sub
 
+oracle
+'TNSサービス名で接続する場合(tnsnames.ora)
+Private Const PROVIDER As String = "OraOLEDB.Oracle"
+Private Const DATA_SOURCE As String = "orcl"        'ネットサービス名
+ 
+'TNSサービス名を使用せず直接接続する場合
+Private Const HOST_NAME As String = "localhost"     'データベースのホスト名orIPアドレス
+Private Const PORT_NO   As String = "1521"          'データベースのポート
+Private Const SERVICE_NAME As String = "orcl.mshome.net"       'サービス名
+ 
+'データベースのアカウント情報
+Private Const USER_ID As String = "sys"            'データベースのユーザID
+Private Const PASSWORD As String = "maomaki0427T@"       'データベースのパスワード
 
+Sub sample()
+    On Error GoTo ERR_HANDLER
+    Dim strSQL As String
+    Dim i As Long
+
+    '--------------------------------
+    ' データベース接続
+    '--------------------------------
+    Dim cn As New ADODB.Connection
+ 
+    'TNSサービス名で接続する場合
+'    cn.ConnectionString = "Provider=" & PROVIDER _
+'                        & ";Data Source=" & DATA_SOURCE _
+'                        & ";User ID=" & USER_ID _
+'                        & ";PASSWORD=" & PASSWORD
+'    cn.Open
+ 
+   'TNSサービス名を使用せず直接接続する場合
+   cn.ConnectionString = "Provider=" & PROVIDER _
+                       & ";Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)" _
+                       & "(HOST=" & HOST_NAME & ")" _
+                       & "(PORT=" & PORT_NO & "))" _
+                       & "(CONNECT_DATA=" _
+                       & "(SERVICE_NAME=" & SERVICE_NAME & ")))" _
+                       & ";User ID=" & USER_ID _
+                       & ";PASSWORD=" & PASSWORD
+   cn.Open
+
+    '--------------------------------
+    ' SQLの実行
+    '--------------------------------
+    Dim rs As New ADODB.Recordset
+    strSQL = "select * from uhist"
+    rs.Open strSQL, cn
+ 
+    '取得データをセルに一括出力
+    rs.MoveFirst
+    ActiveSheet.Range("A1").CopyFromRecordset rs
+
+    '--------------------------------
+    ' データベース切断
+    '--------------------------------
+    If Not rs Is Nothing Then
+        If rs.State = adStateOpen Then rs.Close
+        Set rs = Nothing
+    End If
+    If Not cn Is Nothing Then
+        If cn.State = adStateOpen Then cn.Close
+        Set cn = Nothing
+    End If
+
+Exit Sub
+
+ERR_HANDLER:
+
+    'エラーメッセージ
+    Debug.Print Err.Number & ")" & Err.Description
+ 
+    '--------------------------------
+    ' データベース切断
+    '--------------------------------
+    If Not rs Is Nothing Then
+        If rs.State = adStateOpen Then rs.Close
+        Set rs = Nothing
+    End If
+    If Not cn Is Nothing Then
+        If cn.State = adStateOpen Then cn.Close
+        Set cn = Nothing
+    End If
+    
+End Sub
 
 
 
