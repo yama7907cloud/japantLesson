@@ -11,619 +11,269 @@
   <p>新しい情報です</p>
 <pre>
   <code>
-===================COBOL===================
-拡張子…cob
+===================VB===================
+Console.WriteLine()引数なしは空白行の出力
+
+
+【計算】
+　∟余り　Mod
+　∟整数除算　\　（丸められた後に計算される）
+
+【文字の連結】
+　∟&
+【行の継続】
+　∟1ステートメントが長くなると、複数行にする→　「空白 _」
+
+【名前空間】
+　∟プロジェクトエクスプローラ > プロパティ > アプリケーション > ルート名前空間(R):
+　∟参照設定されていることで、名前空間の記述が不要でも実行可能になる
+　　∟参照設定なし　→　System.Console.WriteLine("テスト")
+　　∟参照設定あり　→　Console.WriteLine("テスト")
+指定方法
+　∟　Imports　名前空間名
+
 【コメント】
-固定書式…7番目(一連番号の直後)に*　※8～11 A領域　12～B領域（コボルのプログラム領域）
-自由書式…*>
-【文末】
-．_ ※_は空白
-配列のインデックス番号は1から始まる
-文字列の連結…半角スペース
-
-↓プログラムの記述形式
-【固定形式】
-左から1～6列は記述不可
-左7列はコメント（*）を記述する
-8列からプログラムを記述していく
-　∟_______*DIVISION....みたいな※_は6スペース確保している
-【自由形式】
-どこから書いてもいいが、コメントが違う
-　∟*>
-
-【OPEN】
-【CLOSE】
-【READ】
-【WRITE】
-　∟WRITE 出力領域 FROM 編集領域
-【MOVE】
-　∟代入 MOVE 変数　TO 変数2 ※変数の値を変数2に代入する
-　∟桁数が小さい場合…数字は小数点が右にあるとされて、上位が切り捨てられる
-	…文字は先頭から埋められて、下位がきりすてられる
-【COMPUTE】
-　∟計算する場合に記述
-　∟例 COMPUTE W-TOTAL = U-JUCE + U-TEA + U-COFFEE.※変数 ROUNDED←変数のデータに併せて、四捨五入する。記述なしは切り捨て
-※桁あふれ（オーバーフロー）による処理分岐
-COMPUTE W-TOTAL = U-JUCE + U-TEA + U-COFFEE
-	ON SIZE ERROR
-		桁あふれの場合の処理
-	NOT ON SIZE ERROR
-		桁あふれでない場合の処理
-END-COMPUTE.
-
-【STOP】
-　∟プログラム終了
-　∟例 STOP RUN.
-
-
-【領域】
-入力領域…入力してきたレコード値を保存する領域
-出力領域…出力するレコード値を保存する領域
-作業領域…編集・加工項目を保存する領域
-編集領域…プリントレイアウトを記憶する
-
-
-レベル番号 ※01～49が可能範囲
-レコード名は01
-各カラムを02
-01が一番上位の階層になる。番号によって　階層関係になる
-※レコード名のような全体を集団項目・各カラムのような最小単位を基本項目
-
-
-
-DIVISION　>　SECTION
-DIVISION…順番必須だが、省略可能
-【見出し部】
- ∟①IDENTIFICATION DIVISION.←記述必須　プログラムID
-　　 	PROGRAM-ID. 任意の文字列(プログラム名).
-
-【環境部】
-環境部（実行環境・入出力ファイル等を記述）書き込み
- ∟②ENVIRONMENT DIVISION.←省略可能
-　　 INPUT-OUTPUT SECTION.
-     FILE-CONTROL.　　←どのファイルに書き込むか
-	 SELECT OUT-FILE※A ASSIGN TO 'ファイル名(例out.txt)'
-　　　　 		ORGANIZATION IS LINE SEQUETIAL.　改行で書き込む指定する
-※環境部の例
-　SELECT URIAGE_F（※ファイル名） ASSIGN TO DISK.
-  SELECT PRINT_F  ASSIGN TO PRINTER.
-
-
-環境部（実行環境・入出力ファイル等を記述）読み込み
- ∟②ENVIRONMENT DIVISION.←省略可能
-　　　　INPUT-OUTPUT SECTION.
-	  	FILE-CONTROL.　　←どのファイルに書き込むか
-	    	SELECT IN-FILE※A ASSIGN TO 'ファイル名(例in.txt)'
-　　　　　　  	ORGANIZATION IS LINE SEQUETIAL.　改行で書き込む指定する
-	      	STATUS 変数名B.←ステータスを管理するための変数を定義
-→③データ部に定義DATA DIVISION.
-		  01 変数名B
-
-
-【データ部】
-データ部（変数の定義等を行うエリア）
- ∟③DATA DIVISION.←省略可能
-記述例）
-DATA DIVISION.
-　　FILE SECTION.←ファイル節（入出力で利用する領域の定義）
-	FD ファイル名.　※ファイル名は環境部と同じファイル名
-	レコード記述項.
-  　WOUKING-STORAGE SECTION.←作業場所節。（入出力以外で利用する領域の定義）※初期値を設定できるVALUE句が利用できる
-    	01 変数名 PIC X(20).
-	∟変数のレベル番号・変数名・PIC・
-	∟文字列はX(文字数）又はXを文字数分記述
-	∟代入は手続き部エリアにて実施
-　　	01 変数名 PIC 9(桁数) ※VALUE デフォルト値.
-	∟数値は9(桁数)　又は9を文字数分記述　整数値　マイナスを含む場合はS9(桁数)
-	∟0埋めされる
-	∟デフォルト値はなくても良い
-
-    	01 変数名 PIC 9(桁数)V9(小数点の桁数). 又は9999V99
-	∟小数点はVを付与して記述する
-
-　　	01 FILLER PIC X(20). ←文字列20数分の予備領域確保
-		
-
-
- 	環境部の指定時↓書き込み
-　　　　　FILE SECTION. ←ファイルセクションを定義する
-            FD OUT-FILE※A.
-	     01 変数名 PIC 99.
-	  WORKING-STORAGE SECTION.
-	    01 変数名 PIC 99 VALUE 0.
-
-	環境部の指定時↓読み込み
-　　　　　FILE SECTION. ←ファイルセクションを定義する
-            FD IN-FILE※A.
-	     01 変数名 PIC X(20).
-	  WORKING-STORAGE SECTION.
-例
-FD URIAGE_F.※入力レコードの領域
-　O1 URIAGE_REC.
-	02 U-NAME   PIC X(10).
-	02 U-JUICE  PIC 9(06).
-FD PRINT_F.※出力レコードの領域
-　O1 PRINT_REC.
-	02 P-NAME   PIC X(10).
-	02 P-JUICE  PIC 9(06).
-WOUKING-STORAGE SECTION.←作業場所節
-  O1 MEISAI_REC.
-	02 FILLER PIC X(04) VALUE SPACE.※VALUEは作業場所節のみで使用可能　SPACEはスペースで4範囲格納
-	02 P-NAME PIX X(10)←レコードの最小単位の名前
-	※FILLER…無記名項目という名前が不要な項目
-SPACE　一つ以上の空白
-ZERO　　一つ以上の0
-HIGH-VALUE 
-LOW-VALUE
-
-
-
-
-集合項目（※レベル番号は親子関係を表す）
-　01 変数名A.
-    03 変数名B PIC X(10).
-    03 変数名C PIC 9(100).
- ∟使い方は手続き部にて記述
-
-配列
-　01 配列名AA.
-    03 配列名BB OCCURS 3 PIC X(90). ※OCCURS 領域数
-
-
-【表（配列）】
-インデックスは1から
-データ部
-　∟FD 読み込みファイル名.
-	01 URIAGE-REC.
-		02 U-NAME PIC X(10).　←入力領域は各カラムの値
-		02 U-JUICE PIC 9(06) OCCURS 要素数.  ※　VALUES 0.　初期値も付与可能
-※
-作業領域にインデックスの変数を作成することを忘れない
-添え字の定義←データ部での定義※注意
-※インデックスの添え字の桁数　PIC 9(01)1～9 / PIC 9(02) 10～99 / PIC 9(03) 100～999
-
-
-【配列の繰り返し】
-外パフォーム文
-PERFORM 呼び出し先 VARYING インデックス変数  FROM 初期値 BY 増減値 UNTIL 条件（満たすまで実行する）
-
-
-内パフォーム文
-PERFORM VARYING インデックス変数 FROM 初期値 BY 増減値 UNTIL 条件（満たすまで実行する）
-処理
-END-PERFORM.
-
-VARYING…データの値を変えながら繰り返し処理を実行してくれる
-
-例　インデックスが1～3の間繰り返しを行う
-　∟PERFORM VARYING IND FROM 1 BY 1 UNTIL IND > 3
-	COMPUTE W-TOTAL = W-TOTAL + U-DRINK(IND)
-    END-PERFORM.
-
-
-
-【データ部のデータの再定義】
-　02 再定義する変数名 REDEFINES 既存変数名.※レベル番号は同じに刷ること
-例
-01 CHECK-VALUE.
-  02 FILLER PIC X(08) VALUE "0040000A".←40000(点数) と　A（判定）の内容が定義されている
-  02 FILLER PIC X(08) VALUE "0030000B".
-01 CHECK-HYO-R REDEFINES CHECK-VALUE.←CHECK-VALUEを再定義する
-  02 CHECK-HYO OCCURS 2.
-	03 W-CHECK PIC 9(7).
-	03 W-CHECK PIC X(1).
-
-※集団項目(親)はXタイプとなるので子が9(1)整数でも計算には利用できない!
-01 W-DATE.
-  02 W-YEAR PIC 9(4) VALUE 2024.
-  02 W-MONTH PIC 9(2) VALUE 12.
-01 W-DATE-R REDEFINES W-DATE PIC 9(6).←再定義することで整数型になり、計算で利用できるようになる
-
-【手続き部】
-手続き部
- ∟④PROCEDURE DIVISION.←記述必須
-       MAIN SECTION.※節名称 SECTION
-	MOVE 文字列 TO 変数名.←変数名に代入する
-	DISPLAY 変数名.
-	*>集合項目↓
-	MOVE 文字列B TO 変数名B.←集合項目代入
-	MOVE 文字列C TO 変数名C.←集合項目代入
-	DISPLAY 変数名A         ←変数名B,Cを出力する
-	DISPLAY 変数名C         ←変数名Cのみ出力する
-	*>配列↓
-	MOVE 文字列BB TO 配列名BB(1).
-	STOP RUN.※節名称の終了
-
-指示の内容
-OPEN INPUT ファイル名A　　　←入力用
-     OUTPUT ファイル名B.※.は一つ←出力用
-READ ファイル名A.　←データ部のファイル名 1レコードの処理を記述できる
-	AT END データ終了時の処理
-	NOT AT END データ存在時の処理
-END-READ.
-
-出力処理
-WRITE レコード名.←データ部のレコード名
-※ WRITE レコード名 FROM 編集領域.　※AFTER PAGE.←改行(改ページ後) AFTER 2.←飛ばし改行
-
-
-DISPLAY 表示させる指示
-
-CLOSE ファイル名A  ファイルを閉じる
-      ファイル名B.
-STOP RUN.　プログラム終了
-
-【代入】
-MOVE 変数1 TO 変数2.
-
-MOVE 変数1 TO 変数2
-              変数3.※変数1を２，３に代入する
-
-※桁数の違い
-小数点の位置に合わせて上位が切り捨てられる
-0埋め
-
-文字は下位が切り捨て
-空白埋め
-
-
-【データの編集】
-目的…データを見やすくする
-データ編集前→06000   データ編集後→  6,000
-手順　データ部を変更する
-　∟02 変数名 PIC ZZZ,ZZ9.※1の位を数字として空白を避ける
-※
-英数字　X
-数字　9,S,V（仮想小数点）
-数字編集 Z,, . \ + - ←計算には使用できない
-　∟Z(0を抑制),(,を入力).(小数点を入力)\(数字の左側に\記号)-+（数字の左側に入力）
-※前に数字のない,は空白扱いになる
-注意
-　∟123456 \\\,\\9 →\23,456上位が欠落する!!
-計算に利用する小数点←作業領域
-　∟02 変数名 PIC 999V99.　→　作業領域から編集領域へ 02 変数名 PIC 999.99. 
-注意
-　∟小数点のカット 02 変数名 PIC 999V99. 12345 （123.45と同一）→　02 変数名 PIC 99999    00123になってしまう
-
-12345 →　PIC +++++9 → +12345※プラスが明示される
--12345 → PIC +++++9 → -12345
-12345 → PIC -----9 → 12345※プラスの場合は空白扱いになる
-※\,+- 桁を多く取らないと　桁数切り捨てになってしまうので注意する
-例-12345 > ----9 > -2345
-
-★計算
-データ部
-DATA DIVISION
-  WOUKING-STORAGE SECTION.
-    01 NUM-1
-	03 D1 PIC 9(5) VALUE 0.
-	03 D2 PIC 9(5) VALUE 0.
-	03 D3 PIC 9(5) VALUE 0.
-	03 D4 PIC 9(5) VALUE 0.
-
-手続き部
-足し算
-　∟ADD 5 TO D1. ←D1+5
-　∟ADD 6 TO D1 D3 D4. ←D1+5　D3+5　D4+5
-引き算
-　∟SUBTRACT 4 FROM D1. ←D1-4
-割り算
-　∟DIVIDE D1 BY D2 GIVING D3 REMAINDER D4, ←D1/D2 D3に答え代入（GIVING） D4に余り代入（REMAINDER）
-かけ算
-　∟MULTIPLY D1 BY D2 GIVING D3 ←D1*D2 D3に答え代入（GIVING）
-
-その他の処理
-　∟COMPUTE D3 = D1 * D2. ←かけ算と同じ処理を実施　＋－／＊　**
-
-COMPUTE 変数 = へんすう + HENNSUU / HENNSUU3 * 5.※間に半角空白が必要
-COMPUTE へんすう ROUNDED = ※少数第一を四捨五入する　ないと切り捨て
-
-オーバーフローの対応
-　COMPUTE へんすう　＝
-	ON SIZE ERROR
-		オーバーフロー時の処理
-	NOT ON SIZE ERROR
- 		じゃないときの処理
-END-COMPUTE.
-
-
-★インプットボックス
-データ部※入力値を格納する変数を定義
- DATA DIVISION
-  WOUKING-STORAGE SECTION.
-    01 変数名V PIC X(80).
- 
-手続き部
-  DISPLAY 質問？.
-  ACCEPT 変数名V.
-
-
-①
-データ部※入力値を格納する変数を定義
- DATA DIVISION
-  WOUKING-STORAGE SECTION.
-    01 変数名N PIC 9(2).
-
-手続き部
-【条件分岐1　2分岐処理】
- IF 変数名N > 60
-	THEN
-  		TRUEの処理※CONTINUEの記述が可能
- 	ELSE
-　		FALSEの処理※省略可能
- END-IF.※END-IFの後にのみ.を記述する
-
- ※　ELSE CONTINUE…何もしないで次の処理に移動。書かなくても良い
-※ネストは可能。ネストの場合は一番外の処理に．を記述する
-
-【条件分岐2　多分岐処理】
-IFをネストさせない書き方。条件が当てはまる1つが実行される
-EVALUATE TRUE
-	WHEN 条件 
-		処理
-	WHEN 条件
-		処理
-	WHEN OTHER※当てはまらないとき
-		処理
-END-EVALUATE.
-
-EVALUATE データ値
-	WHEN 値1 THRU 値2 ※範囲指定 値1以上値2以下と同等
-		処理
-	WHEN 値
-		処理
-	WHEN OTHER
-		処理
-END-EVALUATE.
-
-
-【比較演算子】
-・= (IS EQUAL TO)
-・NOT = (IS NOT EQUAL TO)
-・> (IS GREATER THEN)
-・>= (IS GREATER THEN OR EQUAL TO)
-・< (IS LESS THAN)
-・<= (IS LESS THEN OR EQUAL TO)
-
-【論理演算子】
-AND
-OR
+　∟'
+　∟'''（XML用のコメント）
+
+【変数】
+　∟小文字始まり
+　∟enum型…DayOfWeek→曜日て定数が定義されている
+　∟Option Explicit　変数宣言を行う　　　ソリューションエクスプレスメニュー > プロジェクト > プロジェクト名のプロパティ >　コンパイル　　
+　∟Option Strict　厳密なデータ型を判定
+ソースの先頭に指定を記述する Option ～ On|Off
+
+【定数】
+　∟Const 定数名 as データ型 = 初期値
+　※全て大文字
+
+【データ型】
+参照型…string object
+ object→Nothing
+ string
+ ∟変数名.length…文字数を取得
+ ∟String.Empty…空文字を意味する
+特殊文字
+　∟"""こんにちは　""" または　ControlChars.Quote →　"こんにちは"
+　∟ControlChars.NewLine →　改行文字
+
+
+値型
+　∟null許容型はNothingを代入できる 変数名? 例dim 変数名? as integer = nothing
+single…末尾にF
+double…末尾にR
+decimal…末尾にD
+char…末尾にc
+boolean
+
+date.Now./Year/Month/Day/Hour/Minute
+
+【型変換】
+　integer型に変換する例※変換できないと実行時エラーが発生する(Exception)
+   dim a as integer
+   a = CType(ダブル型,Integer)※最も近い偶数にまとめられる(0.5→0 1.5→2)
+   a = CType(ロング型,Integer)
+   a = CType(string型,Integer)
+特定のデータ型に変換
+　∟CBool
+　∟CStr
+　∟CInt
+　∟CDate
+
+TryParse
+　∟dim a as Boolean = Integer.TryParse("aaa",b)文字列aaaをinteger型に変換できないなら　a=false b= 0が代入される
+
+文字列へ変換する
+　∟変数名.ToString(※1)※1実引数""で囲む d(短い日付) D（長い日付）t（短い時刻）T（長い時刻）C（通貨\）F2(小数点以下の数字)
+	N2(カンマ編集)
+
+
+
+【配列】
+初期値設定　= {1,2,5,34}※インデックスは0始まり
+多次元配列
+　∟配列名(0,1) = 50※0レコード目の1カラムの要素という意味
+　∟配列名.GetLength(0)…レコード数が取得
+　∟配列名.GetLength(1)…カラム数が取得
+
+
+【演算子】
+Is オブジェクトを参照しているか, Is Not　別オブジェクトを参照しているかを判定
+Like文字パターン非各区を判定
+
+
+
+【条件分岐】
+If 条件 Then
+	条件が当てはまった際の処理
+Else if 条件2 Then
+	条件2が当てはまった際の処理
+Else
+	当てはまらなかった際の処理
+End If
+※2分岐を1行で記述する方法　※end if は不要!
+　∟If 条件 then  trueの処理  else falseの処理 
+
+※Continue Forで処理を飛ばす　抜けるのはExit For
+
+select Case 条件
+	case 値1
+	
+	case 値2,値3
+	
+	case else
+
+end select
+
+※値1 to 値2←値1から値2の間に当てはまるもの
+※Is 比較演算子 値　…trueであればの意味になる
+
 
 【繰り返し】
-ファイルを読み込むと内容の有無が判断できるので、繰り返しを実施する場合は
-1つ目のレコード処理→繰り返し文で2つ目からの処理を実施する
+While
+
+End While
+Do While 反復条件
+
+Loop
+
+Do Until 終了条件
+
+Loop
+※　処理を1回は実行するには、Loop While(Until) 条件
+
+For i as データ型 = 初期値　to 終了値 step 加算値
+
+Next
+
+For Each 要素変数 In 配列名
+
+Next
+
+Exit For←繰り返し処理を抜ける
+　∟Exit While/Do/Select/Sub/Function
+Continue For←現在繰り返しターンを終了
+
+【クラス】
+定義
+　∟Public Class クラス名※クラス名は先頭のみ大文字
+　　End Class
+※Friend修飾子…同一アセンブリ（プロジェクト）内からの接続を可能
+※1ファイルにつき 1クラス
+
+自分自身はme
+
+フィールド…インスタンス変数
+フィールドの修飾子
+　∟Public
+　∟Friend
+　∟Protected
+　∟Protected Friend
+　∟Private
+　∟Private Protected
+
+メソッド
+　∟戻り値あり…Public Function　メソッド名（) As 戻り値のデータ型　※メソッド名は関数名
+                End Function
+　　　∟Reture で戻り値を返す
+　∟戻り値なし…Public Sub メソッド名()
+                End Sub
+
+※仮引数の参照方法
+　∟ByRef←元データが変わってしまう
+　∟ByVal
 
 
-データ部※入力値を格納する変数を定義
- DATA DIVISION
-  WOUKING-STORAGE SECTION.
-    01 変数名N PIC 9(2) VALUE 1.
+コンストラクタ
+　定義…Public Sub New(仮引数)
+	end sub
+　※仮引数のあり、なしの2つのコンストラクタを定義する　　オーバーロード可能
 
-内パフォーム文※モジュールに飛ばない記述のため、END-PERFORM.を記述すること!!
-  PERFORM 10 TIMES  ←終了条件（まで）　10回繰り返す
-    処理
-    ADD 1 TO 変数名N 
-  END-PERFORM.　←END-PERFORMの後にのみ.を記述する
+インスタンス
+　∟Dim 変数名 As クラス名 = New クラス名(実引数)
 
+メソッドの実行
+　∟インスタンス変数.メソッド名()
 
-外パフォーム文
-※動き---PERFORM　モジュール > モジュール分に移動して処理を実行 > PERFORM文の次の処理に進む
-PERFORM 呼び出しモジュール ※1 WITH TEST BEFORE(又は AFTER) ※2 UNTIL 条件
-※1 先に判定（デフォルト値）…WITH TEST BEFORE　後に判定…WITH TEST AFTER
-※2 条件は終了条件を記述すること　無限ループにならないように!!
-
-
-
-【出力領域の不要な0抑制& カンマ付与】
-
-
-
-
-
-②
-EVALUATE
-END-EVALUATEの後にのみ.を記述する
-データ部※入力値を格納する変数を定義
- DATA DIVISION
-  WOUKING-STORAGE SECTION.
-    01 変数名X PIC X(2).
-
-手続き部
-  MOVE 文字列 TO 変数名X.
-  EVALUATE 変数名X
-　　WHEN "AAA"
-	処理AAA
-    WHEN "BBB"
-        処理BBB
-    WHEN OTHER
-        当てはまらない処理
-  END-EVALUTE.
-
-
-★繰り返し
-END-PERFORMの後にのみ.を記述する
-①
-データ部※入力値を格納する変数を定義
- DATA DIVISION
-  WOUKING-STORAGE SECTION.
-    01 変数名N PIC 9(2) VALUE 1.
-
-手続き部
-  PERFORM 10 TIMES  ←10回繰り返す
-    処理
-    ADD 1 TO 変数名N 
-  END-PERFORM.
-
-
-②
-　PERFORM UNTIL 変数名N > 10  ←条件に達したら処理終了
-　　処理
-　　ADD 1 TO 変数名N ←無限を防ぐ
-  END-PERFORM.
-
-③
-　PERFORM VARYING 変数名N FROM 1 BY 1 UNTIL 変数名N > 10
-    処理
-  END-PERFORM.
-  ∟FROM…開始
-　∟BY…づつ
-　∟UNTIL…条件に達するまで
-
-
-★ファイルを書き込む
-　∟
-手続き部 OPEN OUTPUT OUT-FILE.※A
-	PERFORM 10 TIMES←ループ文
-	  ADD 1 TO LINE-COUNT
-	  MOVE LINE-COUNT TO 変数名※ファイルセクションを定義した変数名
-	  WRITE 変数名※ファイルセクションを定義した変数名
-	END-PERFORM.
-
-	CLOSE OUT-FILE.※A
-∟ファイルの確認
-ターミナル画面
-　　∟less ファイル名
-
-★ファイルの読み込み
-事前にin.txtが存在する前提
-手続き部 OPEN INPUT IN-FILE.※A
-	PERFORM UNTIL 変数名　NOT = "00"←ループ文 正常なら00が返る　変数はWORKING-STORAGEで定義した変数
-	　READ IN-FILE
-	    AT END　
-		※データが読み終わった際の処理
- 	    NOT AT END　
-		※データ読み込み途中の処理
-		DISPLAY 変数名※ファイルセクションを定義した際の変数
-	  END-READ
-	END-PERFORM.
-
-	CLOSE IN-FILE.※A
-
-
-
-
-【例題】
-IDENTIFICATION DIVISION.
-PROGRAM-ID. プログラム名.
-
-ENVIRONMENT DIVISION.
-INPUT-OUTPUT SECTION.
-FILE-CONTROL.　　
-	 SELECT 読み込みファイル名 ASSIGN TO DISK.
-         SELECT 書き込みファイル名 ASSIGN TO PRINTER.	
-
-DATA DIVISION.
-FILE SECTION.←ファイル節
-FD 読み込みファイル名.
-01 URIAGE-REC.
-	02 U-NAME PIC X(10).　←入力領域は各カラムの値
-	02 U-JUICE PIC 9(06).
-	02 U-TEA PIC 9(06).
-	02 U-COFFEE PIC 9(06).
-FD 書き込みファイル名.   ←出力領域は全ての結果を羅列　____XXXXXXXXXX___XXXXXX___XXXXXX___XXXXXX___X
-01 PRINT-REC PIC X(60).
-
-WOUKING-STORAGE SECTION.←作業場所節。作業領域を記述
-01 MEISAI-REC.
-	02 FILTER PIC X(04) VALUE SPACE.　←編集領域
-	02 P-NAME PIC X(10).
-	02 FILTER PIC X(03) VALUE SPACE.
-	02 P-JUICE PIC X(06).
-	02 FILTER PIC X(03) VALUE SPACE.
-	02 P-TEA PIC X(06).
-	02 FILTER PIC X(03) VALUE SPACE.
-	02 P-COFFEE PIC X(06).
-	02 FILTER PIC X(03) VALUE SPACE.
-	02 P-GRADE PIC X(01).
-
-01 W-TOTAL PIC 9(07).  ←作業領域
-01 FILE-END PIC 9(01).
-
-PROCEDURE DIVISION.
-PROGRAM-START.
-	PERFORM START-PROCESS.          ←モジュール（関数）呼び出し
-	PERFORM URIAGE-WRITE UNTIL FILE-END = 1.←モジュール（関数）呼び出し FILE-ENDが1になるまで繰り返し
-	PERFORM END-PROCESS　　　　　　←モジュール（関数）呼び出し
-	STOP RUN.
-
-URIAGE-WRITE. ←モジュール定義
-	PERFORM GRADE-CHECK.   ←モジュール（関数）呼び出し
-	PERFORM MEISAI-WRITE.  ←モジュール（関数）呼び出し
-	PERFORM URIAGE-READ.   ←モジュール（関数）呼び出し
-
-GRADE-CHECK.←モジュール定義
-	COMPUTE W-TOTAL = U-JUCE + U-TEA + U-COFFEE.
+プロパティー
+　∟フィールドの設定や読み取り処理を実行する
+　Public Property プロパティー名() As データ型
+	Get
+		Return フィールド名
+	End Get
 	
-	IF W-TOTAL >= 40000 THEN
-		MOVE "good" TO P-GRADE
-	ELSE
-		MOVE "bad" TO P-GRADE
-	END-IF.
+	Set (ByVal 仮引数変数 As データ型)
+		フィールド名 = 仮引数変数
+	End Set 
+　End Property
+※Setを記述しない読み取り専用の場合ReadOnly Propertyに記述を変更する
 
-MEISAI-WRITE.←モジュール定義
-	MOVE U-NAME TO P-NAME
-	MOVE U-JUICE TO P-JUICE
-	MOVE U-TEA TO P-TEA
-	MOVE U-COFFEE TO P-COFFEE
-	MOVE W-TOTAL TO P-TOTAL
-	WRITE PRINT-REC FROM MEISAI-REC　　※見出しを出力する場合→PERFORM MIDASHI-MEISAI-WRITE.
-
-URIAGE-READ.←モジュール定義
-	READ ファイル名A.　
-		AT END ←データ終了時の処理
-			MOVE 1 TO FILE-END
-		NOT AT END ←データ存在時の処理。省略可能
-	END-READ.
-
-START-PROCESS.←モジュール定義
-	OPEN INPUT 読み込みファイル名
-	　　 OUTPUT 書き込みファイル名.←.　の位置に注意!!
-	MOVE 0 TO FILE-END       ←判定用変数の初期化
-	PERFORM URIAGE-READ.     ←モジュール（関数）呼び出し
-
-END PROCESS.←モジュール定義
-	CLOSE 読み込みファイル名
-	      書き込みファイル名.
+ String.IsNullOrEmpty(a)←aが何もない(nothing 又は　"")ならtrue
 
 
-【先頭行に見出しをプリントする】※20レコードごとに先頭行を表示
-追加項目
-　∟データ部
-     01 MIDASHI-REC.
-	02 FILLER PIC X(04) VALUE SPACE.
-	02 FILLER PIC X(05) VALUE "ナマエ".
-	02 FILLER PIC X(04) VALUE SPACE.
-	02 FILLER PIC X(05) VALUE "ジュース".
-	02 FILLER PIC X(04) VALUE SPACE.
-	02 FILLER PIC X(03) VALUE "オチヤ".
-	02 FILLER PIC X(04) VALUE SPACE.
-	02 FILLER PIC X(04) VALUE "コーヒー".
-	02 FILLER PIC X(04) VALUE SPACE.
-	02 FILLER PIC X(05) VALUE "ゴウケイ".
-	02 FILLER PIC X(04) VALUE SPACE.
-	02 FILLER PIC X(06) VALUE "グレード".
 
-　∟作業領域
-　　01 LINE-COUNT PIC 9(02).
+プロパティー呼び出し
+　∟インスタンス変数.プロパティー名    ※()は不要
+
+クラスに紐付く変数 ※フィールド定義でConstまたはShared ReadOnly でもクラスに紐付く形になる　併用は不可
+　∟修飾子 Shared　変数名　As データ型
+Public Shared Sub クラスに紐付く関数名()
+    Console.WriteLine("Employeeクラスです")
+End Sub
 
 
-　∟手続き部
-MOVE 20 TO LINE-COUNT. ←初期値を20に設定して、先頭に見出しを出力する
-
-PERFORM MIDASHI-MEISAI-WRITE.←呼び出し
 
 
-MIDASHI-MEISAI-WRITE.←関数定義
-	IF LINE-COUNT >= 20
-	 THEN
-		WRITE PRINT-REC FROM MIDASHI-REC AFTER PAGE
-		MOVE 0 TO LINE-COUNT
-	END-IF.
-	WRITE PRINT-REC FROM MEISAI-REC AFTER 2.
-	COMPUTE LINE-COUNT = LINE-COUNT + 1.
+【継承】※親クラスもObjectクラスを継承しているInheits Object
+Public Class クラス名
+	Inherits 親クラス名
 
-	  
-	  
+オーバーライドされる可能性のある
+　∟親メソッドにはOverridableを記述する
+　∟子メソッドにはOverridesを記述する
+例　Public Overridable Sub 関数名()
+
+
+
+継承先から親を実行する
+　∟MyBase.メソッド()
+ コンストラクタ
+　　∟MyBase.New(実引数)※実引数は親クラスの引数と同じ形
+
+
+【例外】
+例外の種類
+　∟DivideByZeroException 0で割った場合
+　∟IndexOutOfRangeException配列の要素外にアクセス
+　∟InvalidCastExceptionキャストが不適切
+　∟NullReferenceExcception　null,Nothingの場合に発生する
+　∟OverflowExceptionオーバフロー時
+　∟Data.sqlclient.SqlExceptionSQLSeverでエラーが通知された場合
+　∟FormatException　データ型変換ができない
+Message例外を説明する
+Sourceオブジェクトの表示
+StackTrace
+ToString()詳細譲歩
+
+Try 
+
+Catch 変数名 As OverflowException　　※ When 条件 trueの場合のみ実行
+	変数名.Message
+Catch 変数名 As FormatException
+	変数名.Message
+Finally
+
+End Try
+
+Throw New 例外クラス※例　OverflowException
+
+例外の再スロー
+Catch 変数名　As Exception
+	Throw ※キャッチしなかった者とする
+
+MessageBox.Show("計算を終了します!!")
+フォームの終了
+　Me.Close()
 	  ===================VBA===================
 データベース
 スキーマ設計
