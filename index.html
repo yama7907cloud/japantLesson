@@ -11,1177 +11,622 @@
   <p>新しい情報です</p>
 <pre>
   <code>
-===================VB===================
-Console.WriteLine()引数なしは空白行の出力
+===================PYTHON===================
+	  【コーディング方法】
+　∟コマンドプロンプト > notepad←メモ帳が開く
+【コードの実行】
+	cmd(コマンドプロンプト) 又は パワーシェル(Windows + R)
+　カレントディレクトリーに移動 > ファイルの存在確認 > python ファイル名.py(実行)
+※
+cd…カレントディレクトリの移動 
+dir…フォルダー内の存在確認
+mkdir フォルダー名…フォルダーを作成
+exit()…終了
+【実行時エラー確認】
+　∟キャレット（^）の位置近辺にエラーの可能性あり
 
+※コードの実行方法
+　∟インタラクティブシェルによる実行
+　∟python と入力 >  「>>>」が表示される　コードを直接入力して実行　終了はexit()※Ctrl + z → Enter
 
-【計算】
-　∟余り　Mod
-　∟整数除算　\　（丸められた後に計算される）
+【パイソン実行】
+　∟python ファイル名.py　←コマンドプロンプトに実行結果が表示される
 
-【文字の連結】
-　∟&
-【行の継続】
-　∟1ステートメントが長くなると、複数行にする→　「空白 _」
+【拡張子】
+　∟.py
 
-【名前空間】
-　∟プロジェクトエクスプローラ > プロパティ > アプリケーション > ルート名前空間(R):
-　∟参照設定されていることで、名前空間の記述が不要でも実行可能になる
-　　∟参照設定なし　→　System.Console.WriteLine("テスト")
-　　∟参照設定あり　→　Console.WriteLine("テスト")
-指定方法
-　∟　Imports　名前空間名
+【エンコーディング】
+　∟UTF-8
+
+【ブロック判断】
+　∟半角スペース…4
 
 【コメント】
-　∟'
-　∟'''（XML用のコメント）
+　∟#(1行) 
 
-【変数】
-　∟小文字始まり
-　∟enum型…DayOfWeek→曜日て定数が定義されている
-　∟Option Explicit　変数宣言を行う　　　ソリューションエクスプレスメニュー > プロジェクト > プロジェクト名のプロパティ >　コンパイル　　
-　∟Option Strict　厳密なデータ型を判定
-ソースの先頭に指定を記述する Option ～ On|Off
-
-【定数】
-　∟Const 定数名 as データ型 = 初期値
-　※全て大文字
-
-【データ型】
-参照型…string object
- object→Nothing
- string
- ∟変数名.length…文字数を取得
- ∟String.Empty…空文字を意味する
-特殊文字
-　∟"""こんにちは　""" または　ControlChars.Quote →　"こんにちは"
-　∟ControlChars.NewLine →　改行文字
+"""で囲むと　改行を含めることができる
 
 
-値型
-　∟null許容型はNothingを代入できる 変数名? 例dim 変数名? as integer = nothing
-single…末尾にF
-double…末尾にR
-decimal…末尾にD
-char…末尾にc
-boolean
 
-date.Now./Year/Month/Day/Hour/Minute
+【定数】※変数は全小文字を記述
+全大文字 = 値
+
+【組み込み関数】
+print()
+　∟出力　※実引数を,で区切ると半角スペースで表示してくれる
+※bool型を出力する場合…True False　初め大文字記述
+
+
+変数 = input("入力してください")
+　∟入力値を求めることができる※戻り値は文字列!!
+
+range(開始値,終了値,増減値)
+　∟開始値はインデックス0、終了値は要素数を表す
+　∟range(5)→0,1,2,3,4 range(2,4)→2,3
+
+
+【文字列の結合】
+　∟+
 
 【型変換】
-　integer型に変換する例※変換できないと実行時エラーが発生する(Exception)
-   dim a as integer
-   a = CType(ダブル型,Integer)※最も近い偶数にまとめられる(0.5→0 1.5→2)
-   a = CType(ロング型,Integer)
-   a = CType(string型,Integer)
-特定のデータ型に変換
-　∟CBool
-　∟CStr
-　∟CInt
-　∟CDate
+数値型→文字列
+　∟str(数値型値)
+文字列→数値型
+　∟int(文字列)、又は float(文字列)
 
-TryParse
-　∟dim a as Boolean = Integer.TryParse("aaa",b)文字列aaaをinteger型に変換できないなら　a=false b= 0が代入される
-
-文字列へ変換する
-　∟変数名.ToString(※1)※1実引数""で囲む d(短い日付) D（長い日付）t（短い時刻）T（長い時刻）C（通貨\）F2(小数点以下の数字)
-	N2(カンマ編集)
-
-
-
-【配列】
-初期値設定　= {1,2,5,34}※インデックスは0始まり
-多次元配列
-　∟配列名(0,1) = 50※0レコード目の1カラムの要素という意味
-　∟配列名.GetLength(0)…レコード数が取得
-　∟配列名.GetLength(1)…カラム数が取得
 
 
 【演算子】
-Is オブジェクトを参照しているか, Is Not　別オブジェクトを参照しているかを判定
-Like文字パターン非各区を判定
+　∟算術演算子 %（余り）//(小数点以下切り捨て割り算)
+　∟論理演算子 not and or
+　∟関係演算子　== != >= etc
+　∟in / not in / is / is not
+※++や--の処理はないため　+= 1 -=1等を利用する
 
 
+【条件演算子】※2分岐の際の記述
+　∟trueの場合の値 if 条件 else falseの場合の値
 
 【条件分岐】
-If 条件 Then
-	条件が当てはまった際の処理
-Else if 条件2 Then
-	条件2が当てはまった際の処理
-Else
-	当てはまらなかった際の処理
-End If
-※2分岐を1行で記述する方法　※end if は不要!
-　∟If 条件 then  trueの処理  else falseの処理 
+if 条件式: ※:（コロン）が必要
+　処理　※インデント4つ必要
+elif:
+  処理
+else:
+  処理
 
-※Continue Forで処理を飛ばす　抜けるのはExit For
-
-select Case 条件
-	case 値1
-	
-	case 値2,値3
-	
-	case else
-
-end select
-
-※値1 to 値2←値1から値2の間に当てはまるもの
-※Is 比較演算子 値　…trueであればの意味になる
+【反復処理】
+for 変数名 in 配列※range():
+  処理　※インデント4つ
+else: 
+  処理←反復処理終了時に実行される処理　※breakは飛ばされる
 
 
-【繰り返し】
-While
+while 条件:
+else: 
+  処理←反復処理終了時に実行される処理　※breakは飛ばされる
 
-End While
-Do While 反復条件
 
-Loop
 
-Do Until 終了条件
+break…反復処理を抜ける
+continue…ターンのスキップ
 
-Loop
-※　処理を1回は実行するには、Loop While(Until) 条件
 
-For i as データ型 = 初期値　to 終了値 step 加算値
 
-Next
+↓4つはin　演算子で検索可能　len関数で要素数を取得できる
+【リスト】※配列（ミュータブル）
+リスト変数名 = [値1,値2,値3]  ※空リストの作成 = [] 又は = list()
+　∟インデックス番号で管理
+　∟len(リスト)…要素数を取得
 
-For Each 要素変数 In 配列名
+要素の挿入
+　∟リスト変数名.append(値)※最後に要素を挿入
+　∟リスト変数名.insert(インデックス,値)※インデックスを指定した要素の挿入
+要素の削除※存在しないと実行時エラーが発生する
+　∟del リスト変数名[インデックス番号]
+　∟リスト変数名.remove(値)←最初の値が削除される
 
-Next
+リストの連結
+　∟+
+　∟+=でもリストにリストを連結できる※又はリスト1.extend(リスト2)でも同様
 
-Exit For←繰り返し処理を抜ける
-　∟Exit While/Do/Select/Sub/Function
-Continue For←現在繰り返しターンを終了
+要素の検索
+　∟b = 値　in　リスト変数名←bにはboolが代入される
+　∟c = リスト変数名.index(値)←cにはインデックス番号が代入される
+
+リストのリスト
+　∟リストにはリストを入れ子にできる
+　∟リスト変数名[インデックス][インデックス]1つ目…リストのインデックス.2つ目…1つ目のリストのリストのインデックス
+
+リストの新規作成※参照型なので
+　∟リスト変数2　= list(リスト変数1)別のオブジェクトになる
+　∟リスト変数2　= リスト変数1.copy()
+
+※イテレータ
+　∟i = iter（リスト変数名）
+　∟print(next(i))
+
+スライス
+　∟インデックス範囲を指定することでリスト要素の範囲を取得する
+　　∟リスト変数名[開始位置インデックス: 終了位置インデックス-1:ステップ※省略可能]
+    ∟リスト変数名[-2:]←最後の要素から2つ取り出す
+    ∟リスト変数名[::-1]←最後の要素から最初の要素までを取得する
+　　∟リスト変数名[2::-1]←インデックス2の要素から最初の要素までを取得する
+　　∟ソート
+　　　∟リスト変数名.sort()昇順※reverse=True…降順←直接並び替える
+　　　∟新しいリストに並び替えを適応　リスト変数名2 = sorted(リスト変数名1,reverse=True)
+   リストの中身を集計
+　　　∟変数 = sum(リスト変数名,開始位置)
+　　最大値・最小値を表示
+　　　∟max(リスト変数名) min(リスト変数名)
+
+
+【タプル】※配列
+　∟インデックス番号で管理
+　∟追加削除更新ができない（イミュータブル）
+　　※リストとの違い　
+　　　タプル変数名 = (値,値,値)※()は省略可能
+　タプルの参照
+　　∟タプル変数名[インデックス番号]
+　タプルの連結…　+
+
+　タプルの値を変数に代入
+　　∟a,b = (10,17)←a=10 b=17
+
+  ZIP関数　→戻り値はタプル型　※短い要素数で終了
+　　∟for i（又はi1,i2） in zip(リスト変数,リスト変数)
+　　　　　→(リスト変数[1],リスト変数[1])※タプル型で返される
+  enumerate関数（zip関数にインデックス番号を追加して取得できる）　　
+	∟for i（又はi1,i2） in enumerate(リスト変数)
+
+
+【辞書】
+　∟キーと値を関連して保持
+  ∟辞書変数名 = {キー1:値1,キー2:値2,キー3:値3}
+  ∟辞書の値への参照方法
+　　∟エラーあり　辞書変数名["キー1"]　※辞書変数名[("タプル値1","タプル値2")]キーがタプルの場合
+　　∟エラーなし(返り値None)　辞書変数名.get("キー1")
+    
+　値の挿入・変更
+　　∟キーが存在→更新
+　　∟キーが存在しない→追加
+　　∟辞書変数名["キー"] = 値
+
+　キーの検索
+　　∟キー in 辞書変数名→存在する場合True
+    ∟キー　not in 辞書変数名 →　存在する場合False
+
+  辞書の定義
+　　∟辞書変数名　= dict(キー1 = 値1,キー2 = 値2)※""は不要
+　　∟タプルを辞書に変換する　dict([("キー",値),("キー",値)])
+  　∟キーと値をグループとして辞書に変換する = dict(zip(["キー1","キー2","キー3"],[値1,値2,値3]))
+
+　値の追加
+　　∟辞書変数名["キー"] = 値　※存在したら更新、存在しないと追加
+　　∟辞書変数名.setdefault("キー",値) ※追加のみ!! キーが存在したら何もしない
+
+
+　値の削除※要素が存在しないとエラーになる
+　　∟del 辞書変数名["キー"]
+　　∟辞書変数名.pop("キー")
+
+　繰り返し処理
+　　∟キーと値を取得する
+　　　　∟for キー用変数, 値用変数 in 辞書変数名.items():
+    ∟キーのみ取得.keys():
+　　∟値のみ取得.values():
+
+  辞書の連結　※　+=の表記は使用できない
+　　　∟辞書変数名1.update(辞書変数名2)→辞書変数名1に辞書変数名2が連結される。ただし同じキーが存在すると更新される
+
+【集合】※重複を許さない
+　∟一意の要素を順不同で保持
+　∟｛値,値,値｝
+　∟検索　変数 =　値 in(又はnot in) 集合変数 ※返値はbool型
+　値の追加
+　　∟集合変数.add(値)※存在する場合は無視される
+　値の削除
+　　∟集合変数.remove(値)
+　　∟.clear()も全ての値を削除し、空の集合になる
+
+
+積集合
+　∟setC = setA & setB→どちらにも存在する値をsetCに取得する※setA.intersection(setB,setC) 3つ以上→ a.intersection(b,c)
+和集合
+　∟setC = setA | setB→重複はまとめられて、全てを取得する※setA.union(setB)
+差集合
+　∟setC = setA - setB→setAのみに存在する値を取得する※setA.difference(setB)
+対象差集合
+　∟setC = setA ^ setB→片側だけに存在する値を取得する※setA.symmetric_difference(setB)
+部分集合※すべて含んでいればTrue
+　∟変数 = setB <= setA→setAに全て含まれていればTrueを取得する※setB.issubset(setA)
+
+
+【繰り返し・内包表記】※新しいリストを作成
+　∟リスト名 = [i ** 2 for i in リスト変数名 ※条件]…リスト変数名から一つずつ取り出し2乗しながらリスト作成する
+　∟条件式を含む内包表記※条件 if i%2 == 0
+
+辞書内包表記※新しい辞書を作成
+　∟d = {str(k+100):v for k,v in zip(range(3),リスト変数名) ※条件}
+
+セット集合内包表記※重複は外される
+　∟d = {a for a in リスト変数名 if 0 < a < 100}
+
+【関数】
+　組み込み関数
+　　∟print()
+  　∟input()
+
+・戻り値なし※インデントで処理を制御
+　∟def 関数名():
+      return←処理の終了無くても最後まで行けば終了する
+> 呼び出し
+   ∟関数名()
+
+戻り値ありは
+　return 戻す値
+
+引数は参照渡しで渡される
+　∟ただし、int float 文字列 タプル※イミュータブル名引数を書き換えたら、新しい実態が作成されるので参照先も新しくなる
+　∟引数の順序を変更　（仮引数名 = 実引数,仮引数名 = 実引数）
+　∟関数呼び出し時のデフォルト値の設定 def 関数名(仮引数 = 値)
+　∟実引数にタプル(,区切りで文字を渡す)→仮引数はdef 関数名(*args)で可変長でタプルとして受け取れる※argsでなくてもよい
+　∟実引数に辞書(キー=値)→仮引数はdef 関数名(**kwargs)で可変長で辞書としてうけとれる※kwargsでなくてもよい
+　∟変数1,変数2 = 関数←　※関数の中身return 返し値1,返し値2で二つの返しをそれぞれに代入できる
+
+　return None　←Noneを返す…判定はif 変数 is None
+
+
+※関数呼び出しと関数オブジェクトの違い※呼び出しの際に()があるかないか
+　∟関数名()…関数呼び出し←値が返される
+　∟関数名…関数オブジェクト呼び出し←関数名と16進数のidentityを返す
+　∟id関数…10進数で返すid(関数名)※関数名後に()は不要
+　∟hex関数…0xから始まる16進数で返す hex(id(関数名))※関数名後に()は不要
+　∟関数を変数に代入→変数 = 関数※()なし 変数(実引数,実引数)←関数処理を実行する
+　∟リストの要素に関数を指定
+　　∟変数 = [len, sum, max, min] ←変数[0]…len関数（要素数を返す）変数[1]…sum関数
+     →for 仮変数 in 変数: print(仮変数(リスト変数))
+
+ラムダ式関数
+　∟変数 = lambda 仮引数1,仮引数2 : 式　※仮引数なしの場合はlambda:式
+　∟呼び出し方法1　変数(実引数1,実引数2)
+　∟呼び出し方法2　(lambda 仮引数1,仮引数2 : 式)(実引数1,実引数2)※後半が呼び出し
+
+map関数 リスト等の全ての要素に式を当てはめて処理を返す
+　∟list(map(lambda 仮引数: 式,実引数))※実引数はリスト([値1, 値2])※list関数は新しくリストを作成する関数
+　∟for 仮引数 in map(lambda 仮引数内 : 式, リスト変数)※繰り返し処理
+
+関数のネスト　
+　∟def 外関数名():def 内関数名():return 返し値　return 内関数名※()なし 
+　∟変数 = 外関数()
+　→　呼び出し　変数()※（）が必要
+
+デコレータ…関数に処理の追加を実施
+　∟def deco(仮引数)
+　∟@deco
+    def 関数名()
+
+　∟呼び出し…関数名(実引数) @decoが付いた関数に処理が移るが、すぐにdef deco(@deco付きの関数を仮引数に渡す)
+
+ジェネレータ
+　∟def 関数名(引数1)
+    	i = 1 ※初期値設定
+　　　　while True:
+           if i%2 == 0:
+              yield i ※return文と同一　ジェネレータはreturnの記述ができない
+           i = i+ 1
+  ∟呼び出し
+	変数 = ジェネレータ関数()
+　　　next(変数)
+
+
+【スコープ】
+　∟グローバル変数をローカル変数で代入しても、別物として扱われる※引数渡しとは異なる
+　∟同一として取り扱う場合はローカル内で　global 変数　※書き換わるので注意
+
+　∟locals()…名前空間に存在する変数と値を取得する関数
+　　∟print(locals())→変数名:値の辞書として返してくれる
+　∟globals()…グローバル名前空間に存在する変数と値を取得
+　　∟print(globals())※__付きの変数名は`pythonが使用する変数になるため無視
 
 【クラス】
-定義
-　∟Public Class クラス名※クラス名は先頭のみ大文字
-　　End Class
-※Friend修飾子…同一アセンブリ（プロジェクト）内からの接続を可能
-※1ファイルにつき 1クラス
+class クラス名:※クラス名は大文字開始
+    pass　※passは構文エラーを回避
 
-自分自身はme
+インスタンスの作成
+　∟変数名 = クラス名()
 
-フィールド…インスタンス変数
-フィールドの修飾子
-　∟Public
-　∟Friend
-　∟Protected
-　∟Protected Friend
-　∟Private
-　∟Private Protected
+データ属性が作成されていない場合でも変数名.データ属性名 = 値　←設定される
+self.データ属性名
+　∟selfは自分自身
+※_データ属性名は外部から変更してはいけない（ただし明示的な存在
+※__データ属性名は外部から変更できない(実行時エラーが発生する
 
 メソッド
-　∟戻り値あり…Public Function　メソッド名（) As 戻り値のデータ型　※メソッド名は関数名
-                End Function
-　　　∟Reture で戻り値を返す
-　∟戻り値なし…Public Sub メソッド名()
-                End Sub
+　∟def メソッド名(self,仮引数):※第一仮引数はself
+       self.データ属性名 = 仮引数
+※メソッド内でselfが付いてない変数はローカル変数になる
 
-※仮引数の参照方法
-　∟ByRef←元データが変わってしまう
-　∟ByVal
+クラスに紐付くクラス変数
+　∟変数名= 値　※クラス名配下に記述
+　∟呼び出し
+　　∟クラス名.クラスに紐付く変数名　もしくは　インスタンス変数名.クラスに紐付く変数名※インスタンス属性が作成されてしまう
+クラスに紐付くメソッド
+　∟@classmethod
+    def メソッド名(cls):※clsは自分を表すクラス変数
+　　　return cls.変数名←自分自身の暮らす変数名を返す
+　∟呼び出し
+　　　∟クラス名.クラスメソッド()
 
 
 コンストラクタ
-　定義…Public Sub New(仮引数)
-	end sub
-　※仮引数のあり、なしの2つのコンストラクタを定義する　　オーバーロード可能
+　∟def __init__(self,仮引数1,仮引数2）:
+　　　self.データ属性名 = 仮引数1
+      self.データ属性名 = 仮引数2
 
-インスタンス
-　∟Dim 変数名 As クラス名 = New クラス名(実引数)
+ゲッターとセッター
+　∟get_プロパティ名(self)
+　∟set_プロパティ名(self, 仮引数)
+  ∟インスタンス名.データ属性名 = 値でset_を呼び出す
 
-メソッドの実行
-　∟インスタンス変数.メソッド名()
+もうひとつのゲッターとセッター
+　∟@property←ゲッター
+    def プロパティ名(self)
+　　retuern self.データ属性名
+　∟@property.setter
+    def プロパティ名(self,仮引数1)
+	self.データ属性名 = 仮引数1
+インスタンス変数名.dデータ属性名で代入呼び出し
 
-プロパティー
-　∟フィールドの設定や読み取り処理を実行する
-　Public Property プロパティー名() As データ型
-	Get
-		Return フィールド名
-	End Get
-	
-	Set (ByVal 仮引数変数 As データ型)
-		フィールド名 = 仮引数変数
-	End Set 
-　End Property
-※Setを記述しない読み取り専用の場合ReadOnly Propertyに記述を変更する
+【継承】
+class サブクラス名(スーパークラス名)
 
- String.IsNullOrEmpty(a)←aが何もない(nothing 又は　"")ならtrue
-
-
-
-プロパティー呼び出し
-　∟インスタンス変数.プロパティー名    ※()は不要
-
-クラスに紐付く変数 ※フィールド定義でConstまたはShared ReadOnly でもクラスに紐付く形になる　併用は不可
-　∟修飾子 Shared　変数名　As データ型
-Public Shared Sub クラスに紐付く関数名()
-    Console.WriteLine("Employeeクラスです")
-End Sub
+コンストラクタ
+def __init__(self,仮引数)
+ super().__init__(仮引数)←親クラスのコンストラクタを呼び出すので、仮引数は親に渡す仮引数を記述する
 
 
+【クラスにまつわる組み込み関数】
+　∟print(type(インスタンス変数名))←__main__.の後がクラス名※__main__は内部的なスコープ名
+　∟print(isinstance(インスタンス名,クラス名))←bool値で返してくれる
 
 
-【継承】※親クラスもObjectクラスを継承しているInheits Object
-Public Class クラス名
-	Inherits 親クラス名
+【オーバーライド】
+　∟定義方法　サブクラスでdef 親クラスのメソッド名(self):
+  ∟サブクラスから親クラスを呼び出す方法
+    　∟super().メソッド名()←スーパークラスのメソッドが呼び出される
+　　　∟コンストラクタはsuper().__init__(仮引数1,仮引数2）
 
-オーバーライドされる可能性のある
-　∟親メソッドにはOverridableを記述する
-　∟子メソッドにはOverridesを記述する
-例　Public Overridable Sub 関数名()
+【モジュール】別ファイルにクラスや関数をまとめておく
+　∟ファイル名.py ※ファイル名がモジュール名になる
+　∟利用方法 使用する側のファイル先頭にimport モジュール名 as 別名
+　　　∟モジュール名.クラス名やモジュール名.関数名()で呼び出す
+※モジュール名を省略して記述する方法
+　　　∟from モジュール名 import クラス名や関数名※*は全てを呼び出す。カンマ区切りで記述可能
+
+【パッケージ】
+モジュールを1つのフォルダーでまとめたもの
+　∟import フォルダ.フォルダ. モジュール名（※パッケージ.パッケージ. モジュール名）
+　　→呼び出し方法 パッケージ.パッケージ. モジュール名.クラス名()
+　∟パッケージ名を省略する記述方法from パッケージ名.パッケージ名 import モジュール名
+　　　→呼び出し方法パッケージ.クラス名()※from句でモジュール名.メソッド名は記述できない
+★大切!
+　∟パッケージを構成するフォルダー全てに__init__.pyのファイルが必要→初期化が必要なくてもファイル自体は必要
+パッケージとして認識されない
+【標準ライブラリ】
+　∟import math
+    math.sqrt(2)→平方根を返す　
+　　∟etc.mathモジュール→log関数floor関数ceil関数
+　　∟osモジュール→listdir関数mkdir関数pathモジュール
+　∟datetimeモジュール→datetimeクラス、timedeltaクラス
+
+インストールして利用する
+　∟python -m pip install　パッケージ名←これでインターネットよりインストールする※PyPI…サービス名http;//pypi.org/
+
+
+【アトリビュート】
+　インスタンスが持つ変数や関数のこと
+　　∟dir(インスタンス変数名)　スーパークラスも全てリストに含まれる
+特殊メソッドもオーバーライドすれば挙動を変更可能
+＝＝　def __eq__():←引数self,other 
+< __lt__()
+> __gt__()
+>= __ge__()
++ __add__()
+- __sub__()
+
+str()   __str__()
+len() __len__()
+int() __int__()
+float() __float__()
+iter() __iter__()
+
+【エスケープシーケンス】※文字列として利用する
+　∟\n改行/ \tタブ/\rキャッシュリターン/\"ダブルクォーテーション/\'シングルクォーテーション/\\ yenまーく
+　∟raw文字（パスの出力等で使用）r又はR"c:\work\sample.py等"\を多く利用する場合に適応する※文字列の最後に\を記述する場合　+”\\”とすること
+
+【組み込み関数】
+　∟len(文字列) …文字数を取得
+　∟文字列.find(検索対象文字,開始位置,終了位置)※終了位置は-1のところまで→見つからない場合は-1が返る
+　∟文字列.replace(置換したい文字,置換後の文字,置換回数)※置換回数を省略すると全てが置換される。""だと削除される→戻り値にすると元の文字列は変更されない
+　∟文字列.split(区切り文字,区切り回数) ※区切り文字を省略すると、空白で区切る
+　∟区切り文字列.join(リスト) s = ",".join(リスト変数)→リストが,で区切った文字が格納される
+　∟文字列.lower()小文字に変換
+　∟文字列.upper()大文字に変換
+　∟文字列.swapcase()大文字→小文字、小文字→大文字
+　∟文字列.strip/lstrip（削除する文字列）先頭や末尾の文字を消去
+　∟文字列.ljust(文字列幅,埋め文字)文字幅で左寄せ、足りない幅分はうめもじで埋める※無い場合は空白で埋める
+
+　∟format関数　※{}の引数で書式を指定できる
+　　∟変数 = "{}年{}月",format(値,値)←値を順番通り当てはめる
+　　∟変数 = "{1}{2}{0}".format(値,値,値)←formatのインデックスの値が渡される
+　　∟変数 = "{キー1}{キー2}{キー3}".format(キー1=値,キー2=値,キー3=値)←キーに紐付く値が渡される
+　　∟:, カンマ区切り
+　　∟:数字 表示桁数※空白で埋められる 05なら0埋めされる
+　　∟:> 右揃え
+　　∟:< 左揃え
+　　∟:+ 数値に+-を記述
+　　∟:- -値にのみ-を記述
+　　∟:.数字% パーセンテージ
+　　∟:.数字f 小数点桁数の実数※四捨五入される 1fなら小数第1まで表示
+　∟f文字列　※変数を{}内部に渡すことができる
+　　∟f"文字列{変数名}"　※変数名:.等の書式指定も可能
+　　　
+
+【正規表現】メタ文字と文字を組み合わせて表現する方法
+　　∟.　改行を覗く任意の一文字　例_W.W…W開始と終了かつ3文字ならマッチ
+　　∟*　0回以上の繰り返し　例_WO*W…W　Oの0回以上の繰り返し　W
+　　∟+　1回以上の繰り返し　例_WO+W…W　Oの1回以上の繰り返し　W
+　　∟?　0か1回　　　　　　　例_WO?W…W　Oの0か1回の繰り返し　W
+　　∟^　文字の先頭　　　　　例_^WO+W…先頭がW Oが1回以上繰り返し W
+　　∟$　文字の末尾　　　　　例_^WO+W$…先頭がW Oが1回以上繰り返し W終了
+　　∟[]　文字の集合を表現 ※[]内のどれか一文字が一致 ただし^を記述すると否定になる!!　連続文字は-でつなげて記述可能A-Z　a-zA-Z大文字小文字
+　　∟{n}　n回の繰り返し     例_EX{2}E…E Xが2回　E
+　　∟{n,}　n回以上の繰り返し 例_EX{2,}E…E Xが2回以上　E　例_EX{2,5}E…E Xが2～5回　E
+　　∟{n,m}　n回以上m回以下の繰り返し
+　　∟|　or(左と右のどちらか)  例_ ABC|FKK…ABC か FKKならOK
+　　∟()　グループ化      例_(BC){2}…BCが2回繰り返し
+　　∟\記号 記号を文字として利用する
+　　　∟\.\* ※エスケープ文字 .*になる
+　　　∟\d　数字一文字 \d{3}…3桁の数字の意味になる
+      ∟\D　数字以外の一文字
+      ∟\w　英数字一文字（大文字小文字含む）\w{4}英数字4桁
+　　　∟\W　英数字以外の一文字
+      ∟\s　空白文字一文字
+      ∟\S　空白文字以外の一文字
+
+
+import re
+変数 = "LI.E"←正規表現※任意の一文字
+変数2 = 文字列※調べたい対象
+変数3 = re.compile(変数)←正規表現のオブジェクトを作成
+変数4 = 変数3.findall(変数2,開始位置のインデックス)←変数4にマッチした文字がリストで格納される※開始位置のインデックスは省略可能
+　∟変数3.search(変数2)←最初にマッチした文字列を返す。ないならnone　← 変数4.group()最初にマッチした文字列を取得する
+　∟変数3.sub("置換文字列",変数2)←マッチした場所を全て置換する
+
+<.*?>と<.*>←?があると0か1になる。?があるとないとではマッチの長さがかわってくる一番最短or最長
+
+　∟for match in 変数3.finditer(変数2):
+     print(match.group())←マッチした全てを取得するのでforと併せて利用する
+
+【ファイルの操作】
+開く
+　∟変数 = open(ファイルパス,モード,encoding="")
+モード
+　∟r 読み取り→ファイルがないと実行時エラー※モード省略時のデフォルト
+　∟w 新規作成→新規
+　∟a 追加
+　∟x 新規作成用
+　∟r+,w+,a+ 読み込み書き込み兼用
+　∟rb,wb バイナリファイルを開く　バイナリファイル…画像/動画/実行可能ファイル
+encoding
+　∟shift-jis
+　∟cp932
+　∟iso-2022-jp
+　∟euc-jp
+　∟utf-8　
+
+閉じる
+　∟変数.close()
+1行ずつ読み込む
+　∟for 仮変数 in 変数:
+       print(仮変数)←改行も含まれて表示される!
+   ※仮変数.strip()←先頭と末尾の空白文字を削除するため改行を削除できる
+
+書き込み
+　∟モードはwやa
+  ∟変数.write("文字列\n")※\nは改行
+
+with open(パス,"r",encoding="utf-8") as f←withを記述するとclose()を省略できる
+   for row in f:
+     print(row.strip())
+
+
+【csvファイルを読み込む】
+import csv
+ファイルオブジェクト変数 = open(パス,"r",encoding="utf-8")
+イテレータ変数 = csv.reader(ファイルオブジェクト変数)
+for 仮変数 in イテレータ変数:
+　　繰り返し処理←それぞれはリストとして出力される
+
+※
+for 仮変数 in イテレータ変数:
+　　for カリカリ変数 in 仮変数:←リストではなくなる
+        print(カリカリ変数,end=",")※end属性は末尾の文字を指定
+　　　　print()←改行になる
+
+csvに書き込む
+import csv
+ファイルオブジェクト変数 = open(パス,"r",encoding="utf-8")
+ライタオブジェクト変数 = csv.witer(ファイルオブジェクト変数,lineterminator="\n"※行終端文字,改行文字を1つにする)
+ライタオブジェクト変数.writerrow(仮引数)
+
+import csv
+書き込みよう変数 = [["","",""]],["","",""]]
+ファイルオブジェクト変数 = open(パス,"r",encoding="utf-8")
+ライタオブジェクト変数 = csv.writer(ファイルオブジェクト変数,lineterminator="\n",quoting=csv.QUOTE_NONUMERIC)※""で囲まれた値を書き込む　数字以外※記述しないと""なしで書き込まれる
+for 仮変数 in 書き込みよう変数:
+    ライタオブジェクト変数.writerow(仮変数)
+ファイルオブジェクト変数.close()
 
 
 
-継承先から親を実行する
-　∟MyBase.メソッド()
- コンストラクタ
-　　∟MyBase.New(実引数)※実引数は親クラスの引数と同じ形
+【Jsonファイル】
+　∟キー:値で構成されたテキストデータ
+  {"外キー":{"キー":"値","キー":"値"},"外キー":{"キー":"値","キー":"値"}}
 
+読み込み
+import json
+ファイルオブジェクト変数 = open(パス,"r",encoding="utf-8")
+パイソンデータ型変数 = json.load(ファイルオブジェクト変数)
+print(パイソンデータ型変数)
+
+for 仮変数1,仮変数2 in パイソンデータ型変数.items():※キーと値を取り出す
+   
+書き込み
+json.dump(書き込みたい値,ファイルオブジェクト変数,ensure_ascii=False※日本語が含まれる場合,indent=2※インデントを挿入することで見やすく)
 
 【例外】
-例外の種類
-　∟DivideByZeroException 0で割った場合
-　∟IndexOutOfRangeException配列の要素外にアクセス
-　∟InvalidCastExceptionキャストが不適切
-　∟NullReferenceExcception　null,Nothingの場合に発生する
-　∟OverflowExceptionオーバフロー時
-　∟Data.sqlclient.SqlExceptionSQLSeverでエラーが通知された場合
-　∟FormatException　データ型変換ができない
-Message例外を説明する
-Sourceオブジェクトの表示
-StackTrace
-ToString()詳細譲歩
-
-Try 
-
-Catch 変数名 As OverflowException　　※ When 条件 trueの場合のみ実行
-	変数名.Message
-Catch 変数名 As FormatException
-	変数名.Message
-Finally
-
-End Try
-
-Throw New 例外クラス※例　OverflowException
-
-例外の再スロー
-Catch 変数名　As Exception
-	Throw ※キャッチしなかった者とする
-
-MessageBox.Show("計算を終了します!!")
-フォームの終了
-　Me.Close()
-	  ===================VBA===================
-データベース
-スキーマ設計
-　∟データベースの構造設計（データ型やサイズ等）
-インデックスを設定する例
-　∟条件に頻繁に利用される
-　∟結合（外部キー）等に利用される
-　∟複合主キー
-　∟ORDER BY / GROUP BY
-
-
-
-
-【ER図】
-　∟IE記法	
-　∟IDEF1X記法
-
-参照設定
-　∟MICROSOFT ACTIVE X DATA OBJECTS /// LIBRARY
-Sub GetSQLData()
- 
-  On Error GoTo ERR_HANDLER
-    
-    Dim db1 As ADODB.Connection
-    Dim rs1 As ADODB.Recordset
-    
-    '------------------------
-    ' DB接続
-    '------------------------
-    Const strServer = "LAPTOP-IKB12B37\MSSQLSERVER01"
-    Const strDb = "YAMA"
-    Const strUser = "sa"
-    Const strPass = "yama7907T"
-    
-    Dim strConn As String
-    strConn = "Provider=Sqloledb;" & _
-              "Data Source=" & strServer & ";" & _
-              "Initial Catalog=" & strDb & ";" & _
-              "User ID=" & strUser & ";" & _
-              "Password=" & strPass & ";" & _
-              "Connect Timeout=30;"
-    Set db1 = New ADODB.Connection
-    db1.Open strConn
-    
-    '------------------------
-    ' SQL実行
-    '------------------------
-    Dim sql As String
-    sql = ""
-    sql = sql & "SELECT t.object_id AS オブジェクトID, t.name AS テーブル名, c.column_id AS カラムID, c.name AS 項目名,type_name(user_type_id) AS 属性, max_length AS 長さ, CASE WHEN is_nullable = 1 THEN 'DEFAULT' ELSE 'NOT NULL' END AS NULL許可"
-    sql = sql & " FROM sys.objects t INNER JOIN sys.columns c ON t.object_id = c.object_id WHERE t.type = 'U' AND t.name in ('goals')  ORDER BY t.object_id, c.column_id"
-'    sql = sql & " SELECT"
-'    sql = sql & "   id"
-'    sql = sql & "  ,goal_time"
-'    sql = sql & " FROM"
-'    sql = sql & "   goals"
-    
-    Set rs1 = New ADODB.Recordset
-    rs1.Open sql, db1, adOpenStatic, adLockReadOnly
-    
-    '------------------------
-    ' SQL結果 セルへ貼り付け
-    '------------------------
-    Do Until rs1.EOF
-'        ThisWorkbook.Worksheets("Sheet1").Cells(1 + cnt, 1) = rs1("id")
-'        ThisWorkbook.Worksheets("Sheet1").Cells(1 + cnt, 2) = rs1("goal_time")
-        ThisWorkbook.Worksheets("Sheet1").Cells(1 + cnt, 1) = rs1("オブジェクトID")
-        ThisWorkbook.Worksheets("Sheet1").Cells(1 + cnt, 2) = rs1("カラムID")
-        ThisWorkbook.Worksheets("Sheet1").Cells(1 + cnt, 3) = rs1("属性")
-        rs1.MoveNext
-        cnt = cnt + 1
-    Loop
-    
-    '------------------------
-    'データベース閉じる
-    '------------------------
-    rs1.Close
-    Set rs1 = Nothing
-    
-    db1.Close
-    Set db1 = Nothing
-    
-ERR_HANDLER:
-    
-    '------------------------
-    'データベース閉じる
-    '------------------------
-    
-    If Not rs1 Is Nothing Then
-        If rs1.State = adStateOpen Then
-            rs1.Close
-            Set rs1 = Nothing
-        End If
-    End If
-    
-    If Not db1 Is Nothing Then
-        If db1.State = adStateOpen Then
-            db1.Close
-            Set db1 = Nothing
-        End If
-    End If
-     
-End Sub
-
-oracle
-'TNSサービス名で接続する場合(tnsnames.ora)
-Private Const PROVIDER As String = "OraOLEDB.Oracle"
-Private Const DATA_SOURCE As String = "orcl"        'ネットサービス名
- 
-'TNSサービス名を使用せず直接接続する場合
-Private Const HOST_NAME As String = "localhost"     'データベースのホスト名orIPアドレス
-Private Const PORT_NO   As String = "1521"          'データベースのポート
-Private Const SERVICE_NAME As String = "orcl.mshome.net"       'サービス名
- 
-'データベースのアカウント情報
-Private Const USER_ID As String = "sys"            'データベースのユーザID
-Private Const PASSWORD As String = "maomaki0427T@"       'データベースのパスワード
-
-Sub sample()
-    On Error GoTo ERR_HANDLER
-    Dim strSQL As String
-    Dim i As Long
-
-    '--------------------------------
-    ' データベース接続
-    '--------------------------------
-    Dim cn As New ADODB.Connection
- 
-    'TNSサービス名で接続する場合
-'    cn.ConnectionString = "Provider=" & PROVIDER _
-'                        & ";Data Source=" & DATA_SOURCE _
-'                        & ";User ID=" & USER_ID _
-'                        & ";PASSWORD=" & PASSWORD
-'    cn.Open
- 
-   'TNSサービス名を使用せず直接接続する場合
-   cn.ConnectionString = "Provider=" & PROVIDER _
-                       & ";Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)" _
-                       & "(HOST=" & HOST_NAME & ")" _
-                       & "(PORT=" & PORT_NO & "))" _
-                       & "(CONNECT_DATA=" _
-                       & "(SERVICE_NAME=" & SERVICE_NAME & ")))" _
-                       & ";User ID=" & USER_ID _
-                       & ";PASSWORD=" & PASSWORD
-   cn.Open
-
-    '--------------------------------
-    ' SQLの実行
-    '--------------------------------
-    Dim rs As New ADODB.Recordset
-    strSQL = "select * from uhist"
-    rs.Open strSQL, cn
- 
-    '取得データをセルに一括出力
-    rs.MoveFirst
-    ActiveSheet.Range("A1").CopyFromRecordset rs
-
-    '--------------------------------
-    ' データベース切断
-    '--------------------------------
-    If Not rs Is Nothing Then
-        If rs.State = adStateOpen Then rs.Close
-        Set rs = Nothing
-    End If
-    If Not cn Is Nothing Then
-        If cn.State = adStateOpen Then cn.Close
-        Set cn = Nothing
-    End If
-
-Exit Sub
-
-ERR_HANDLER:
-
-    'エラーメッセージ
-    Debug.Print Err.Number & ")" & Err.Description
- 
-    '--------------------------------
-    ' データベース切断
-    '--------------------------------
-    If Not rs Is Nothing Then
-        If rs.State = adStateOpen Then rs.Close
-        Set rs = Nothing
-    End If
-    If Not cn Is Nothing Then
-        If cn.State = adStateOpen Then cn.Close
-        Set cn = Nothing
-    End If
-    
-End Sub
-
-
-
-
-
-
-LAPTOP-IKB12B37\MSSQLSERVER01
-sa
-yama7907T
-
-
-USE YAMA
-SELECT * FROM GOALS WITH(NOLOCK)
-
-----sql serverの定義を取得するクエリ----
-SELECT
-    t.object_id             AS オブジェクトID,
-	t.name                  AS テーブル名,
-    c.column_id             AS カラムID,
-	c.name                  AS 項目名,
-	type_name(user_type_id) AS 属性,
-	max_length              AS 長さ,
-	CASE
-		WHEN
-			is_nullable = 1
-		THEN
-			'DEFAULT'
-		ELSE
-			'NOT NULL'
-	END AS NULL許可
-FROM
-	sys.objects t
-    INNER JOIN sys.columns c ON t.object_id = c.object_id
-WHERE
-    -- オブジェクトの種類(U:テーブル(ユーザー定義))
-	t.type = 'U'
-     AND t.name in ('goals') --と指定すれば特定のテーブルのみ検索可能
-ORDER BY
-	t.object_id, c.column_id
-	  
----------------------COBOL---------------------
-拡張子…cob
-コメント…*>
-文末…．
-　∟ピリオドの位置で処理が異なってくる
-配列のインデックス番号は1から始まる
-文字列の連結…半角スペース
-
-↓プログラムの記述形式
-【固定形式】
-左から1～6列は記述不可
-左7列はコメント（*）を記述する
-8列からプログラムを記述していく
-　∟_______*DIVISION....みたいな※_は6スペース確保している
-【自由形式】
-どこから書いてもいいが、コメントが違う
-　∟*>
-
-
-【領域】
-入力領域…入力してきたレコード値を保存する領域
-出力領域…出力するレコード値を保存する領域
-作業領域…編集・加工項目を保存する領域
-編集領域…プリントレイアウトを記憶する
-
-
-レベル番号 ※01～49が可能範囲
-レコード名は01
-各カラムを02
-01が一番上位の階層になる。番号によって　階層関係になる
-※レコード名のような全体を集団項目・各カラムのような最小単位を基本項目
-
-
-
-DIVISION　>　SECTION
-DIVISION…順番必須だが、省略可能
-【見出し部】
- ∟①IDENTIFICATION DIVISION.←記述必須　プログラムID
-　　 	PROGRAM-ID. 任意の文字列(プログラム名).
-
-【環境部】
-環境部（実行環境・入出力ファイル等を記述）書き込み
- ∟②ENVIRONMENT DIVISION.←省略可能
-　　 INPUT-OUTPUT SECTION.
-     FILE-CONTROL.　　←どのファイルに書き込むか
-	 SELECT OUT-FILE※A ASSIGN TO 'ファイル名(例out.txt)'
-　　　　 		ORGANIZATION IS LINE SEQUETIAL.　改行で書き込む指定する
-※環境部の例
-　SELECT URIAGE_F（※ファイル名） ASSIGN TO DISK.
-  SELECT PRINT_F  ASSIGN TO PRINTER.
-
-
-環境部（実行環境・入出力ファイル等を記述）読み込み
- ∟②ENVIRONMENT DIVISION.←省略可能
-　　　　INPUT-OUTPUT SECTION.
-	  	FILE-CONTROL.　　←どのファイルに書き込むか
-	    	SELECT IN-FILE※A ASSIGN TO 'ファイル名(例in.txt)'
-　　　　　　  	ORGANIZATION IS LINE SEQUETIAL.　改行で書き込む指定する
-	      	STATUS 変数名B.←ステータスを管理するための変数を定義
-→③データ部に定義DATA DIVISION.
-		  01 変数名B
-
-
-【データ部】
-データ部（変数の定義等を行うエリア）
- ∟③DATA DIVISION.←省略可能
-記述例）
-DATA DIVISION.
-　　FILE SECTION.←ファイル節
-	FD ファイル名.　※ファイル名は環境部と同じファイル名
-	レコード記述項.
-  	WOUKING-STORAGE SECTION.←作業場所節。作業領域を記述
-    	01 変数名 PIC X(20).
-	∟変数のレベル番号・変数名・PIC・
-	∟文字列はX(文字数）又はXを文字数分記述
-	∟代入は手続き部エリアにて実施
-　　	01 変数名 PIC 9(桁数) ※VALUE デフォルト値.
-	∟数値は9(桁数)　又は9を文字数分記述
-	∟0埋めされる
-	∟デフォルト値はなくても良い
-
-    	01 変数名 PIC 9(桁数)V9(小数点の桁数). 又は9999V99
-	∟小数点はVを付与して記述する
-
-　　	01 FILLER PIC X(20). ←文字列20数分の予備領域確保
-		
-
-
- 	環境部の指定時↓書き込み
-　　　　　FILE SECTION. ←ファイルセクションを定義する
-            FD OUT-FILE※A.
-	     01 変数名 PIC 99.
-	  WORKING-STORAGE SECTION.
-	    01 変数名 PIC 99 VALUE 0.
-
-	環境部の指定時↓読み込み
-　　　　　FILE SECTION. ←ファイルセクションを定義する
-            FD IN-FILE※A.
-	     01 変数名 PIC X(20).
-	  WORKING-STORAGE SECTION.
-例
-FD URIAGE_F.※入力レコードの領域
-　O1 URIAGE_REC.
-	02 U-NAME   PIC X(10).
-	02 U-JUICE  PIC 9(06).
-FD PRINT_F.※出力レコードの領域
-　O1 PRINT_REC.
-	02 P-NAME   PIC X(10).
-	02 P-JUICE  PIC 9(06).
-WOUKING-STORAGE SECTION.←作業場所節
-  O1 MEISAI_REC.
-	02 FILLER PIC X(04) VALUE SPACE.※VALUEは作業場所節のみで使用可能　SPACEはスペースで4範囲格納
-	02 P-NAME PIX X(10)←レコードの最小単位の名前
-	※FILLER…無記名項目という名前が不要な項目
-SPACE　一つ以上の空白
-ZERO　　一つ以上の0
-HIGH-VALUE 
-LOW-VALUE
-
-
-
-
-集合項目（※レベル番号は親子関係を表す）
-　01 変数名A.
-    03 変数名B PIC X(10).
-    03 変数名C PIC 9(100).
- ∟使い方は手続き部にて記述
-
-配列
-　01 配列名AA.
-    03 配列名BB OCCURS 3 PIC X(90). ※OCCURS 領域数
-
-
-【手続き部】
-手続き部
- ∟④PROCEDURE DIVISION.←記述必須
-       MAIN SECTION.※節名称 SECTION
-	MOVE 文字列 TO 変数名.←変数名に代入する
-	DISPLAY 変数名.
-	*>集合項目↓
-	MOVE 文字列B TO 変数名B.←集合項目代入
-	MOVE 文字列C TO 変数名C.←集合項目代入
-	DISPLAY 変数名A         ←変数名B,Cを出力する
-	DISPLAY 変数名C         ←変数名Cのみ出力する
-	*>配列↓
-	MOVE 文字列BB TO 配列名BB(1).
-	STOP RUN.※節名称の終了
-
-指示の内容
-OPEN INPUT ファイル名A　　　←入力用
-     OUTPUT ファイル名B.※.は一つ←出力用
-READ ファイル名A.　←データ部のファイル名 1レコードの処理を記述できる
-	AT END データ終了時の処理
-	NOT AT END データ存在時の処理
-END-READ.
-
-出力処理
-WRITE レコード名.←データ部のレコード名
-※ WRITE レコード名 FROM 編集領域.　※AFTER PAGE.←改行 AFTER 2.←飛ばし改行
-
-
-DISPLAY 表示させる指示
-
-CLOSE ファイル名A  ファイルを閉じる
-      ファイル名B.
-STOP RUN.　プログラム終了
-
-【代入】
-MOVE 変数1 TO 変数2.
-
-MOVE 変数1 TO 変数2
-              変数3.※変数1を２，３に代入する
-
-※桁数の違い
-小数点の位置に合わせて上位が切り捨てられる
-0埋め
-
-文字は下位が切り捨て
-空白埋め
-
-
-
-
-★計算
-データ部
-DATA DIVISION
-  WOUKING-STORAGE SECTION.
-    01 NUM-1
-	03 D1 PIC 9(5) VALUE 0.
-	03 D2 PIC 9(5) VALUE 0.
-	03 D3 PIC 9(5) VALUE 0.
-	03 D4 PIC 9(5) VALUE 0.
-
-手続き部
-足し算
-　∟ADD 5 TO D1. ←D1+5
-　∟ADD 6 TO D1 D3 D4. ←D1+5　D3+5　D4+5
-引き算
-　∟SUBTRACT 4 FROM D1. ←D1-4
-割り算
-　∟DIVIDE D1 BY D2 GIVING D3 REMAINDER D4, ←D1/D2 D3に答え代入（GIVING） D4に余り代入（REMAINDER）
-かけ算
-　∟MULTIPLY D1 BY D2 GIVING D3 ←D1*D2 D3に答え代入（GIVING）
-
-その他の処理
-　∟COMPUTE D3 = D1 * D2. ←かけ算と同じ処理を実施　＋－／＊　**
-
-COMPUTE 変数 = へんすう + HENNSUU / HENNSUU3 * 5.※間に半角空白が必要
-COMPUTE へんすう ROUNDED = ※少数第一を四捨五入する　ないと切り捨て
-
-オーバーフローの対応
-　COMPUTE へんすう　＝
-	ON SIZE ERROR
-		オーバーフロー時の処理
-	NOT ON SIZE ERROR
- 		じゃないときの処理
-END-COMPUTE.
-
-
-★インプットボックス
-データ部※入力値を格納する変数を定義
- DATA DIVISION
-  WOUKING-STORAGE SECTION.
-    01 変数名V PIC X(80).
- 
-手続き部
-  DISPLAY 質問？.
-  ACCEPT 変数名V.
-
-
-★条件分岐
-END-IFの後にのみ.を記述する
-①
-データ部※入力値を格納する変数を定義
- DATA DIVISION
-  WOUKING-STORAGE SECTION.
-    01 変数名N PIC 9(2).
-
-手続き部
-【条件分岐】
- IF 変数名N > 60
-	THEN
-  		TRUEの処理
- 	ELSE
-　		FALSEの処理
- END-IF.
- ※　ELSE CONTINUE…何もしないで次の処理に移動。書かなくても良い
-※ネストは可能。ネストの場合は一番外の処理に．を記述する
-
-【条件分岐2】
-EVALUATE TRUE
-	WHEN 条件 
-		処理
-	WHEN 条件
-		処理
-	WHEN OTHER
-		処理
-END-EVALUATE.
-
-EVALUATE データ値
-	WHEN 値1 THRU 値2 ※範囲指定 値1以上値2以下と同等
-		処理
-	WHEN 値
-		処理
-	WHEN OTHER
-		処理
-END-EVALUATE.
-
-
-【比較演算子】
-・= (IS EQUAL TO)
-・NOT = (IS NOT EQUAL TO)
-・> (IS GREATER THEN)
-・>= (IS GREATER THEN OR EQUAL TO)
-・< (IS LESS THAN)
-・<= (IS LESS THEN OR EQUAL TO)
-
-【論理演算子】
-AND
-OR
-
-
-②
-EVALUATE
-END-EVALUATEの後にのみ.を記述する
-データ部※入力値を格納する変数を定義
- DATA DIVISION
-  WOUKING-STORAGE SECTION.
-    01 変数名X PIC X(2).
-
-手続き部
-  MOVE 文字列 TO 変数名X.
-  EVALUATE 変数名X
-　　WHEN "AAA"
-	処理AAA
-    WHEN "BBB"
-        処理BBB
-    WHEN OTHER
-        当てはまらない処理
-  END-EVALUTE.
-
-
-★繰り返し
-END-PERFORMの後にのみ.を記述する
-①
-データ部※入力値を格納する変数を定義
- DATA DIVISION
-  WOUKING-STORAGE SECTION.
-    01 変数名N PIC 9(2) VALUE 1.
-
-手続き部
-  PERFORM 10 TIMES  ←10回繰り返す
-    処理
-    ADD 1 TO 変数名N 
-  END-PERFORM.
-
-
-②
-　PERFORM UNTIL 変数名N > 10  ←条件に達したら処理終了
+例外クラス名
+BaceException　全ての例外クラスのスーパークラス
+Exception
+ArithmeticError 算術上のさまざまなエラー
+AttributeError　属性の参照や代入が失敗した場合に発生
+IndexError インデックスが範囲外の場合に発生
+KeyError 辞書のキーがない場合に発生
+NameError 名前が見つからなかった場合に発生
+ValueError 妥当でない引数を受け取った場合に発生
+FileNotFoundError ファイルやフォルダーが存在しない場合に発生する
+
+
+try:
+
+except 例外クラス名 as 例外オブジェクトの変数名:
+   処理
+except 例外クラス名:
+   処理
+except Exception:←最終的に例外をまとめて処理する
 　　処理
-　　ADD 1 TO 変数名N ←無限を防ぐ
-  END-PERFORM.
+else:
+    例外が発生しなかった場合の処理
+finally:
+　　必ず最後に実行される処理
 
-③
-　PERFORM VARYING 変数名N FROM 1 BY 1 UNTIL 変数名N > 10
-    処理
-  END-PERFORM.
-  ∟FROM…開始
-　∟BY…づつ
-　∟UNTIL…条件に達するまで
 
 
-★ファイルを書き込む
-　∟
-手続き部 OPEN OUTPUT OUT-FILE.※A
-	PERFORM 10 TIMES←ループ文
-	  ADD 1 TO LINE-COUNT
-	  MOVE LINE-COUNT TO 変数名※ファイルセクションを定義した変数名
-	  WRITE 変数名※ファイルセクションを定義した変数名
-	END-PERFORM.
+　∟例外オブジェクト変数.args←エラー情報のタプル
+    ∟print(変数名)__str__()←
 
-	CLOSE OUT-FILE.※A
-∟ファイルの確認
-ターミナル画面
-　　∟less ファイル名
+記述されていない例外クラスはプログラムが停止する
+※まとめる記述
+　∟except(例外クラスa,例外クラスb)
 
-★ファイルの読み込み
-事前にin.txtが存在する前提
-手続き部 OPEN INPUT IN-FILE.※A
-	PERFORM UNTIL 変数名　NOT = "00"←ループ文 正常なら00が返る　変数はWORKING-STORAGEで定義した変数
-	　READ IN-FILE
-	    AT END　
-		※データが読み終わった際の処理
- 	    NOT AT END　
-		※データ読み込み途中の処理
-		DISPLAY 変数名※ファイルセクションを定義した際の変数
-	  END-READ
-	END-PERFORM.
 
-	CLOSE IN-FILE.※A
+例外を意図として発生させる
+　raise Exception("文字列実引数")
+except Exception as e:
+   print("エラー",e)
 
-
-
-
-【例題】
-IDENTIFICATION DIVISION.
-PROGRAM-ID. プログラム名.
-
-ENVIRONMENT DIVISION.
-INPUT-OUTPUT SECTION.
-FILE-CONTROL.　　
-	 SELECT 読み込みファイル名 ASSIGN TO DISK.
-         SELECT 書き込みファイル名 ASSIGN TO PRINTER.	
-
-DATA DIVISION.
-FILE SECTION.←ファイル節
-FD 読み込みファイル名.
-01 URIAGE-REC.
-	02 U-NAME PIC X(10).　←入力領域は各カラムの値
-	02 U-JUICE PIC 9(06).
-	02 U-TEA PIC 9(06).
-	02 U-COFFEE PIC 9(06).
-FD 書き込みファイル名.   ←出力領域は全ての結果を羅列
-01 PRINT-REC PIC X(60).
-
-WOUKING-STORAGE SECTION.←作業場所節。作業領域を記述
-01 MEISAI-REC.
-	02 FILTER PIC X(04) VALUE SPACE.　←編集領域
-	02 P-NAME PIC X(10).
-	02 FILTER PIC X(03) VALUE SPACE.
-	02 P-JUICE PIC X(06).
-	02 FILTER PIC X(03) VALUE SPACE.
-	02 P-TEA PIC X(06).
-	02 FILTER PIC X(03) VALUE SPACE.
-	02 P-COFFEE PIC X(06).
-
-01 W-TOTAL PIC 9(07).  ←作業領域
-
-PROCEDURE DIVISION.
-PROGRAM-START.
-	OPEN INPUT 読み込みファイル名
-	　　 OUTPUT 書き込みファイル名.
-	READ 読み込みファイル名.
-	COMPUTE W-TOTAL = U-JUCE + U-TEA + U-COFFEE.
-	
-	IF W-TOTAL >= 40000 THEN
-		MOVE "good" TO P-GRADE
-	ELSE
-		MOVE "bad" TO P-GRADE
-	END-IF.
-	
-	MOVE U-NAME TO P-NAME
-	MOVE U-JUICE TO P-JUICE
-	MOVE U-TEA TO P-TEA
-	MOVE U-COFFEE TO P-COFFEE
-	MOVE W-TOTAL TO P-TOTAL
-	WRITE PRINT-REC FROM MEISAI-REC
-
-	CLOSE 読み込みファイル名
-	      書き込みファイル名.
-	STOP RUN.
-
-
-
-
-	  
------------C#-----------
-ビルドで作成されるファイル
-　∟コンソールアプリケーションやWINDOWSアプリケーションは「EXE」
-　∟クラスは「DLL」
-※bin>Debug
-
-ローカルウィンドウ
-　∟変数の内容を確認できる
-namespaceは.で区切って記述可能　または　ネスト namespace a {namespace b{定義 }}
-
-ソリューションエクスプローラの参照でusing　で使用する定義を追加する
-　∟右クリック>参照の追加をクリック
-
-コメントにはXMLのためのコメントもある
-　∟///<tug>///コメント内容///</tug>※///
-
-
-【定数】
-const 定数名 = 値;
-　∟全て大文字にする
-
-【データ型】
-参照　string object (=null※参照型)※値型でもデータ型? 変数　= nullを格納できる
-
-int / double / long / float floatはfを末に記述※記述なしだとdobleになってしまう→型変換必要
-char c = 'a'※シングルクォーテーション
-bool
-DateTime 変数 = Datetime.Now ※現在
-
-【日付】
-DateTime.Now.※（置換する）　※Year Month Day Hour Minute　Second
-
-大きいデータ型から小さいデータ型は変換が必要
-
-＋　で文字列連結
-文字変数.Length…文字数を取得
-string.Empty　は　"" と同等の意味
-エスケープシーケンス
-　∟\\…\
-　∟\'…'
-
-
-
-
-【VS環境構築】
-ソースコードに行番号を表示させる（デバック時の表示行で判断を速くでる）
-　∟メニュー→ツール>オプション>テキストエディタ>C#>行番号(L)
-
-
-【配列】
-int[] 配列変数 = new int[要素数]
-また　
-int[] 配列変数 = ｛値1, 値2｝
-・配列変数.Length　要素数を取得
-多次元配列
-　∟int[,] 配列名 = new [4,2]
-また
-int[,] 配列名 = {{3,54},{63,5},{1,76}}
-・配列変数.GetLength(0)　縦の要素数を取得
-・配列変数.GetLength(1)　横の要素数を取得
-ジャグ配列
-int[][] 変数名 = new int[2][]
-配列変数[0] = new int[2]{10,30}
-配列変数[1] = new int[4]{4,10,30,4}
-
-【動的配列】
-useing System.Collections.Genericが必要
-list<データ型> 変数名 = new list<データ型>
-変数名.Add(値)   ※追加 データ型が合致していること
-変数名.Remove(値)　　※削除　値で削除する
-変数名.RemoveAt(インデックス番号)※削除 インデックスで削除する
-要素数は.Countで取得できる
-
-
-【演算子】
-文字列連結…+
-
-【コンソール出力】
-Console.WriteLine()…空文字列を出力
-
-【型変換】
-int 変数　= (int)値　※値がlong型の場合,値は損なわれるが型変換できる
-　∟ダブル型をintに変換すると小数点以下切り捨てられる
-文字列への変換
-　∟変数名.ToString()※d,D,t,T,C　書式して文字列 引数として可能
-DateTime a = DateTime.Now()
-変数 = a.ToString("d")
-int b = 134
-変数 = b.ToString("C") \付きの文字列
-変数 = b.ToString("F2")小数点桁数を追加した文字列
-変数 = b.ToString("N2")カンマ編集
-
-Parseメソッド…変換できないと例外が発生する
-データ型　変数 = データ型.Parse(文字列)
-string b = "2024/01/03"
-DateTime a = DateTime.Parse(b)
-変数 = int.Parse(文字列);
-
-TryParse ※変換できればtrue　例外が発生しない 
-int hennsuu
-bool　変数　= int.TryParse("20", out hennsuu)←hennsuuにint型の20を格納し、変数にはboolを格納
-　
-
-【if】
-if(){}
-else if(){}
-else{}
-
-【switch】
-switch (条件){ case 値1:処理;break; default: 処理;break;}
-※goto case 値1;で制御を移動させることも可能
-
-
-【while】
-while(条件){}
-do{ 処理}(条件);←１度は処理が実行される
-
-
-【for】
-for(int i=0 ;i<10; i++){}※初期値はブロック前でも宣言可能(;i<10;i++)みたいに記述
-foreach( データ型　変数　in 配列）{}
- 
-
-【クラス】
-オーバーロード…引数の違うメソッド←引数に合わせて自動で呼び出してくれる
-　∟戻り値が異なるだけ、仮引数の名前が違うだけ　などではコンパイルエラーになる
-
-public string プロパティ名※valueという特殊文字で設定できる
-get
-{return}
-set
-{プロパティ名=value}
-　※プロパティーの数だけ定義する set{}を定義しないと読み取り専用になる
-
-※メソッドの定義が不要
-public string プロパティ名 {get; set;}読み書き両方
-　∟{get; private set;}※読み取り専用setができない
-
-【static】クラスに紐付いた情報
-クラス名.メソッド名※インスタンスしていないでも利用可能
-プロパティ名においても public static データ型　プロパティ名で利用できる
-　∟プロパティの呼び出し　クラス名.プロパティ名
-※static を const　に記述しても同じ意味になる←二つ指定はビルドエラーになる
-※readonly　をフィールド名に対して追加記述すると読み取り専用になる
-　∟static コンストラクタ←static クラス名(){}ここで初期化も可能※const は宣言時のみ初期化が可能
-public static DateTime.Now{get} 現在日時を取得する
-プロパティの呼び出し
-　∟クラス名.プロパティ名
-
-【クラスの継承】　※：派生クラス名が無いと:Objectとなっている
-基本クラスを定義→派生クラス
-※基本クラスのプロパティにprotectedにすると、派生クラスからでもアクセスできる
-派生クラスの定義　class 派生クラス名 :基本クラス名
-
-オーバーライド
-　∟基本クラス　pubic virtual void メソッド名()
-　∟派生クラス　public override void メソッド名()※基本クラスと同じメソッド名だよ
-base.メソッド名　派生クラスから基本クラスのメソッドを呼び出す
-コンストラクタの基本クラスを呼び出す
-　派生クラスコンストラクタ public クラス名 ():base(引数、引数)←基本クラスのコンストラクタを実装する
-
-
-【例外】
-try{}
-catch(例外名　変数名){}※複数記述可能
-　∟catch(例外名　変数名)　when (実行したい条件※trueの場合に処理を実行){}
-finally{}
-	・変数名.Messageメッセージを出力する
-・変数名.Sourceオブジェクトの名前
-・変数名.ToString詳細情報を出力する　
-
-OverflowException…許容範囲以外の数値の場合
-FormatExcenption…数値に変換できない（空文字　文字列）
-DivideByZeroException…0で割り算をした場合
-IndexOutOfRangeExxeption…配列の範囲外にアクセスした場合
-NullReferenceException…null参照の場合に発生
-Data.SqlClient.SqlException…SQL Serverでエラーが通知された際に発生
-InvaidCastException…キャストが不適切の場合に発生
-
-
-string.IsNullOrEmpty(値)…null 、空ならtrue
-
-【例外　throw】
-
-throw new 空Exception();
-
-※catch(～Exception 変数名)の内部　※ex(変数)はオブジェクトになる
-　∟throw;そのままスロー
-　∟throw ex ; その場所が例外の起点になる
-　∟throw new ～Exception("エラーメッセージ",ex);
-
-
-【その他】
-TextBox.Textはstringなので数値にする場合は数値型に変換する
-数字を文字列にする場合は変換する
-　∟int 変数;
-　∟int.TryParse(～TextBox.Text, out 変数)
-　∟～.Text = 値.ToString();
-
-this.Close()でフォームを閉じる
-
-
-FORM
- ∟・FormBorderStyle(フォームの仕切り表示)・StartPosition(フォームの表示位置)・Text(フォームのタイトル文字)
-TEXTBOX
- ∟・BackColor(背景色※Control/入力できないのを視覚的に表現する)・MultiLine(複数行の入力)・ReadOnly(入力不可)
-NUMERICUPDOWN1
-　∟・Maximum/最大値・Minimum/最小値・
-
-
-フォームを閉じる
-　∟this.Close();
-
-ランダム値を算出する
-　∟Random random = new Random();
-　　aswerNumber = random.Next(0,1000)+1;
-
-メッセージを表示する
-　∟ MessageBox.Show("THANK YOU!!");
-
-decimal→int型に変更する
-　∟Decimal.ToInt32(numericUpDown1.Value) または　(int)numericUpDown1.Value
-　数値表現が大→小は暗黙的にデータ型変換が可能。逆（小→大）は不可能
-
-string型に変換する
-　∟maxAnswerCount.ToString();
-
-改行
-　∟Environment.NewLine
-
-★参照されるフォームの変数はpublicにする
-★this.Hide();←this.Closeでは変数を渡せないので渡すまではthis.Hide();で隠す
-★Form2 a = new Form2();
-a.ShowDialog();
-　∟参照元で開く
-a.Close();
-　∟参照先のフォームを閉じる※変数を渡した後に実行する
-★numericUpDown1.Maximum = maxNumber;※最大値も変更すること
-
-
-○input Boxを利用する場合は参照設定が必要
-　∟参照の追加→アセンブリ→MicrosoftVisualBasicにチェックを入れる
-string input = Microsoft.VisualBasic.Interaction.InputBox(
-                    "値を入力してください。",
-                    "値の入力",
-                    "yama",
-                    -1,
-                    -1);
-○数値を判定するロジック
-int d;
-if (int.TryParse(input, out d) == false){
-    return;
-}
   </code>
 </pre>
   
