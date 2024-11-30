@@ -10,7 +10,26 @@
   <p>d6 リソースシートb3 完了以外を表示</p>
   <p>新しい情報です</p>
 <pre>
-  <code>
+  <code
+===================lesson===================
+非同期処理
+async function showmain(){
+  const sisy = await fetch('https://dotinstall.github.io/setup/fetchapi/users.json');
+  const sisy2 = await fetch('https://dotinstall.github.io/setup/fetchapi/invalid-users.json');
+    try{
+      const yaa = await sisy.json();
+      yaa.forEach(element => {
+        console.log(element.userName);
+        console.log(element.score);
+        if (element.userName == 'Taro'){
+          throw new Error('errrr');
+        }
+      });
+    }catch(er){
+      console.log(er.message);
+    }
+ }
+	  
 ===================PYTHON===================
 	  【コーディング方法】
 　∟コマンドプロンプト > notepad←メモ帳が開く
