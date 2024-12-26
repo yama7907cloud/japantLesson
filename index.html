@@ -10,7 +10,34 @@
   <p>d6 リソースシートb3 完了以外を表示</p>
   <p>新しい情報です</p>
 <pre>
-  <code
+  <code>
+===================js===================
+画面一面を暗くする
+2つの手法を利用する
+　∟透明度を持たせる
+background-color: rgba(0, 0, 0, 0.3);
+  ∟全体に広げる
+position: fixed;
+top: 0;
+bottom: 0;
+right: 0;
+left: 0;
+
+★優先順位の注意点★
+position: fixed;が利用されると優先的に上位に来てしまうので、
+position: absolute;をつかって後から記述する方が手前に来る
+
+配置の移動
+　∟transform: translate(0,-500px);
+
+要素.click()
+　∟先にクリックイベントで実行していたことを実行できる
+
+動く者に対して変化をつける※動きをつける場合はdisplay:none;は不要
+　∟transition: transform 0.4s;
+
+
+	  
 ===================lesson===================
 非同期処理
 async function showmain(){
