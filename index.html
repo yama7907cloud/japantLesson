@@ -23,9 +23,22 @@ bottom: 0;
 right: 0;
 left: 0;
 
+右上に配置
+ ∟ position: absolute;
+  top: 16px;
+  right: 16px;
+
 ★優先順位の注意点★
 position: fixed;が利用されると優先的に上位に来てしまうので、
 position: absolute;をつかって後から記述する方が手前に来る
+
+透明度で配置した際に触れないので、イベントも解除すること
+  opacity: 0;
+  pointer-events: none;
+クリックイベント等で表示させたら忘れずにポインター動作を戻す
+　∟pointer-events: auto;
+
+
 
 配置の移動
 　∟transform: translate(0,-500px);
@@ -35,7 +48,41 @@ position: absolute;をつかって後から記述する方が手前に来る
 
 動く者に対して変化をつける※動きをつける場合はdisplay:none;は不要
 　∟transition: transform 0.4s;
+ゆっくり透明度
+　∟transition: opacity .6s;
+transition: background-color 1s;
+transition: color 1s;
 
+
+ゆっくり透明＆移動（対象物）
+ opacity: 0;
+  transform: translate(0,30px);
+  transition: opacity 1s,transform 1s;
+→クラスがついた要素
+　∟  opacity: 1;
+  transform: none;
+
+要素で遅らせる変化
+.overlay.show li:nth-child(1) {
+  transition-delay: .1s;
+}
+
+.overlay.show li:nth-child(2) {
+  transition-delay: .2s;
+}
+
+
+アイコンを利用する
+　∟マテリアルアイコン
+　　→①linkをheadにコピー②コードにスパンタグをコピー
+
+
+Jquery
+　∟($("#taitol").text()　値を取得できる
+　∟$("#open").attr("name")引数の属性が取得できる
+
+外枠要素に
+　∟display: flex;　右に寄せたい要素にmargin-left: auto;
 
 	  
 ===================lesson===================
