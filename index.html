@@ -11,6 +11,24 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+	  ------開発-------
+declare @st decimal(8) 
+declare @ed decimal(8) 
+set @st = 20241209
+set @ed = 20241210
+
+select t0.skucd, t0.color, t0.size,max(t0.edate) as date into #temp_hjs from hjs as t0 with(nolock)
+where t0.sdate <= @ed and t0.edate >= @st and t0.status <> 2 group by t0.skucd, t0.color, t0.size
+
+select * from hjs
+
+select t0.*,t1.rank from #temp_hjs as t0
+left join hjs as t1 with(nolock)
+on t1.skucd = t0.skucd
+and t1.color = t0.color
+and t1.size = t0.size
+and t1.edate =t0.date
+
 ===================js===================
 画面一面を暗くする
 2つの手法を利用する
