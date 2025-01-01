@@ -11,6 +11,151 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+	  画面一面を暗くする
+2つの手法を利用する
+　∟透明度を持たせる
+background-color: rgba(0, 0, 0, 0.3);
+  ∟全体に広げる
+position: fixed;
+top: 0;
+bottom: 0;
+right: 0;
+left: 0;
+
+選択できないようにする
+　∟user-select: none;
+
+右上に配置
+ ∟ position: absolute;
+  top: 16px;
+  right: 16px;
+
+★優先順位の注意点★
+position: fixed;が利用されると優先的に上位に来てしまうので、
+position: absolute;をつかって後から記述する方が手前に来る
+
+透明度で配置した際に触れないので、イベントも解除すること
+  opacity: 0;
+  pointer-events: none;
+クリックイベント等で表示させたら忘れずにポインター動作を戻す
+　∟pointer-events: auto;
+
+親
+　∟position: relative;→子position: absolute;top:;right:;等で移動させる※親を基準に場所を配置
+
+
+配置の移動
+　∟transform: translate(0,-500px);
+
+回転
+　∟  transform: rotate(45deg);
+
+
+要素.click()
+　∟先にクリックイベントで実行していたことを実行できる
+
+動く者に対して変化をつける※動きをつける場合はdisplay:none;は不要
+　∟transition: transform 0.4s;
+ゆっくり透明度
+　∟transition: opacity .6s;
+transition: background-color 1s;
+transition: color 1s;
+
+
+ゆっくり透明＆移動（対象物）
+ opacity: 0;
+  transform: translate(0,30px);
+  transition: opacity 1s,transform 1s;
+→クラスがついた要素
+　∟  opacity: 1;
+  transform: none;
+
+要素で遅らせる変化
+.overlay.show li:nth-child(1) {
+  transition-delay: .1s;
+}
+
+.overlay.show li:nth-child(2) {
+  transition-delay: .2s;
+}
+
+
+アイコンを利用する
+　∟マテリアルアイコン
+　　→①linkをheadにコピー②コードにスパンタグをコピー
+
+疑似要素
+　∟要素::before(※after)※空白は不要
+　→content: "文字";
+
+
+Jquery
+　∟($("#taitol").text()　値を取得できる
+　∟$("#open").attr("name")引数の属性が取得できる
+
+外枠要素に
+　∟display: flex;　右に寄せたい要素にmargin-left: auto;
+
+要素の親を取得
+　∟要素.parentNode.classList.remove…←parentNodeの部分
+
+切り替え※親ノードにクラスの付け替えをする
+　∟dts.forEach(dt => {
+ dt.addEventListener("click",()=>{
+  dt.parentNode.classList.toggle("change");
+ });
+});
+
+アニメーション
+　∟animation: 0.4s アニメのPG名;
+　∟@keyframes test {}※display:none;の場合はopacity: 0;から設定をおこなうとよい
+
+ourline: solid #f00 5px;
+　∟外枠をつける※borderとの違いは領域の幅・高さに影響されない
+
+widthとheightの違い
+　∟heightは親要素までしか参照しない
+
+画像を幅いっぱいに表示
+　∟ <li><img src="img/a.png" alt=""></li>←liに対してmin-width: 100%;を指定
+　∟  object-fit: cover;←imgに対して指定
+
+aタグの遷移動作をなくす★e.preventDefault();
+　∟clickedItem.addEventListener('click', e => {
+      e.preventDefault();
+
+idで紐付ける
+　∟data-id="任意name"　と　id="任意name"
+　→document.getElementById(li_.dataset.nnn).classList.remove("dis_brk");※li_はクリックされた要素のdate-(属性)nnnの値→同じid属性に対して操作を実装
+
+クラスの操作※cssありきの考え
+　∟classList.add();,で区切って複数付与できる
+　∟remove()/contains()/toggle()
+  ∟if(  === true){}
+
+querySelectorAll()[0].textContent→.forEach((仮引数) => {});※forEachが利用可能。他は利用できない！★
+
+html要素を作成する
+　∟const 変数 = document.createElement('li');作成したい要素
+  →変数.textContent=値で値を追加できる
+子要素の最後に追加
+　∟親ノード（document.qualySelector('ul')）.appendChild(追加したい要素変数)
+子要素の途中に追加する（参照の前に追加される）
+　∟親ノード().InserBefore(追加したい要素変数※第一仮引数,追加する参照ノードdocument.querySelector()※第二仮引数前に追加される
+html要素を削除する
+　∟document.querySelector(※対象).remove();←これでもようそが消える
+
+getElementsByClassName
+　∟配列として格納される→[インデックス番号]を利用した参照にしないといけない※.lengthも要素数を取得できる
+
+
+FORM
+  ∟単行　input="text"　→　.valueで中の値が取得できる
+　∟複数行　<textarea></textarea>　→　.valueで中の値が取得できる
+  ∟1つ選択　<select><option value="green">Green</option></select>※一つ選択　selected属性で選択　select要素の.valueで中の値が取得できる
+　∟1つ選択　input="radio"value='' name属性を付与することで一つの選択が可能になる→仮引数.checkedでチェックの判定　.valueで中の値が取得できる
+  ∟複数　　　input="checkbox"value='' name属性いらない
+	  
 	  ------開発-------
 declare @st decimal(8) 
 declare @ed decimal(8) 
