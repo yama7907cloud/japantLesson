@@ -162,6 +162,12 @@ FORM
 
 addEventによるイベント種類
 →input → text, textarea, select　・　change → radio, checkbox
+
+イベント
+　  document.addEventListener('keydown', (e) => {
+    document.querySelector('p').textContent = e.key;※.keyで押されたキーボードがわかる
+  });
+	  
 	  ------開発-------
 declare @st decimal(8) 
 declare @ed decimal(8) 
