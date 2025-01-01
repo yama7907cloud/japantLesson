@@ -148,6 +148,10 @@ html要素を削除する
 getElementsByClassName
 　∟配列として格納される→[インデックス番号]を利用した参照にしないといけない※.lengthも要素数を取得できる
 
+配列の生成
+　∟const 配列名 = [];配列名.push(値);
+配列を文字列
+　∟変数.join(連結値)
 
 FORM
   ∟単行　input="text"　→　.valueで中の値が取得できる
@@ -155,7 +159,9 @@ FORM
   ∟1つ選択　<select><option value="green">Green</option></select>※一つ選択　selected属性で選択　select要素の.valueで中の値が取得できる
 　∟1つ選択　input="radio"value='' name属性を付与することで一つの選択が可能になる→仮引数.checkedでチェックの判定　.valueで中の値が取得できる
   ∟複数　　　input="checkbox"value='' name属性いらない　.checked === true　.value
-	  
+
+addEventによるイベント種類
+→input → text, textarea, select　・　change → radio, checkbox
 	  ------開発-------
 declare @st decimal(8) 
 declare @ed decimal(8) 
