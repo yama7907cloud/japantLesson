@@ -153,20 +153,125 @@ getElementsByClassName
 配列を文字列
 　∟変数.join(連結値)
 
+
 FORM
   ∟単行　input="text"　→　.valueで中の値が取得できる
 　∟複数行　<textarea></textarea>　→　.valueで中の値が取得できる
   ∟1つ選択　<select><option value="green">Green</option></select>※一つ選択　selected属性で選択　select要素の.valueで中の値が取得できる
 　∟1つ選択　input="radio"value='' name属性を付与することで一つの選択が可能になる→仮引数.checkedでチェックの判定　.valueで中の値が取得できる
   ∟複数　　　input="checkbox"value='' name属性いらない　.checked === true　.value
-
 addEventによるイベント種類
-→input → text, textarea, select　・　change → radio, checkbox
+→input → text, textarea, select　change → radio, checkbox
 
 イベント
 　  document.addEventListener('keydown', (e) => {
     document.querySelector('p').textContent = e.key;※.keyで押されたキーボードがわかる
   });
+
+
+styleを付与する
+　∟-の付くプロパティは-を削除して大文字で1文字記述する例）font-size →fontSize
+  ∟動かす要素.style.transform = "translateX(-200px)";※文字列で渡す。単位も忘れずに渡す。★ul.style = "transform : translateX(-200px)";上書きする記述方法
+　　∟ul.style = "transform : translateX(" + widt + "px)";※文字列は + で連結。又は`${}`テンプレートリテラルを使用して変数を活用する
+
+子要素を取得
+　∟const 子要素定数 = 要素.children;
+　∟子要素定数.lengthで子要素の要素数も取得可能
+    →子要素定数[0].getBoundingClientRect().width★子要素の最初の要素の幅を取得できる
+
+
+prompt()は文字列の返値
+　∟数字は型変換が必要。
+
+数字を扱う
+【数字】
+　∟Math.ceil(数字);→小数点以下切り上げる
+　∟Math.floor();→小数点以下切り捨てる
+　∟Math.round();→小数点以下四捨五入
+　∟Math.random();乱数を生成 0～1未満※*3で0～2.99999の数字が生成可能
+　∟数字.toFixed(表示桁数);→表示桁数で四捨五入
+　∟3桁ごとにカンマ表示　数字型.toLocaleString();※文字列であればNumber()で型変換を行う
+【日付】
+  ∟const d = new Date();日付の生成（現在）任意→new Date(2023,5,1);月は0始まり 0～11で扱う　日に0を入れると月末
+  ∟d.toLocalString();見やすい表示に変換
+　∟d.getFullYear();年を取得
+　∟d.getMonth();月を取得★0始まり!!
+　∟d.getDate();日を取得
+　∟d.getHour();時間を取得
+　∟d.getMinutes();分を取得
+　∟d.getSeconds();秒を取得
+　∟d.getMilliseconds();ミリ秒を取得
+　∟d.getDay();曜日を取得※0…日曜日
+　∟.getTime();1979/1/1からのミリ秒を取得してくれる
+　　→日付の差Date.now()-new Date(2023,5,12).getTime();→1000/60/60/24　※ミリ秒/分/時/日
+　∟日付の再代入
+　　→const d = new Date(2023,5,12); d.setDate(d.getDate()+20);※dに対して実引数分の時間を返してセットしてくれる
+   20日後
+　∟バックアップの取得※参照先はアドレスのため新しく向き先を作成する必要がある
+　　→const a = new Date(2024,11,31);
+	const bk = new Date(a.getTime());
+
+
+
+
+
+文字を扱う
+　∟文字列変数.toUpperCase().Trim();※大文字変換&前後の空白を除去
+　∟文字列.includes(検索文字列);→検索文字列が文字列に含まれていたらtrue　=== true
+　∟文字列.indexOf(検索文字列);→検索結果の最初のインデックス番号を返値とする
+　∟文字列.startWith(検索文字列);→最初の検索文字列をtrueで返す === true
+　∟文字の切り出し→文字列.slice(0,4);→インデックス番号の0～3までを抜き出す※文字列.substring(0,3);も同様の処理
+　∟文字の置換→文字列.replace※全てはreplaceAll(置換前文字,置換後文字); ※置換五文字が''だと抜き取る
+　∟文字の分割→文字列.split(区切りの文字);配列として返値が発生 →配列変数[インデックス番号]で取得
+　∟文字の繰り返し→let a = ''; for(let i=0;i<変数;i++){bar += 文字}
+   　→同じ挙動　文字.repeat(繰り返し数);　文字を繰り返し数文繰り返してくれる
+　∟文字埋め
+　　→文字列に対して処理　String(文字).padStart(表示文字数,表示数に満たない際の穴埋め文字);※padEndもあり
+
+型変換
+　∟Number(promtp("数字を入力してね"));←入力ボックス→文字列型→数字型
+　∟String();
+
+boolean型の変換
+　∟let a = true; a = !a ;←falseを代入する
+　∟true→[]空の配列。空のオブジェクト
+　∟false→undefined(未定義)　null　0 NaN ''
+　→json[{"":""}]配列とオブジェクト※オブジェクトに関しては値にnullを代入する場合もあり得る
+if文で === undifined　=== null も利用できる
+
+
+
+
+ページ遷移
+setIntrval(()=>{},秒後);関数終了に関わらす秒後に実行するので関数に時間がかかるのであれば負荷がかかる
+setTimeout(()=>{},秒後);関数終了後から秒後をセットする
+　∟window.location.href = 'url'; ※文字列でurlを渡すことでページ遷移する
+
+
+デバック操作
+　∟typeOf 変数;※データ型を表示してくれる
+
+
+非同期処理関数宣言 対json→[{"キー":"値","キー":70},{"":"","":70},{"":"","":70}] 配列 +オブジェクト　""で囲う必要あり※数字は不要。キーは必要
+　∟async function main(){
+　∟ const a = await fetch("https://dotinstall.github.io/setup/fetchapi/users.json");←処理を待った上で状態を取得
+　∟ const b = await a.json();←処理を待った上で取得
+
+非同期関数式 ★asyncの位置に注意
+　const a = async () =>{};※処理の中身は関数宣言と一緒
+
+以前の非同期処理
+　∟fetch('https://dotinstall.github.io/setup/fetchapi/users.json')
+      .then((response) => {　←うまくいったら仮引数に入る
+        return response.json();←json形式の値を次のthenに渡す
+      })
+      .then((users) => {
+        console.log(users);←ここで正規の処理を実施する
+      })
+      .catch((err) => {
+        console.log('Something went wrong getting user data');
+        console.log('Error log: ' + err);
+      });
 	  
 	  ------開発-------
 declare @st decimal(8) 
