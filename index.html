@@ -11,7 +11,17 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+SET @index = 1
+SET @SQL = ''
+WHILE @index <= 2
+BEGIN
+    --ループしたいクエリを書く
 
+	  SET @SQL = @SQL + 'max(case TUKI when @A then GAKU else 0 end) as ''' + CONVERT(VARCHAR,@index) + 'がつ'' ,'
+	  SET @index = @index +1
+END
+
+	  
 	  DECLARE @A NVARCHAR(MAX)
 SET @A = 'A,B,C'
 SELECT COUNT(*) FROM STRING_SPLIT(@A, ',');
