@@ -11,6 +11,22 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+
+	  DECLARE @A NVARCHAR(MAX)
+SET @A = 'A,B,C'
+SELECT COUNT(*) FROM STRING_SPLIT(@A, ',');
+
+select
+ NAME,
+ KAISHIBI,SYURYOUBI,
+ max(case TUKI when @A then GAKU else 0 end) as '2がつ' ,
+ max(case TUKI when @B then GAKU else 0 end) as '3がつ',
+ max(case TUKI when @C then GAKU else 0 end) as '4がつ',
+ max(case TUKI when @D then GAKU else 0 end) as '5がつ'
+from TESYAMA
+group by NAME,KAISHIBI,SYURYOUBI←
+
+	  
 	さんかくけい
 .yama {
   width: 0;
