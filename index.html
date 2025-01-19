@@ -11,6 +11,63 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+	  開閉
+	  'use strict';
+{
+  const elements = document.getElementsByClassName("collapse");
+  
+  const a = document.querySelectorAll('button');
+
+      a.forEach(a_ => {
+        a_.addEventListener('click',() =>{
+
+        let num;
+              a.forEach(no_ => {
+                if(no_ == a_){
+                  num = no_.dataset.nnn;
+                }
+              });
+            for(let i = 0 ; i < elements.length; i++){
+              if(num == i){
+                          elements[num].classList.toggle('vis');
+                      }
+              }
+            });
+      });
+}
+
+
+		    
+	  追加
+"use strict";
+{
+  const thead = document.getElementsByClassName("head");
+  let i = 3;
+  for(let num = 0; num< i; num++){
+    const th = document.createElement('th');
+    th.textContent = num;
+    thead[0].appendChild(th);
+  }
+  
+  
+  let o= 1;
+  for(let dd = 0; dd<= o; dd++){
+    const body = document.getElementsByClassName("body" + dd);
+      for(let num = 0; num< i; num++){
+        const td = document.createElement('td');
+        td.textContent = num* dd* 2;
+        body[0].appendChild(td);
+      }
+  }
+
+}
+
+
+
+
+
+
+	  ここまで
 SET @index = 1
 SET @SQL = ''
 WHILE @index <= 2
