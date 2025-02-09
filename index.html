@@ -12,6 +12,244 @@
 <pre>
   <code>
 
+<%@ LANGUAGE=VBSCRIPT %>
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hert_yama</title>
+<style>
+
+
+#container {
+  width: 1000px;
+  margin: 0 auto;
+  overflow-y: scroll;
+  background-color: #ccc;
+  padding: 0;
+}
+
+#container::-webkit-scrollbar {
+   background-color: white;
+  }
+ 
+  #container table {
+    border: double;
+    border-collapse: collapse;
+  }
+
+  #container table th {
+    border: 1px solid black;
+  }
+#bodycontainer {
+    width: 1000px;
+    margin: 0 auto;
+    height: 300px;
+    overflow-y: scroll;
+  }
+.gitable {
+    margin: 0;
+    padding: 0;
+    display: table;
+    width: 100%;
+  table-layout: fixed;
+}
+
+.gitable .li {
+  display: table-cell;
+  height: 40px;
+  border: 1px solid black;
+  overflow-wrap: normal;
+}
+
+#bodycontainer div.hidden {display: none;}
+
+</style>
+</head>
+<body id="contain">
+<h1>tosyama</h1>
+<p id="open">all open</p>
+
+
+
+<div id="container">
+    <table>
+      <colgroup>
+      <col style="width: 200px;">
+      <col style="width: 200px;">
+      <col style="width: 200px;">
+      <col style="width: 200px;">
+      <col style="width: 200px;">
+      <col style="width: 200px;">
+      </colgroup>
+      <tr>
+        <th rowspan="2">rabel1</th>
+        <th rowspan="2">rabel2</th>
+        <th rowspan="2">rabel3</th>
+        <th colspan="3" style="font-weight: normal; border-bottom-color: red;">rabel all</th>
+      </tr>
+      <tr>
+        <th rowspan="2">naiyou1</th>
+        <th rowspan="2">naiyou2</th>
+        <th rowspan="2">naiyou3</th>
+      </tr>
+    </table>  
+</div>
+<div id="bodycontainer">
+    <ul class="gitable mainkb" style="background-color: yellow;" data-name="1">
+      <li class="li">oya1</li>
+      <li class="li">hontai2</li>
+      <li class="li">hontai3</li>
+      <li class="li">hontai4</li>
+      <li class="li">hontai5</li>
+      <li class="li">hontai6</li>
+    </ul>
+    <div id="divvv_1" class="hidden tog">
+    <ul class="gitable">
+      <li class="li">oya1_ko1</li>
+      <li class="li">hontai21</li>
+      <li class="li">hontai31</li>
+      <li class="li">hontai41</li>
+      <li class="li">hontai51</li>
+      <li class="li">hontai61</li>
+    </ul>
+    </div>
+    <ul class="gitable mainkb" style="background-color: yellow;" data-name="2">
+      <li class="li">oya2</li>
+      <li class="li">hontai2</li>
+      <li class="li">hontai3</li>
+      <li class="li">hontai4</li>
+      <li class="li">hontai5</li>
+      <li class="li">hontai6</li>
+    </ul>
+    <div id="divvv_2" class="hidden tog">
+    <ul class="gitable">
+      <li class="li">oya2_ko1</li>
+      <li class="li">hontai21</li>
+      <li class="li">hontai31</li>
+      <li class="li">hontai41</li>
+      <li class="li">hontai51</li>
+      <li class="li">hontai61</li>
+    </ul>
+    <ul class="gitable hidden cla_2">
+      <li class="li">oya2_ko1</li>
+      <li class="li">hontai2</li>
+      <li class="li">hontai3</li>
+      <li class="li">hontai4</li>
+      <li class="li">hontai5</li>
+      <li class="li">hontai6</li>
+    </ul>
+    </div>
+    <ul class="gitable mainkb" style="background-color: yellow;" data-name="3">
+      <li class="li">oya3</li>
+      <li class="li">hontai21</li>
+      <li class="li">hontai31</li>
+      <li class="li">hontai41</li>
+      <li class="li">hontai51</li>
+      <li class="li">hontai61</li>
+    </ul>
+    <div id="divvv_3" class="hidden tog">
+    <ul class="gitable hidden cla_3">
+      <li class="li">oya3_ko1</li>
+      <li class="li">hontai2</li>
+      <li class="li">hontai3</li>
+      <li class="li">hontai4</li>
+      <li class="li">hontai5</li>
+      <li class="li">hontai6</li>
+    </ul>
+    <ul class="gitable hidden cla_3">
+      <li class="li">oya3_ko1</li>
+      <li class="li">hontai21</li>
+      <li class="li">hontai31</li>
+      <li class="li">hontai41</li>
+      <li class="li">hontai51</li>
+      <li class="li">hontai61</li>
+    </ul>
+    <ul class="gitable hidden cla_3">
+      <li class="li">oya3_ko1</li>
+      <li class="li">hontai21</li>
+      <li class="li">hontai31</li>
+      <li class="li">hontai41</li>
+      <li class="li">hontai51</li>
+      <li class="li">hontai61</li>
+    </ul>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+
+
+$('.mainkb').on('click', function() {
+  var day_div = "#divvv_" + $(this).data('name');
+  $(day_div).toggle(500);
+  $(day_div).toggleClass('hidden');
+
+
+
+  const result = document.getElementsByClassName('tog');
+  
+
+   var cou_= 0;
+  for(var i= 0; i< $('.tog').length;i++){
+    if(result[i].classList.contains('hidden')){
+    cou_++;
+    }
+  }
+
+  if(cou_ !== 0){
+    document.querySelector('#open').textContent = "all open";
+  }else{
+    document.querySelector('#open').textContent = "all close";
+  }
+});
+
+$('p').on('click', function() {
+    const result = document.getElementsByClassName('tog');
+    var cou_= 0;
+    for(var i= 0; i< $('.mainkb').length;i++){
+      if(result[i].classList.contains('hidden')){
+        cou_++;
+      }
+    }
+
+var day_div
+
+if(cou_ ===  $('.mainkb').length || cou_ === 0 ){
+  for(var i= 0; i< $('.tog').length;i++){
+   day_div = "#divvv_" + (i +1) ;
+    $(day_div).toggle(500);
+    $(day_div).toggleClass('hidden');
+  }
+  var txt_ = "all close";
+  if(cou_ !== $('.mainkb').length){
+   txt_ =  "all open";
+    }
+        document.querySelector('#open').textContent = txt_;
+}else {
+
+  for(var j= 0; j< $('.mainkb').length;j++){
+    day_div = "#divvv_" + (j +1) ;
+    if($(day_div).hasClass("hidden")){
+    $(day_div).toggle(500);
+    $(day_div).toggleClass('hidden');
+
+    }
+
+  }
+        document.querySelector('#open').textContent = "all close";
+}
+  
+});
+
+</script>
+</body>
+</html>
+
+
+	  -------ここまで
 
 scrollbar-color: white white;
 	      .wrapper.is-scrollLock {
