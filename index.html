@@ -23,6 +23,35 @@ body {
   height: 200px;
 }
 <div id="spacer"></div></div>←overflow-yを設定しているhtml中身に入れる
+
+<div>
+  <input type="checkbox" id="check_input" style="display: none;">
+  <label id="check_btn" for="check_input"></label>
+  <span id="check_content" style="cursor: pointer;">動きをつけたい要素</span>
+  </div>
+
+#check_content {
+  margin: 0;
+  width: 160px;
+  text-align: center;
+  border: 1px solid red;
+  border-radius: 3px;
+  background-color: rgb(127, 72, 199);
+}
+
+input[type=checkbox]:checked ~ #check_content{
+  background-color:red;/*チェック後の色は赤*/
+}
+	  
+chk.addEventListener("click",()=>{
+  if(ipt.checked !== true){
+    ipt.checked = true;
+    return;
+  }
+  ipt.checked = false;
+})
+
+	  
 	  -------ここまで
 
 scrollbar-color: white white;
