@@ -11,6 +11,26 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+
+$("button").click(()=>{
+  if($("#inp").val() !== ""){
+    var lis = $("<li>").text($("#inp").val());
+    lis.appendTo($("ul"));//実引数に追加する
+    $("#inp").val("");
+    $("#inp").focus();//カーソルを当てる
+  }
+});
+
+$("ul").click((e)=>{//eはその実態を指す
+if(e.target.nodeName === "LI"){
+  if(confirm("remove OK?"))
+  // e.target.remove();//すばやく消す
+  $(e.target).fadeOut();//ゆっくり消す
+}
+});
+
+
+	  
 $("#tre").slideToggle(100,function(){
     alert("yama");
   });
