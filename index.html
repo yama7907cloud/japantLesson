@@ -12,6 +12,10 @@
 <pre>
   <code>
 
+  $(".li").click((e)=>{
+    alert($(e.target).data("name"))　//e.targetはｊquaryに変換してあげる←方法$()で囲う
+  });
+	  
 $("button").click(()=>{
   if($("#inp").val() !== ""){
     var lis = $("<li>").text($("#inp").val());
