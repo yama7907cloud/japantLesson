@@ -15,7 +15,12 @@
 function yamashita(e){
  var elements = $(e).attr("id");
  var element = document.getElementById(elements);
-    alert(element.nodeName); // LIノードを取得する
+     if(element.nodeName === "UL"){
+      $("#h1").text("yama");
+      setTimeout(() => {
+        $("#h1").text("");
+      }, 2000);
+    }
 }
 
 	  
