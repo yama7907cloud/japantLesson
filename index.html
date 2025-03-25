@@ -11,7 +11,187 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Data.SqlClient;//DB必須
+using System.Drawing.Text;//DB必須
+using System.Data.OleDb;
+using Oracle.ManagedDataAccess.Client;
 
+
+
+
+namespace DB_SEARCH
+{
+    public partial class Form1 : Form
+    {
+        public int height_Num;
+        public int weight_Num;
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+            height_Num = decimal.ToInt32(height.Value); //decimal→int に変換
+            weight_Num = decimal.ToInt32(weight.Value); //decimal→int に変換
+            textBox1.Text = "";
+            textBox2.Text = "";
+            textBox3.Text = "";
+
+            bool juggement = false;
+
+            try
+            {
+                //↓↓↓接続方法1  using System.Data.SqlClient;
+                // 接続文字列の構築
+                SqlConnectionStringBuilder DB_selecrt = new SqlConnectionStringBuilder();
+            DB_selecrt.DataSource = "LAPTOP-IKB12B37\\MSSQLSERVER01";   // 接続先の SQL Server インスタンス
+            DB_selecrt.UserID = "sa";              // 接続ユーザー名
+            DB_selecrt.Password = "yama7907T";     // 接続パスワード
+            DB_selecrt.InitialCatalog = "yama";    // 接続するデータベース
+                                                   // DB_selecrt.ConnectTimeout = 60000;  // 接続タイムアウトの秒数(ms) デフォルトは 15 秒
+
+            //↓↓↓接続方法2 using System.Data.OleDb;
+            //試し
+ 
+
+
+                Console.Write("SQL Server に接続しています... ");
+                using (SqlConnection connect = new SqlConnection(DB_selecrt.ConnectionString))
+                {
+                    connect.Open();
+                    Console.WriteLine("接続成功。");
+                    Console.WriteLine("テーブルからデータを読み取り中です。任意のキーを押して処理を続行します。...");
+
+                    String sql = "select * from players where height >= " + height_Num.ToString() + " and weight >= " + weight_Num.ToString();
+                    using (SqlCommand command = new SqlCommand(sql, connect))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+
+                                juggement = true;
+                                //Console.WriteLine("{0} {1} {2}", reader.GetInt32(0), reader.GetString(1), reader.GetString(2));
+                                //Console.WriteLine("{0} {1} {2} {3}", reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetString(3));
+                                textBox1.Text += reader.GetInt32(0) + Environment.NewLine;
+                                textBox2.Text += reader.GetString(4) + Environment.NewLine;
+                                textBox3.Text += reader.GetString(5) + Environment.NewLine;
+                            }
+
+
+                            if (!juggement)
+                            {
+                                MessageBox.Show("検索結果が見当たりません");
+                            }
+
+                        }
+                    }
+                }
+            }
+            catch (SqlException er)
+            {
+                Console.WriteLine(er.ToString());
+            }
+
+            Console.WriteLine("すべてが完了しました。任意のキーを押してアプリを終了します...");
+
+
+
+
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            height_Num = decimal.ToInt32(height.Value); //decimal→int に変換
+            weight_Num = decimal.ToInt32(weight.Value); //decimal→int に変換
+
+
+            try
+            {
+                // 接続文字列の構築
+                SqlConnectionStringBuilder DB_selecrt = new SqlConnectionStringBuilder();
+                DB_selecrt.DataSource = "LAPTOP-IKB12B37\\MSSQLSERVER01";   // 接続先の SQL Server インスタンス
+                DB_selecrt.UserID = "sa";              // 接続ユーザー名
+                DB_selecrt.Password = "yama7907T";     // 接続パスワード
+                DB_selecrt.InitialCatalog = "yama";    // 接続するデータベース
+                // DB_selecrt.ConnectTimeout = 60000;  // 接続タイムアウトの秒数(ms) デフォルトは 15 秒
+
+                Console.Write("SQL Server に接続しています... ");
+                using (SqlConnection connect = new SqlConnection(DB_selecrt.ConnectionString))
+                {
+                    connect.Open();
+                    Console.WriteLine("接続成功。");
+                    Console.WriteLine("テーブルからデータを読み取り中です。任意のキーを押して処理を続行します。...");
+
+                    String sql = "update test set name = @value1 where id = @value2";
+                    using (SqlCommand command = new SqlCommand(sql, connect))
+                    {
+                        command.Parameters.AddWithValue("@value1", "山");
+                        command.Parameters.AddWithValue("@value2", 1);
+                        int rowsAffected = command.ExecuteNonQuery();
+
+                        MessageBox.Show("更新しました!!");
+                    }
+                }
+            }
+            catch (SqlException er)
+            {
+                Console.WriteLine(er.ToString());
+            }
+            
+            Console.WriteLine("すべてが完了しました。任意のキーを押してアプリを終了します...");
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("オラクルに接続します");
+            var DataSource = "ORCL =" +
+              "(DESCRIPTION =" +
+                "(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))" +
+                "(CONNECT_DATA =" +
+                  "(SERVER = DEDICATED)" +
+                  "(SERVICE_NAME = orcl.mshome.net)" +
+                ")"+
+            ")";
+            //var DataSource = "ORCL=" +
+            //                    "(DESCRIPTION =" +
+            //                        "(ADDRESS = (PROTOCOL = TCP)(HOST = 127.0.0.1)(PORT = 1521))" +
+            //                        "(CONNECT_DATA =" +
+            //                        "(SERVER = DEDICATED)" +
+            //                        "(SERVICE_NAME = ORCL)" +
+            //                        ")" +
+            //                    ")";
+            string connectionString = "Data Source=" + DataSource + ";User ID=sys;Password=maomaki0427T@;";
+            OracleConnection connection = new OracleConnection(connectionString);
+            try
+            {
+                connection.Open();
+                MessageBox.Show("Oracle Databaseに接続しました。");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Oracle Databaseに接続できませんでした。エラー: " + ex.Message);
+            }
+        }
+    }
+}
+
+
+
+	  ------
 function yamashita(e){
  var elements = $(e).attr("id");
  var element = document.getElementById(elements);
