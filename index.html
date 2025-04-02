@@ -11,6 +11,25 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+--オラクル　すでに存在するテーブルにインサートするクエリ
+
+create or replace NONEDITIONABLE PROCEDURE ADDTEST (
+    DrinkID IN NUMBER, 
+    Name IN VARCHAR, 
+    Type IN VARCHAR,
+    Price IN NUMBER,
+    Available IN NUMBER
+) AS
+BEGIN
+    INSERT INTO TEKFL (ID, NAME, AGE, STYMD, STATUS)
+    VALUES (DrinkID, Name, Type, Price, Available);
+END;
+
+--実行
+BEGIN
+    ADDTEST(2, 'MAKI',43, 20250402, 1);
+END;
+	  
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
