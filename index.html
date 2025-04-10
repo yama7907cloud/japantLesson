@@ -11,6 +11,38 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+
+任意の営業日で割り当てる形状月を
+drop table if exists #kadou
+drop table if exists #bace
+drop table if exists #tar
+
+
+
+declare @tar decimal(1)
+set @tar = 2
+
+select * into #kadou from cal with(nolock) where holi <> 1
+
+select row_number() over (partition by ym order by ym,days)as rownum,* into #bace from #kadou with(nolock)
+
+select * into #tar from #bace where rownum = @tar
+
+select 
+	ymd
+	ym,days
+	,case when days >= right(ymd,2) then format(dateadd(month,-1,cast(cast(ym as varchar(6))+'01' as date)) ,'yyyyMM') else left(ymd,6) end as 'settei'--   
+from tekfl --11
+left join #tar
+on ym = left(ymd,6)
+order by ymd,name
+
+	ここまで
+
+
+
+
+	  
 --UPDATE T_WINC
 SET DELFLG = (SELECT T.DELFLG FROM TEKFL AS T WITH(NOLOCK) WHERE T.KYKNO = T1.KYKNO AND T.TEKSEQ = T1.TEKSEQ)
 FROM T_WINC AS T1 WITH(NOLOCK)
