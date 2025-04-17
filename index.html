@@ -11,7 +11,43 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+	  ウィンドウ関数の練習
+select 
+	tmp.employee_id
+	,tmp.employee_name
+	,tmp.sale_amount
+	,tmp.dy
+	,case when tmp.dy is null then null
+	else tmp.sale_amount - tmp.dy
+	end as diff
+	,SUM(tmp.sale_amount) OVER (
+	  PARTITION BY tmp.employee_id
+	  ORDER BY sale_date
+	  ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+	) AS cumulative_sales
+from (
 
+		select 
+			ni.employee_id
+			,ni.employee_name
+			,ni.sale_amount
+			,ni.sale_date
+			,lag(ni.sale_amount) over (partition by ni.employee_id order by ni.sale_date) as dy
+		 from (
+				select
+					employee_id
+					,employee_name
+					,sum(sale_amount) as sale_amount
+					,FORMAT(sale_date, 'yyyy-MM') as sale_date
+				from sales
+				group by employee_id,employee_name,FORMAT(sale_date, 'yyyy-MM')
+		 ) as ni
+	) as tmp
+	--ウィンドウ関数lag()は全行の値を持ってくるsum()…ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROWでグループ化の中で足していく
+
+
+
+	  
 任意の営業日で割り当てる形状月を
 drop table if exists #kadou
 drop table if exists #bace
