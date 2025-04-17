@@ -11,7 +11,28 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+
+	  再帰的
+	CREATE TABLE employees (
+  employee_id INT PRIMARY KEY,
+  name TEXT NOT NULL,
+  manager_id INT,
+  FOREIGN KEY (manager_id) REFERENCES employees(employee_id)
+);
+
+INSERT INTO employees (employee_id, name, manager_id) VALUES
+(1, '社長 太郎', NULL),         -- トップ
+(2, '部長 花子', 1),           -- 社長の部下
+(3, '課長 一郎', 2),           -- 部長の部下
+(4, '主任 次郎', 3),           -- 課長の部下
+(5, '平社員 三郎', 4),         -- 主任の部下
+(6, '係長 四郎', 2),           -- 部長の別の部下
+(7, '新人 五郎', 6);    
+
+
+	  
 	  ウィンドウ関数の練習
+	  
 select 
 	tmp.employee_id
 	,tmp.employee_name
