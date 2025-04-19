@@ -12,6 +12,41 @@
 <pre>
   <code>
 
+sql サーバー　json型に類似
+create table 
+  ∟skills        nvarchar(max)         NULL,
+
+insert into 
+  (4, '中村優子',    3, 1, '2021-03-12', 550,
+
+    '["PowerPoint","SQL"]');
+  ∟""で囲む
+
+select 
+ JSON_VALUE(カラム名, '$[0]')        AS first_skill_array,
+ 
+
+ update
+ 末尾
+ UPDATE employees
+SET skills = JSON_MODIFY(
+    skills,
+    'append $',      -- ルート配列の末尾に追加
+    '"Sql"'   -- 追加する要素は文字列リテラルでさらにクォート
+)
+WHERE id = 2;
+
+
+置換
+UPDATE employees
+SET skills = JSON_MODIFY(
+    skills,
+    '$[0]',          -- ルート配列のインデックス0を指定
+    '"Asp"'
+)
+WHERE id = 2;
+
+	  
 	  再帰的
 	CREATE TABLE employees (
   employee_id INT PRIMARY KEY,
