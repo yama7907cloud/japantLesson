@@ -11,6 +11,45 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+	  静的縦横変換
+select
+	a.dept_name
+	,max(case a.ym when '2024-01' then a.amount else null end) as '2024-01'
+	,max(case a.ym when '2024-02' then a.amount else null end) as '2024-02'
+	,max(case a.ym when '2024-03' then a.amount else null end) as '2024-03'
+from(
+select t1.dept_id,t1.dept_name,format(sales_date,'yyyy-MM') as ym ,cast(sum(isnull(amount,0)) as int) as amount from departments as t1
+inner join sales as t2
+on t2.dept_id = t1.dept_id
+group by t1.dept_id,t1.dept_name,format(sales_date,'yyyy-MM')
+) as a
+group by a.dept_id,a.dept_name
+	  
+sqlサーバー動的クエリ
+1.セットする※fromは必要な一意に絞る
+	SELECT @cols = STRING_AGG(QUOTENAME(FORMAT(sales_date, 'yyyy-MM')), ',')
+	FROM (SELECT DISTINCT sales_date FROM sales) AS tmp;
+
+2.from句は縦もちにしている
+SET @sql = '
+SELECT dept_name, ' + @cols + '
+FROM (
+    SELECT 
+        d.dept_name,
+        FORMAT(s.sales_date, ''yyyy-MM'') AS ym,
+        s.amount
+    FROM sales s
+    INNER JOIN departments d ON s.dept_id = d.dept_id
+) AS src
+PIVOT (
+    SUM(amount) FOR ym IN (' + @cols + ')
+) AS pvt
+ORDER BY dept_name;
+';
+
+-- 実行
+EXEC sp_executesql @sql;
+	  
 	  ーーオラクルーーバインド変数の書き方
 	  
 SELECT *
