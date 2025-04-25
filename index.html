@@ -11,6 +11,19 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+--確認
+select * from a with(nolock) where bytaisb = 'tj' and seq >= 165--64
+
+--insert 
+insert into a
+select 
+t1.seq,'tj',t1.liveflg,t1.syakukbn
+from main as t0 with(nolock)
+inner join a as t1 with(nolock)
+	on t1.seq = t0.seq
+	and t1.bytaisb = 't'
+where t0.seq >= 165
+	  
 	  静的縦横変換
 select
 	a.dept_name
