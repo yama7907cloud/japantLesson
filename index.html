@@ -11,6 +11,58 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+sql繰り返しストアド
+	  USE [yamashitaLesson]
+GO
+/****** Object:  StoredProcedure [dbo].[ProcessTest]    Script Date: 2025/05/19 17:01:39 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[ProcessTest]
+    @targetdate NVARCHAR(100)
+AS
+BEGIN
+	if @targetdate = ''
+		begin
+			print '終了'
+			return
+		end
+
+	 SET NOCOUNT ON;
+
+    -- 1. カンマ区切り文字列をテーブルに変換（STRING_SPLIT使用）
+    DECLARE @Item NVARCHAR(100)
+	DECLARE @StartDate decimal(8,0)
+	DECLARE @EndDate decimal(8,0)
+	DECLARE @DelimiterPos INT
+
+    -- 2. テンポラリテーブル or ループ処理
+    DECLARE ItemCursor CURSOR FOR
+        SELECT value FROM STRING_SPLIT(@targetdate, ',')
+
+    OPEN ItemCursor
+    FETCH NEXT FROM ItemCursor INTO @Item
+
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+		SET @DelimiterPos = CHARINDEX('_', @Item)
+		SET @StartDate = cast(SUBSTRING(@Item, 1, @DelimiterPos - 1) as decimal(8,0))
+		SET @EndDate   = cast(SUBSTRING(@Item, @DelimiterPos + 1, 8) as decimal(8,0))
+        -- ここで1件ずつ処理
+        select * from kykno where jucbi between @StartDate and @EndDate
+
+        -- 次の行へ
+        FETCH NEXT FROM ItemCursor INTO @Item
+    END
+
+    CLOSE ItemCursor
+    DEALLOCATE ItemCursor
+
+END
+
+
+	  
 --確認
 select * from a with(nolock) where bytaisb = 'tj' and seq >= 165--64
 
