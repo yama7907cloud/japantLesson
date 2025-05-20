@@ -14,53 +14,58 @@
 sql繰り返しストアド
 	  USE [yamashitaLesson]
 GO
-/****** Object:  StoredProcedure [dbo].[ProcessTest]    Script Date: 2025/05/19 17:01:39 ******/
+/****** Object:  StoredProcedure [dbo].[ProcessTest]    Script Date: 2025/05/20 23:24:15 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 ALTER PROCEDURE [dbo].[ProcessTest]
-    @targetdate NVARCHAR(100)
+    @targetdate NVARCHAR(100) = ''
 AS
 BEGIN
-	if @targetdate = ''
-		begin
-			print '終了'
-			return
-		end
 
-	 SET NOCOUNT ON;
+--引数処理変数
+DECLARE @pos INT
+DECLARE @value VARCHAR(100)
 
-    -- 1. カンマ区切り文字列をテーブルに変換（STRING_SPLIT使用）
-    DECLARE @Item NVARCHAR(100)
-	DECLARE @StartDate decimal(8,0)
-	DECLARE @EndDate decimal(8,0)
-	DECLARE @DelimiterPos INT
+--個別処理変数
+DECLARE @Item VARCHAR(100)
+DECLARE @StartDate decimal(8,0)
+DECLARE @EndDate decimal(8,0)
+DECLARE @DelimiterPos INT
 
-    -- 2. テンポラリテーブル or ループ処理
-    DECLARE ItemCursor CURSOR FOR
-        SELECT value FROM STRING_SPLIT(@targetdate, ',')
+WHILE LEN(@targetdate) > 0
+	BEGIN
+		SET @pos = CHARINDEX(',', @targetdate)
 
-    OPEN ItemCursor
-    FETCH NEXT FROM ItemCursor INTO @Item
+		IF @pos > 0
+		BEGIN
+			SET @value      = SUBSTRING(@targetdate, 1, @pos - 1)
+			SET @targetdate = SUBSTRING(@targetdate, @pos + 1, LEN(@targetdate))
+		END
+		ELSE
+		BEGIN
+			SET @value = @targetdate
+			SET @targetdate = ''
+		END
 
-    WHILE @@FETCH_STATUS = 0
-    BEGIN
-		SET @DelimiterPos = CHARINDEX('_', @Item)
-		SET @StartDate = cast(SUBSTRING(@Item, 1, @DelimiterPos - 1) as decimal(8,0))
-		SET @EndDate   = cast(SUBSTRING(@Item, @DelimiterPos + 1, 8) as decimal(8,0))
-        -- ここで1件ずつ処理
-        select * from kykno where jucbi between @StartDate and @EndDate
+		--変数初期化
+		SET @DelimiterPos = 0
+		SET @StartDate    = 0
+		SET @EndDate      = 0
 
-        -- 次の行へ
-        FETCH NEXT FROM ItemCursor INTO @Item
-    END
+		--個別処理
+		SET @DelimiterPos = CHARINDEX('_', @value)
 
-    CLOSE ItemCursor
-    DEALLOCATE ItemCursor
-
+		IF @DelimiterPos > 0
+			BEGIN
+				SET @StartDate = CAST(SUBSTRING(@value, 1, @DelimiterPos - 1) AS DECIMAL(8,0))
+				SET @EndDate   = CAST(SUBSTRING(@value, @DelimiterPos + 1, 8) AS DECIMAL(8,0))
+				-- ここで1件ずつ処理
+				SELECT * FROM kykno WHERE jucbi BETWEEN @StartDate AND @EndDate
+			END
+	END
 END
-
 
 	  
 --確認
