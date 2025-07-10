@@ -11,1715 +11,401 @@
   <p>新しい情報です</p>
 <pre>
   <code>
-sql繰り返しストアド
-	  USE [yamashitaLesson]
-GO
-/****** Object:  StoredProcedure [dbo].[ProcessTest]    Script Date: 2025/05/20 23:24:15 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-ALTER PROCEDURE [dbo].[ProcessTest]
-    @targetdate NVARCHAR(100) = ''
-AS
-BEGIN
+<%@ Language=VBScript %>
+<!--#include file="config.inc" -->
+<% 
+
+
+Response.CodePage = 932  
+Response.Charset = "Shift_JIS"
+
+'グローバル変数定義
+Dim hen1, hen2, hen3, hen4, openflg
+Dim errMsg, pageSize, page, totalPages, suPage
+Dim connStr
+Dim action
+Dim selectedItems, k, id, gk, parts, updateSql, rows, key
+Dim conn, rs, sql, rs_hantr, sql_s, s_count, hyoji_count
+Dim devcon, upvalues, bikou_value
+Dim editData, records, item, keys, bikou_values, delData, derecords, deleteSql
+Dim insertData, newRecords, gk_val, bikou_val, sqlInsert, insert_empno
+
+
+action = Request("action")
+editData = Request.Form("edit_data")
+delData  = Request.Form("delete_data")
+insertData = Request.Form("insert_data")
+
+errMsg = ""
+openflg = 0
+suPage = 1
+pageSize = 10 ' 1ページあたりの件数
+
+If Request.ServerVariables("REQUEST_METHOD") = "POST" Then
+    openflg = Request.Form("openflg")
+    suPage = Request.Form("supage")
+    hen1 = Request.Form("empno")
+    hen3 = Request.Form("empname")
+
+    If hen3 = "" Then
+        errMsg = "従業員は必須です。"
+    Else
+
+If editData <> "" or delData <> "" or insertData <> "" Then
+'updateの処理
+    records = Split(editData, "###")
+        For Each item In records
+            keys = Split(item, "_")
+            If UBound(keys) = 1 Then
+                bikou_values = Replace(keys(1), "'", "''") ' SQLインジェクション対策
+                    updateSql = "UPDATE hantr SET bikou = '" & bikou_values & "' WHERE id = " & keys(0)
+                    Set devcon = Server.CreateObject("ADODB.Connection")
+                    devcon.Open connStr
+                    devcon.Execute updateSql
+                    devcon.Close
+                    Set devcon = Nothing
+            End If
+        Next
+'deleteの処理
+    derecords = Split(delData, "###")
+        For Each item In derecords
+            keys = Split(item, "_")
+            If UBound(keys) = 1 Then
+                deleteSql = "DELETE FROM hantr WHERE id = " & keys(0)
+                Set devcon = Server.CreateObject("ADODB.Connection")
+                devcon.Open connStr
+                devcon.Execute deleteSql
+                devcon.Close
+                Set devcon = Nothing
+            End If
+        Next
+'insertの処理
+    newRecords = Split(insertData, "###")
+    For Each item In newRecords
+        keys = Split(item, "_")
+        If UBound(keys) = 2 Then
+            insert_empno = Replace(keys(0), "'", "''")
+            gk_val = Replace(keys(1), "'", "''")
+            bikou_val = Replace(keys(2), "'", "''")
+            sqlInsert = "INSERT INTO hantr (gk, bikou, emp_no) VALUES ('" & gk_val & "', '" & bikou_val & "', " & insert_empno & ")"
+            Set devcon = Server.CreateObject("ADODB.Connection")
+            devcon.Open connStr
+            devcon.Execute sqlInsert
+            devcon.Close
+            Set devcon = Nothing
+        End If
+    Next
+End If
+        
+    End If
+End If
 
---引数処理変数
-DECLARE @pos INT
-DECLARE @value VARCHAR(100)
 
---個別処理変数
-DECLARE @Item VARCHAR(100)
-DECLARE @StartDate decimal(8,0)
-DECLARE @EndDate decimal(8,0)
-DECLARE @DelimiterPos INT
 
-WHILE LEN(@targetdate) > 0
-	BEGIN
-		SET @pos = CHARINDEX(',', @targetdate)
-
-		IF @pos > 0
-		BEGIN
-			SET @value      = SUBSTRING(@targetdate, 1, @pos - 1)
-			SET @targetdate = SUBSTRING(@targetdate, @pos + 1, LEN(@targetdate))
-		END
-		ELSE
-		BEGIN
-			SET @value = @targetdate
-			SET @targetdate = ''
-		END
-
-		--変数初期化
-		SET @DelimiterPos = 0
-		SET @StartDate    = 0
-		SET @EndDate      = 0
-
-		--個別処理
-		SET @DelimiterPos = CHARINDEX('_', @value)
-
-		IF @DelimiterPos > 0
-			BEGIN
-				SET @StartDate = CAST(SUBSTRING(@value, 1, @DelimiterPos - 1) AS DECIMAL(8,0))
-				SET @EndDate   = CAST(SUBSTRING(@value, @DelimiterPos + 1, 8) AS DECIMAL(8,0))
-				-- ここで1件ずつ処理
-				SELECT * FROM kykno WHERE jucbi BETWEEN @StartDate AND @EndDate
-			END
-	END
-END
-
-	  
---確認
-select * from a with(nolock) where bytaisb = 'tj' and seq >= 165--64
-
---insert 
-insert into a
-select 
-t1.seq,'tj',t1.liveflg,t1.syakukbn
-from main as t0 with(nolock)
-inner join a as t1 with(nolock)
-	on t1.seq = t0.seq
-	and t1.bytaisb = 't'
-where t0.seq >= 165
-	  
-	  静的縦横変換
-select
-	a.dept_name
-	,max(case a.ym when '2024-01' then a.amount else null end) as '2024-01'
-	,max(case a.ym when '2024-02' then a.amount else null end) as '2024-02'
-	,max(case a.ym when '2024-03' then a.amount else null end) as '2024-03'
-from(
-select t1.dept_id,t1.dept_name,format(sales_date,'yyyy-MM') as ym ,cast(sum(isnull(amount,0)) as int) as amount from departments as t1
-inner join sales as t2
-on t2.dept_id = t1.dept_id
-group by t1.dept_id,t1.dept_name,format(sales_date,'yyyy-MM')
-) as a
-group by a.dept_id,a.dept_name
-	  
-sqlサーバー動的クエリ
-1.セットする※fromは必要な一意に絞る
-	SELECT @cols = STRING_AGG(QUOTENAME(FORMAT(sales_date, 'yyyy-MM')), ',')
-	FROM (SELECT DISTINCT sales_date FROM sales) AS tmp;
-
-2.from句は縦もちにしている
-SET @sql = '
-SELECT dept_name, ' + @cols + '
-FROM (
-    SELECT 
-        d.dept_name,
-        FORMAT(s.sales_date, ''yyyy-MM'') AS ym,
-        s.amount
-    FROM sales s
-    INNER JOIN departments d ON s.dept_id = d.dept_id
-) AS src
-PIVOT (
-    SUM(amount) FOR ym IN (' + @cols + ')
-) AS pvt
-ORDER BY dept_name;
-';
-
--- 実行
-EXEC sp_executesql @sql;
-	  
-	  ーーオラクルーーバインド変数の書き方
-	  
-SELECT *
-FROM JHDFL
-WHERE ID BETWEEN :SID AND :EID 
-
-	  
-sql サーバー　json型に類似
-create table 
-  ∟skills        nvarchar(max)         NULL,
-
-insert into 
-  (4, '中村優子',    3, 1, '2021-03-12', 550,
-
-    '["PowerPoint","SQL"]');
-  ∟""で囲む
-
-select 
- JSON_VALUE(カラム名, '$[0]')        AS first_skill_array,
- 
-
- update
- 末尾
- UPDATE employees
-SET skills = JSON_MODIFY(
-    skills,
-    'append $',      -- ルート配列の末尾に追加
-    '"Sql"'   -- 追加する要素は文字列リテラルでさらにクォート
-)
-WHERE id = 2;
-
-
-置換
-UPDATE employees
-SET skills = JSON_MODIFY(
-    skills,
-    '$[0]',          -- ルート配列のインデックス0を指定
-    '"Asp"'
-)
-WHERE id = 2;
-
-	  
-	  再帰的
-	CREATE TABLE employees (
-  employee_id INT PRIMARY KEY,
-  name TEXT NOT NULL,
-  manager_id INT,
-  FOREIGN KEY (manager_id) REFERENCES employees(employee_id)
-);
-
-INSERT INTO employees (employee_id, name, manager_id) VALUES
-(1, '社長 太郎', NULL),         -- トップ
-(2, '部長 花子', 1),           -- 社長の部下
-(3, '課長 一郎', 2),           -- 部長の部下
-(4, '主任 次郎', 3),           -- 課長の部下
-(5, '平社員 三郎', 4),         -- 主任の部下
-(6, '係長 四郎', 2),           -- 部長の別の部下
-(7, '新人 五郎', 6);    
-
-
-	  
-	  ウィンドウ関数の練習
-	  
-select 
-	tmp.employee_id
-	,tmp.employee_name
-	,tmp.sale_amount
-	,tmp.dy
-	,case when tmp.dy is null then null
-	else tmp.sale_amount - tmp.dy
-	end as diff
-	,SUM(tmp.sale_amount) OVER (
-	  PARTITION BY tmp.employee_id
-	  ORDER BY sale_date
-	  ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
-	) AS cumulative_sales
-from (
-
-		select 
-			ni.employee_id
-			,ni.employee_name
-			,ni.sale_amount
-			,ni.sale_date
-			,lag(ni.sale_amount) over (partition by ni.employee_id order by ni.sale_date) as dy
-		 from (
-				select
-					employee_id
-					,employee_name
-					,sum(sale_amount) as sale_amount
-					,FORMAT(sale_date, 'yyyy-MM') as sale_date
-				from sales
-				group by employee_id,employee_name,FORMAT(sale_date, 'yyyy-MM')
-		 ) as ni
-	) as tmp
-	--ウィンドウ関数lag()は全行の値を持ってくるsum()…ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROWでグループ化の中で足していく
-
-
-
-	  
-任意の営業日で割り当てる形状月を
-drop table if exists #kadou
-drop table if exists #bace
-drop table if exists #tar
-
-
-
-declare @tar decimal(1)
-set @tar = 2
-
-select * into #kadou from cal with(nolock) where holi <> 1
-
-select row_number() over (partition by ym order by ym,days)as rownum,* into #bace from #kadou with(nolock)
-
-select * into #tar from #bace where rownum = @tar
-
-select 
-	ymd
-	ym,days
-	,case when days >= right(ymd,2) then format(dateadd(month,-1,cast(cast(ym as varchar(6))+'01' as date)) ,'yyyyMM') else left(ymd,6) end as 'settei'--   
-from tekfl --11
-left join #tar
-on ym = left(ymd,6)
-order by ymd,name
-
-	ここまで
-
-
-
-
-	  
---UPDATE T_WINC
-SET DELFLG = (SELECT T.DELFLG FROM TEKFL AS T WITH(NOLOCK) WHERE T.KYKNO = T1.KYKNO AND T.TEKSEQ = T1.TEKSEQ)
-FROM T_WINC AS T1 WITH(NOLOCK)
-WHERE EXISTS (
-SELECT * FROM TEKFL AS T3 WITH(NOLOCK) WHERE T3.KYKNO =T1.KYKNO AND T3.TEKSEQ = T1.TEKSEQ AND T1.DELFLG <> T3.DELFLG
-)
-
-
-	  
---オラクル　すでに存在するテーブルにインサートするクエリ
-
-create or replace NONEDITIONABLE PROCEDURE ADDTEST (
-    DrinkID IN NUMBER, 
-    Name IN VARCHAR, 
-    Type IN VARCHAR,
-    Price IN NUMBER,
-    Available IN NUMBER
-) AS
-BEGIN
-    INSERT INTO TEKFL (ID, NAME, AGE, STYMD, STATUS)
-    VALUES (DrinkID, Name, Type, Price, Available);
-END;
-
---実行
-BEGIN
-    ADDTEST(2, 'MAKI',43, 20250402, 1);
-END;
-	  
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Data.SqlClient;//DB必須
-using System.Drawing.Text;//DB必須
-using System.Data.OleDb;
-using Oracle.ManagedDataAccess.Client;
-
-
-
-
-namespace DB_SEARCH
-{
-    public partial class Form1 : Form
-    {
-        public int height_Num;
-        public int weight_Num;
-
-        public Form1()
-        {
-            InitializeComponent();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-            height_Num = decimal.ToInt32(height.Value); //decimal→int に変換
-            weight_Num = decimal.ToInt32(weight.Value); //decimal→int に変換
-            textBox1.Text = "";
-            textBox2.Text = "";
-            textBox3.Text = "";
-
-            bool juggement = false;
-
-            try
-            {
-                //↓↓↓接続方法1  using System.Data.SqlClient;
-                // 接続文字列の構築
-                SqlConnectionStringBuilder DB_selecrt = new SqlConnectionStringBuilder();
-            DB_selecrt.DataSource = "LAPTOP-IKB12B37\\MSSQLSERVER01";   // 接続先の SQL Server インスタンス
-            DB_selecrt.UserID = "sa";              // 接続ユーザー名
-            DB_selecrt.Password = "yama7907T";     // 接続パスワード
-            DB_selecrt.InitialCatalog = "yama";    // 接続するデータベース
-                                                   // DB_selecrt.ConnectTimeout = 60000;  // 接続タイムアウトの秒数(ms) デフォルトは 15 秒
-
-            //↓↓↓接続方法2 using System.Data.OleDb;
-            //試し
- 
-
-
-                Console.Write("SQL Server に接続しています... ");
-                using (SqlConnection connect = new SqlConnection(DB_selecrt.ConnectionString))
-                {
-                    connect.Open();
-                    Console.WriteLine("接続成功。");
-                    Console.WriteLine("テーブルからデータを読み取り中です。任意のキーを押して処理を続行します。...");
-
-                    String sql = "select * from players where height >= " + height_Num.ToString() + " and weight >= " + weight_Num.ToString();
-                    using (SqlCommand command = new SqlCommand(sql, connect))
-                    {
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-
-                                juggement = true;
-                                //Console.WriteLine("{0} {1} {2}", reader.GetInt32(0), reader.GetString(1), reader.GetString(2));
-                                //Console.WriteLine("{0} {1} {2} {3}", reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetString(3));
-                                textBox1.Text += reader.GetInt32(0) + Environment.NewLine;
-                                textBox2.Text += reader.GetString(4) + Environment.NewLine;
-                                textBox3.Text += reader.GetString(5) + Environment.NewLine;
-                            }
-
-
-                            if (!juggement)
-                            {
-                                MessageBox.Show("検索結果が見当たりません");
-                            }
-
-                        }
-                    }
-                }
-            }
-            catch (SqlException er)
-            {
-                Console.WriteLine(er.ToString());
-            }
-
-            Console.WriteLine("すべてが完了しました。任意のキーを押してアプリを終了します...");
-
-
-
-
-
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            height_Num = decimal.ToInt32(height.Value); //decimal→int に変換
-            weight_Num = decimal.ToInt32(weight.Value); //decimal→int に変換
-
-
-            try
-            {
-                // 接続文字列の構築
-                SqlConnectionStringBuilder DB_selecrt = new SqlConnectionStringBuilder();
-                DB_selecrt.DataSource = "LAPTOP-IKB12B37\\MSSQLSERVER01";   // 接続先の SQL Server インスタンス
-                DB_selecrt.UserID = "sa";              // 接続ユーザー名
-                DB_selecrt.Password = "yama7907T";     // 接続パスワード
-                DB_selecrt.InitialCatalog = "yama";    // 接続するデータベース
-                // DB_selecrt.ConnectTimeout = 60000;  // 接続タイムアウトの秒数(ms) デフォルトは 15 秒
-
-                Console.Write("SQL Server に接続しています... ");
-                using (SqlConnection connect = new SqlConnection(DB_selecrt.ConnectionString))
-                {
-                    connect.Open();
-                    Console.WriteLine("接続成功。");
-                    Console.WriteLine("テーブルからデータを読み取り中です。任意のキーを押して処理を続行します。...");
-
-                    String sql = "update test set name = @value1 where id = @value2";
-                    using (SqlCommand command = new SqlCommand(sql, connect))
-                    {
-                        command.Parameters.AddWithValue("@value1", "山");
-                        command.Parameters.AddWithValue("@value2", 1);
-                        int rowsAffected = command.ExecuteNonQuery();
-
-                        MessageBox.Show("更新しました!!");
-                    }
-                }
-            }
-            catch (SqlException er)
-            {
-                Console.WriteLine(er.ToString());
-            }
-            
-            Console.WriteLine("すべてが完了しました。任意のキーを押してアプリを終了します...");
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            Console.WriteLine("オラクルに接続します");
-            var DataSource = "ORCL =" +
-              "(DESCRIPTION =" +
-                "(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))" +
-                "(CONNECT_DATA =" +
-                  "(SERVER = DEDICATED)" +
-                  "(SERVICE_NAME = orcl.mshome.net)" +
-                ")"+
-            ")";
-            //var DataSource = "ORCL=" +
-            //                    "(DESCRIPTION =" +
-            //                        "(ADDRESS = (PROTOCOL = TCP)(HOST = 127.0.0.1)(PORT = 1521))" +
-            //                        "(CONNECT_DATA =" +
-            //                        "(SERVER = DEDICATED)" +
-            //                        "(SERVICE_NAME = ORCL)" +
-            //                        ")" +
-            //                    ")";
-            string connectionString = "Data Source=" + DataSource + ";User ID=sys;Password=maomaki0427T@;";
-            OracleConnection connection = new OracleConnection(connectionString);
-            try
-            {
-                connection.Open();
-                MessageBox.Show("Oracle Databaseに接続しました。");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Oracle Databaseに接続できませんでした。エラー: " + ex.Message);
-            }
-        }
-    }
-}
-
-
-
-	  ------
-function yamashita(e){
- var elements = $(e).attr("id");
- var element = document.getElementById(elements);
-     if(element.nodeName === "UL"){
-      $("#h1").text("yama");
-      setTimeout(() => {
-        $("#h1").text("");
-      }, 2000);
-    }
-}
-
-	  
-？？？使えるかな？
-SUM(likes) OVER (PARTITION BY area) AS area_sum
-
-	  
-  $(".li").click((e)=>{
-    alert($(e.target).data("name"))　//e.targetはｊquaryに変換してあげる←方法$()で囲う
-  });
-	  
-$("button").click(()=>{
-  if($("#inp").val() !== ""){
-    var lis = $("<li>").text($("#inp").val());
-    lis.appendTo($("ul"));//実引数に追加する
-    $("#inp").val("");
-    $("#inp").focus();//カーソルを当てる
-  }
-});
-
-$("ul").click((e)=>{//eはその実態を指す
-if(e.target.nodeName === "LI"){
-  if(confirm("remove OK?"))
-  // e.target.remove();//すばやく消す
-  $(e.target).fadeOut();//ゆっくり消す
-}
-});
-
-
-	  
-$("#tre").slideToggle(100,function(){
-    alert("yama");
-  });
-html,
-body {
-  overflow: hidden;
-}
-  overflow-y: scroll;
-}
-
-#spacer {
-  height: 200px;
-}
-<div id="spacer"></div></div>←overflow-yを設定しているhtml中身に入れる
-
-<div>
-  <input type="checkbox" id="check_input" style="display: none;">
-  <label id="check_btn" for="check_input"></label>
-  <span id="check_content" style="cursor: pointer;">動きをつけたい要素</span>
-  </div>
-
-#check_content {
-  margin: 0;
-  width: 160px;
-  text-align: center;
-  border: 1px solid red;
-  border-radius: 3px;
-  background-color: rgb(127, 72, 199);
-}
-
-input[type=checkbox]:checked ~ #check_content{
-  background-color:red;/*チェック後の色は赤*/
-}
-	  
-chk.addEventListener("click",()=>{
-  if(ipt.checked !== true){
-    ipt.checked = true;
-    return;
-  }
-  ipt.checked = false;
-})
-
-	  
-	  -------ここまで
-
-scrollbar-color: white white;
-	      .wrapper.is-scrollLock {
-      overflow: auto;
-      scrollbar-gutter: stable;
-    }
-	  開閉
-	  'use strict';
-{
-  const elements = document.getElementsByClassName("collapse");
-  
-  const a = document.querySelectorAll('button');
-
-      a.forEach(a_ => {
-        a_.addEventListener('click',() =>{
-
-        let num;
-              a.forEach(no_ => {
-                if(no_ == a_){
-                  num = no_.dataset.nnn;
-                }
-              });
-            for(let i = 0 ; i < elements.length; i++){
-              if(num == i){
-                          elements[num].classList.toggle('vis');
-                      }
-              }
-            });
-      });
-}
-
-
-		    
-	  追加
-"use strict";
-{
-  const thead = document.getElementsByClassName("head");
-  let i = 3;
-  for(let num = 0; num< i; num++){
-    const th = document.createElement('th');
-    th.textContent = num;
-    thead[0].appendChild(th);
-  }
-  
-  
-  let o= 1;
-  for(let dd = 0; dd<= o; dd++){
-    const body = document.getElementsByClassName("body" + dd);
-      for(let num = 0; num< i; num++){
-        const td = document.createElement('td');
-        td.textContent = num* dd* 2;
-        body[0].appendChild(td);
-      }
-  }
-
-}
-
-
-
-
-
-
-	  ここまで
-SET @index = 1
-SET @SQL = ''
-WHILE @index <= 2
-BEGIN
-    --ループしたいクエリを書く
-
-	  SET @SQL = @SQL + 'max(case TUKI when @A then GAKU else 0 end) as ''' + CONVERT(VARCHAR,@index) + 'がつ'' ,'
-	  SET @index = @index +1
-END
-
-	  
-	  DECLARE @A NVARCHAR(MAX)
-SET @A = 'A,B,C'
-SELECT COUNT(*) FROM STRING_SPLIT(@A, ',');
-
-select
- NAME,
- KAISHIBI,SYURYOUBI,
- max(case TUKI when @A then GAKU else 0 end) as '2がつ' ,
- max(case TUKI when @B then GAKU else 0 end) as '3がつ',
- max(case TUKI when @C then GAKU else 0 end) as '4がつ',
- max(case TUKI when @D then GAKU else 0 end) as '5がつ'
-from TESYAMA
-group by NAME,KAISHIBI,SYURYOUBI←
-
-	  
-	さんかくけい
-.yama {
-  width: 0;
-  height: 0;
-  border: 90px solid transparent; //消せる
-  border-right-color: #fff;//右だけ白
-}
-	  -------ハートの作成------
-css
- ∟labelタグを親要素→子要素にinput type="checkbox"子をクリックでもチェックされる★for属性は削除すること
-
-親属性のチェックボックスにチェックされた　クラスが付いている者に対して
-.container {
-  text-align: center;
-}
-
-.like {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  transition: background 0.5s;
-  width: 50px;
-  height: 50px;
-}
-
-.like:hover {
-  background-color: #f5f5f5;
-}
-
-.heart{
-  font-size: 40px;
-  color:#e5e5e5;
-    user-select: none;
-  cursor: pointer;
-  position: relative;
-  top: 1px;
-}
-
-.like [type="checkbox"] {
-  display: none;
-}
-
-.like [type="checkbox"]:checked ~ .heart {
-  animation-name: heart;
-  animation-duration: .6s;
-  animation-fill-mode: forwards;
-}
-
-@keyframes heart {
-  0% {
-    transform: scale(0);
-  }
-  50% {
-    transform: scale(1.5);
-  }
-  100% {
-    transform: scale(1);
-    color: blue;
-  }
-}
-
-.dip {
-  width: 90px;
-  height: 90px;
-  background-color: #ff0;
-  border-radius: 50%;
-  position: absolute;
-  transform: scale(0);
-}
-
-.like [type="checkbox"]:checked ~ .dip {
-  animation-name: dip;
-  animation-duration: .6s;
-  animation-fill-mode: forwards;
-}
-
-@keyframes dip {
-  0% {
-    transform: scale(0);
-  }
-  50% {
-    transform: scale(1.5);
-  }
-  100% {
-    transform: scale(1);
-    opacity: 0;
-  }
-}
----------
-	  
-テクニック
-∟ノードを作成し配列に入れる→配列変数[0]で呼び出せる　  
-　const button = document.createElement("button");
-    dots.push(button);
-slids = ul.children;→slids.length
-slids[0].getBoundingClientRect().width;
-const button = document.createElement("button");
-    dots.push(button);
-    document.querySelector("nav").appendChild(button);
-	  
-画面一面を暗くする
-2つの手法を利用する
-　∟透明度を持たせる
-background-color: rgba(0, 0, 0, 0.3);
-  ∟全体に広げる
-position: fixed;
-top: 0;
-bottom: 0;
-right: 0;
-left: 0;
-
-選択できないようにする
-　∟user-select: none;
-
-右上に配置
- ∟ position: absolute;
-  top: 16px;
-  right: 16px;
-
-★優先順位の注意点★
-position: fixed;が利用されると優先的に上位に来てしまうので、
-position: absolute;をつかって後から記述する方が手前に来る
-
-透明度で配置した際に触れないので、イベントも解除すること
-  opacity: 0;
-  pointer-events: none;
-クリックイベント等で表示させたら忘れずにポインター動作を戻す
-　∟pointer-events: auto;
-
-親
-　∟position: relative;→子position: absolute;top:;right:;等で移動させる※親を基準に場所を配置
-
-
-配置の移動
-　∟transform: translate(0,-500px);
-
-回転
-　∟  transform: rotate(45deg);
-
-
-要素.click()
-　∟先にクリックイベントで実行していたことを実行できる
-
-動く者に対して変化をつける※動きをつける場合はdisplay:none;は不要
-　∟transition: transform 0.4s;
-ゆっくり透明度
-　∟transition: opacity .6s;
-transition: background-color 1s;
-transition: color 1s;
-
-
-ゆっくり透明＆移動（対象物）
- opacity: 0;
-  transform: translate(0,30px);
-  transition: opacity 1s,transform 1s;
-→クラスがついた要素
-　∟  opacity: 1;
-  transform: none;
-
-要素で遅らせる変化
-.overlay.show li:nth-child(1) {
-  transition-delay: .1s;
-}
-
-.overlay.show li:nth-child(2) {
-  transition-delay: .2s;
-}
-
-
-アイコンを利用する
-　∟マテリアルアイコン
-　　→①linkをheadにコピー②コードにスパンタグをコピー
-
-疑似要素
-　∟要素::before(※after)※空白は不要
-　→content: "文字";
-
-
-Jquery
-　∟($("#taitol").text()　値を取得できる
-　∟$("#open").attr("name")引数の属性が取得できる
-
-外枠要素に
-　∟display: flex;　右に寄せたい要素にmargin-left: auto;
-
-要素の親を取得
-　∟要素.parentNode.classList.remove…←parentNodeの部分
-
-切り替え※親ノードにクラスの付け替えをする
-　∟dts.forEach(dt => {
- dt.addEventListener("click",()=>{
-  dt.parentNode.classList.toggle("change");
- });
-});
-
-アニメーション
-　∟animation: 0.4s アニメのPG名;
-　∟@keyframes test {}※display:none;の場合はopacity: 0;から設定をおこなうとよい
-
-ourline: solid #f00 5px;
-　∟外枠をつける※borderとの違いは領域の幅・高さに影響されない
-
-widthとheightの違い
-　∟heightは親要素までしか参照しない
-
-画像を幅いっぱいに表示
-　∟ <li><img src="img/a.png" alt=""></li>←liに対してmin-width: 100%;を指定
-　∟  object-fit: cover;←imgに対して指定
-
-aタグの遷移動作をなくす★e.preventDefault();
-　∟clickedItem.addEventListener('click', e => {
-      e.preventDefault();
-
-idで紐付ける
-　∟data-id="任意name"　と　id="任意name"
-　→document.getElementById(li_.dataset.nnn).classList.remove("dis_brk");※li_はクリックされた要素のdate-(属性)nnnの値→同じid属性に対して操作を実装
-
-クラスの操作※cssありきの考え
-　∟classList.add();,で区切って複数付与できる
-　∟remove()/contains()/toggle()
-  ∟if(  === true){}
-
-querySelectorAll()[0].textContent→.forEach((仮引数) => {});※forEachが利用可能。他は利用できない！★
-
-html要素を作成する
-　∟const 変数 = document.createElement('li');作成したい要素
-  →変数.textContent=値で値を追加できる
-子要素の最後に追加
-　∟親ノード（document.qualySelector('ul')）.appendChild(追加したい要素変数)
-子要素の途中に追加する（参照の前に追加される）
-　∟親ノード().InserBefore(追加したい要素変数※第一仮引数,追加する参照ノードdocument.querySelector()※第二仮引数前に追加される
-html要素を削除する
-　∟document.querySelector(※対象).remove();←これでもようそが消える
-
-getElementsByClassName
-　∟配列として格納される→[インデックス番号]を利用した参照にしないといけない※.lengthも要素数を取得できる
-
-配列の生成
-　∟const 配列名 = [];配列名.push(値);
-配列を文字列
-　∟変数.join(連結値)
-
-
-FORM
-  ∟単行　input="text"　→　.valueで中の値が取得できる
-　∟複数行　<textarea></textarea>　→　.valueで中の値が取得できる
-  ∟1つ選択　<select><option value="green">Green</option></select>※一つ選択　selected属性で選択　select要素の.valueで中の値が取得できる
-　∟1つ選択　input="radio"value='' name属性を付与することで一つの選択が可能になる→仮引数.checkedでチェックの判定　.valueで中の値が取得できる
-  ∟複数　　　input="checkbox"value='' name属性いらない　.checked === true　.value
-addEventによるイベント種類
-→input → text, textarea, select　change → radio, checkbox
-
-イベント
-　  document.addEventListener('keydown', (e) => {
-    document.querySelector('p').textContent = e.key;※.keyで押されたキーボードがわかる
-  });
-
-
-styleを付与する
-　∟-の付くプロパティは-を削除して大文字で1文字記述する例）font-size →fontSize
-  ∟動かす要素.style.transform = "translateX(-200px)";※文字列で渡す。単位も忘れずに渡す。★ul.style = "transform : translateX(-200px)";上書きする記述方法
-　　∟ul.style = "transform : translateX(" + widt + "px)";※文字列は + で連結。又は`${}`テンプレートリテラルを使用して変数を活用する
-
-子要素を取得
-　∟const 子要素定数 = 要素.children;
-　∟子要素定数.lengthで子要素の要素数も取得可能
-    →子要素定数[0].getBoundingClientRect().width★子要素の最初の要素の幅を取得できる
-
-
-prompt()は文字列の返値
-　∟数字は型変換が必要。
-
-数字を扱う
-【数字】
-　∟Math.ceil(数字);→小数点以下切り上げる
-　∟Math.floor();→小数点以下切り捨てる
-　∟Math.round();→小数点以下四捨五入
-　∟Math.random();乱数を生成 0～1未満※*3で0～2.99999の数字が生成可能
-　∟数字.toFixed(表示桁数);→表示桁数で四捨五入
-　∟3桁ごとにカンマ表示　数字型.toLocaleString();※文字列であればNumber()で型変換を行う
-【日付】
-  ∟const d = new Date();日付の生成（現在）任意→new Date(2023,5,1);月は0始まり 0～11で扱う　日に0を入れると月末
-  ∟d.toLocalString();見やすい表示に変換
-　∟d.getFullYear();年を取得
-　∟d.getMonth();月を取得★0始まり!!
-　∟d.getDate();日を取得
-　∟d.getHour();時間を取得
-　∟d.getMinutes();分を取得
-　∟d.getSeconds();秒を取得
-　∟d.getMilliseconds();ミリ秒を取得
-　∟d.getDay();曜日を取得※0…日曜日
-　∟.getTime();1979/1/1からのミリ秒を取得してくれる
-　　→日付の差Date.now()-new Date(2023,5,12).getTime();→1000/60/60/24　※ミリ秒/分/時/日
-　∟日付の再代入
-　　→const d = new Date(2023,5,12); d.setDate(d.getDate()+20);※dに対して実引数分の時間を返してセットしてくれる
-   20日後
-　∟バックアップの取得※参照先はアドレスのため新しく向き先を作成する必要がある
-　　→const a = new Date(2024,11,31);
-	const bk = new Date(a.getTime());
-
-
-
-
-
-文字を扱う
-　∟文字列変数.toUpperCase().Trim();※大文字変換&前後の空白を除去
-　∟文字列.includes(検索文字列);→検索文字列が文字列に含まれていたらtrue　=== true
-　∟文字列.indexOf(検索文字列);→検索結果の最初のインデックス番号を返値とする
-　∟文字列.startWith(検索文字列);→最初の検索文字列をtrueで返す === true
-　∟文字の切り出し→文字列.slice(0,4);→インデックス番号の0～3までを抜き出す※文字列.substring(0,3);も同様の処理
-　∟文字の置換→文字列.replace※全てはreplaceAll(置換前文字,置換後文字); ※置換五文字が''だと抜き取る
-　∟文字の分割→文字列.split(区切りの文字);配列として返値が発生 →配列変数[インデックス番号]で取得
-　∟文字の繰り返し→let a = ''; for(let i=0;i<変数;i++){bar += 文字}
-   　→同じ挙動　文字.repeat(繰り返し数);　文字を繰り返し数文繰り返してくれる
-　∟文字埋め
-　　→文字列に対して処理　String(文字).padStart(表示文字数,表示数に満たない際の穴埋め文字);※padEndもあり
-
-型変換
-　∟Number(promtp("数字を入力してね"));←入力ボックス→文字列型→数字型
-　∟String();
-
-boolean型の変換
-　∟let a = true; a = !a ;←falseを代入する
-　∟true→[]空の配列。空のオブジェクト
-　∟false→undefined(未定義)　null　0 NaN ''
-　→json[{"":""}]配列とオブジェクト※オブジェクトに関しては値にnullを代入する場合もあり得る
-if文で === undifined　=== null も利用できる
-
-
-
-
-ページ遷移
-setIntrval(()=>{},秒後);関数終了に関わらす秒後に実行するので関数に時間がかかるのであれば負荷がかかる
-setTimeout(()=>{},秒後);関数終了後から秒後をセットする
-　∟window.location.href = 'url'; ※文字列でurlを渡すことでページ遷移する
-
-
-デバック操作
-　∟typeOf 変数;※データ型を表示してくれる
-
-
-非同期処理関数宣言 対json→[{"キー":"値","キー":70},{"":"","":70},{"":"","":70}] 配列 +オブジェクト　""で囲う必要あり※数字は不要。キーは必要
-　∟async function main(){
-　∟ const a = await fetch("https://dotinstall.github.io/setup/fetchapi/users.json");←処理を待った上で状態を取得
-　∟ const b = await a.json();←処理を待った上で取得
-
-非同期関数式 ★asyncの位置に注意
-　const a = async () =>{};※処理の中身は関数宣言と一緒
-
-以前の非同期処理
-　∟fetch('https://dotinstall.github.io/setup/fetchapi/users.json')
-      .then((response) => {　←うまくいったら仮引数に入る
-        return response.json();←json形式の値を次のthenに渡す
-      })
-      .then((users) => {
-        console.log(users);←ここで正規の処理を実施する
-      })
-      .catch((err) => {
-        console.log('Something went wrong getting user data');
-        console.log('Error log: ' + err);
-      });
-	  
-	  ------開発-------
-declare @st decimal(8) 
-declare @ed decimal(8) 
-set @st = 20241209
-set @ed = 20241210
-
-select t0.skucd, t0.color, t0.size,max(t0.edate) as date into #temp_hjs from hjs as t0 with(nolock)
-where t0.sdate <= @ed and t0.edate >= @st and t0.status <> 2 group by t0.skucd, t0.color, t0.size
-
-select * from hjs
-
-select t0.*,t1.rank from #temp_hjs as t0
-left join hjs as t1 with(nolock)
-on t1.skucd = t0.skucd
-and t1.color = t0.color
-and t1.size = t0.size
-and t1.edate =t0.date
-
-===================js===================
-画面一面を暗くする
-2つの手法を利用する
-　∟透明度を持たせる
-background-color: rgba(0, 0, 0, 0.3);
-  ∟全体に広げる
-position: fixed;
-top: 0;
-bottom: 0;
-right: 0;
-left: 0;
-
-右上に配置
- ∟ position: absolute;
-  top: 16px;
-  right: 16px;
-
-★優先順位の注意点★
-position: fixed;が利用されると優先的に上位に来てしまうので、
-position: absolute;をつかって後から記述する方が手前に来る
-
-透明度で配置した際に触れないので、イベントも解除すること
-  opacity: 0;
-  pointer-events: none;
-クリックイベント等で表示させたら忘れずにポインター動作を戻す
-　∟pointer-events: auto;
-
-
-
-配置の移動
-　∟transform: translate(0,-500px);
-
-要素.click()
-　∟先にクリックイベントで実行していたことを実行できる
-
-動く者に対して変化をつける※動きをつける場合はdisplay:none;は不要
-　∟transition: transform 0.4s;
-ゆっくり透明度
-　∟transition: opacity .6s;
-transition: background-color 1s;
-transition: color 1s;
-
-
-ゆっくり透明＆移動（対象物）
- opacity: 0;
-  transform: translate(0,30px);
-  transition: opacity 1s,transform 1s;
-→クラスがついた要素
-　∟  opacity: 1;
-  transform: none;
-
-要素で遅らせる変化
-.overlay.show li:nth-child(1) {
-  transition-delay: .1s;
-}
-
-.overlay.show li:nth-child(2) {
-  transition-delay: .2s;
-}
-
-
-アイコンを利用する
-　∟マテリアルアイコン
-　　→①linkをheadにコピー②コードにスパンタグをコピー
-
-
-Jquery
-　∟($("#taitol").text()　値を取得できる
-　∟$("#open").attr("name")引数の属性が取得できる
-
-外枠要素に
-　∟display: flex;　右に寄せたい要素にmargin-left: auto;
-
-	  
-===================lesson===================
-非同期処理
-async function showmain(){
-  const sisy = await fetch('https://dotinstall.github.io/setup/fetchapi/users.json');
-  const sisy2 = await fetch('https://dotinstall.github.io/setup/fetchapi/invalid-users.json');
-    try{
-      const yaa = await sisy.json();
-      yaa.forEach(element => {
-        console.log(element.userName);
-        console.log(element.score);
-        if (element.userName == 'Taro'){
-          throw new Error('errrr');
-        }
-      });
-    }catch(er){
-      console.log(er.message);
-    }
- }
-	  
-===================PYTHON===================
-	  【コーディング方法】
-　∟コマンドプロンプト > notepad←メモ帳が開く
-【コードの実行】
-	cmd(コマンドプロンプト) 又は パワーシェル(Windows + R)
-　カレントディレクトリーに移動 > ファイルの存在確認 > python ファイル名.py(実行)
-※
-cd…カレントディレクトリの移動 
-dir…フォルダー内の存在確認
-mkdir フォルダー名…フォルダーを作成
-exit()…終了
-【実行時エラー確認】
-　∟キャレット（^）の位置近辺にエラーの可能性あり
-
-※コードの実行方法
-　∟インタラクティブシェルによる実行
-　∟python と入力 >  「>>>」が表示される　コードを直接入力して実行　終了はexit()※Ctrl + z → Enter
-
-【パイソン実行】
-　∟python ファイル名.py　←コマンドプロンプトに実行結果が表示される
-
-【拡張子】
-　∟.py
-
-【エンコーディング】
-　∟UTF-8
-
-【ブロック判断】
-　∟半角スペース…4
-
-【コメント】
-　∟#(1行) 
-
-"""で囲むと　改行を含めることができる
-
-
-
-【定数】※変数は全小文字を記述
-全大文字 = 値
-
-【組み込み関数】
-print()
-　∟出力　※実引数を,で区切ると半角スペースで表示してくれる
-※bool型を出力する場合…True False　初め大文字記述
-
-
-変数 = input("入力してください")
-　∟入力値を求めることができる※戻り値は文字列!!
-
-range(開始値,終了値,増減値)
-　∟開始値はインデックス0、終了値は要素数を表す
-　∟range(5)→0,1,2,3,4 range(2,4)→2,3
-
-
-【文字列の結合】
-　∟+
-
-【型変換】
-数値型→文字列
-　∟str(数値型値)
-文字列→数値型
-　∟int(文字列)、又は float(文字列)
-
-
-
-【演算子】
-　∟算術演算子 %（余り）//(小数点以下切り捨て割り算)
-　∟論理演算子 not and or
-　∟関係演算子　== != >= etc
-　∟in / not in / is / is not
-※++や--の処理はないため　+= 1 -=1等を利用する
-
-
-【条件演算子】※2分岐の際の記述
-　∟trueの場合の値 if 条件 else falseの場合の値
-
-【条件分岐】
-if 条件式: ※:（コロン）が必要
-　処理　※インデント4つ必要
-elif:
-  処理
-else:
-  処理
-
-【反復処理】
-for 変数名 in 配列※range():
-  処理　※インデント4つ
-else: 
-  処理←反復処理終了時に実行される処理　※breakは飛ばされる
-
-
-while 条件:
-else: 
-  処理←反復処理終了時に実行される処理　※breakは飛ばされる
-
-
-
-break…反復処理を抜ける
-continue…ターンのスキップ
-
-
-
-↓4つはin　演算子で検索可能　len関数で要素数を取得できる
-【リスト】※配列（ミュータブル）
-リスト変数名 = [値1,値2,値3]  ※空リストの作成 = [] 又は = list()
-　∟インデックス番号で管理
-　∟len(リスト)…要素数を取得
-
-要素の挿入
-　∟リスト変数名.append(値)※最後に要素を挿入
-　∟リスト変数名.insert(インデックス,値)※インデックスを指定した要素の挿入
-要素の削除※存在しないと実行時エラーが発生する
-　∟del リスト変数名[インデックス番号]
-　∟リスト変数名.remove(値)←最初の値が削除される
-
-リストの連結
-　∟+
-　∟+=でもリストにリストを連結できる※又はリスト1.extend(リスト2)でも同様
-
-要素の検索
-　∟b = 値　in　リスト変数名←bにはboolが代入される
-　∟c = リスト変数名.index(値)←cにはインデックス番号が代入される
-
-リストのリスト
-　∟リストにはリストを入れ子にできる
-　∟リスト変数名[インデックス][インデックス]1つ目…リストのインデックス.2つ目…1つ目のリストのリストのインデックス
-
-リストの新規作成※参照型なので
-　∟リスト変数2　= list(リスト変数1)別のオブジェクトになる
-　∟リスト変数2　= リスト変数1.copy()
-
-※イテレータ
-　∟i = iter（リスト変数名）
-　∟print(next(i))
-
-スライス
-　∟インデックス範囲を指定することでリスト要素の範囲を取得する
-　　∟リスト変数名[開始位置インデックス: 終了位置インデックス-1:ステップ※省略可能]
-    ∟リスト変数名[-2:]←最後の要素から2つ取り出す
-    ∟リスト変数名[::-1]←最後の要素から最初の要素までを取得する
-　　∟リスト変数名[2::-1]←インデックス2の要素から最初の要素までを取得する
-　　∟ソート
-　　　∟リスト変数名.sort()昇順※reverse=True…降順←直接並び替える
-　　　∟新しいリストに並び替えを適応　リスト変数名2 = sorted(リスト変数名1,reverse=True)
-   リストの中身を集計
-　　　∟変数 = sum(リスト変数名,開始位置)
-　　最大値・最小値を表示
-　　　∟max(リスト変数名) min(リスト変数名)
-
-
-【タプル】※配列
-　∟インデックス番号で管理
-　∟追加削除更新ができない（イミュータブル）
-　　※リストとの違い　
-　　　タプル変数名 = (値,値,値)※()は省略可能
-　タプルの参照
-　　∟タプル変数名[インデックス番号]
-　タプルの連結…　+
-
-　タプルの値を変数に代入
-　　∟a,b = (10,17)←a=10 b=17
-
-  ZIP関数　→戻り値はタプル型　※短い要素数で終了
-　　∟for i（又はi1,i2） in zip(リスト変数,リスト変数)
-　　　　　→(リスト変数[1],リスト変数[1])※タプル型で返される
-  enumerate関数（zip関数にインデックス番号を追加して取得できる）　　
-	∟for i（又はi1,i2） in enumerate(リスト変数)
-
-
-【辞書】
-　∟キーと値を関連して保持
-  ∟辞書変数名 = {キー1:値1,キー2:値2,キー3:値3}
-  ∟辞書の値への参照方法
-　　∟エラーあり　辞書変数名["キー1"]　※辞書変数名[("タプル値1","タプル値2")]キーがタプルの場合
-　　∟エラーなし(返り値None)　辞書変数名.get("キー1")
     
-　値の挿入・変更
-　　∟キーが存在→更新
-　　∟キーが存在しない→追加
-　　∟辞書変数名["キー"] = 値
-
-　キーの検索
-　　∟キー in 辞書変数名→存在する場合True
-    ∟キー　not in 辞書変数名 →　存在する場合False
-
-  辞書の定義
-　　∟辞書変数名　= dict(キー1 = 値1,キー2 = 値2)※""は不要
-　　∟タプルを辞書に変換する　dict([("キー",値),("キー",値)])
-  　∟キーと値をグループとして辞書に変換する = dict(zip(["キー1","キー2","キー3"],[値1,値2,値3]))
-
-　値の追加
-　　∟辞書変数名["キー"] = 値　※存在したら更新、存在しないと追加
-　　∟辞書変数名.setdefault("キー",値) ※追加のみ!! キーが存在したら何もしない
-
-
-　値の削除※要素が存在しないとエラーになる
-　　∟del 辞書変数名["キー"]
-　　∟辞書変数名.pop("キー")
-
-　繰り返し処理
-　　∟キーと値を取得する
-　　　　∟for キー用変数, 値用変数 in 辞書変数名.items():
-    ∟キーのみ取得.keys():
-　　∟値のみ取得.values():
-
-  辞書の連結　※　+=の表記は使用できない
-　　　∟辞書変数名1.update(辞書変数名2)→辞書変数名1に辞書変数名2が連結される。ただし同じキーが存在すると更新される
-
-【集合】※重複を許さない
-　∟一意の要素を順不同で保持
-　∟｛値,値,値｝
-　∟検索　変数 =　値 in(又はnot in) 集合変数 ※返値はbool型
-　値の追加
-　　∟集合変数.add(値)※存在する場合は無視される
-　値の削除
-　　∟集合変数.remove(値)
-　　∟.clear()も全ての値を削除し、空の集合になる
-
-
-積集合
-　∟setC = setA & setB→どちらにも存在する値をsetCに取得する※setA.intersection(setB,setC) 3つ以上→ a.intersection(b,c)
-和集合
-　∟setC = setA | setB→重複はまとめられて、全てを取得する※setA.union(setB)
-差集合
-　∟setC = setA - setB→setAのみに存在する値を取得する※setA.difference(setB)
-対象差集合
-　∟setC = setA ^ setB→片側だけに存在する値を取得する※setA.symmetric_difference(setB)
-部分集合※すべて含んでいればTrue
-　∟変数 = setB <= setA→setAに全て含まれていればTrueを取得する※setB.issubset(setA)
-
-
-【繰り返し・内包表記】※新しいリストを作成
-　∟リスト名 = [i ** 2 for i in リスト変数名 ※条件]…リスト変数名から一つずつ取り出し2乗しながらリスト作成する
-　∟条件式を含む内包表記※条件 if i%2 == 0
-
-辞書内包表記※新しい辞書を作成
-　∟d = {str(k+100):v for k,v in zip(range(3),リスト変数名) ※条件}
-
-セット集合内包表記※重複は外される
-　∟d = {a for a in リスト変数名 if 0 < a < 100}
-
-【関数】
-　組み込み関数
-　　∟print()
-  　∟input()
-
-・戻り値なし※インデントで処理を制御
-　∟def 関数名():
-      return←処理の終了無くても最後まで行けば終了する
-> 呼び出し
-   ∟関数名()
-
-戻り値ありは
-　return 戻す値
-
-引数は参照渡しで渡される
-　∟ただし、int float 文字列 タプル※イミュータブル名引数を書き換えたら、新しい実態が作成されるので参照先も新しくなる
-　∟引数の順序を変更　（仮引数名 = 実引数,仮引数名 = 実引数）
-　∟関数呼び出し時のデフォルト値の設定 def 関数名(仮引数 = 値)
-　∟実引数にタプル(,区切りで文字を渡す)→仮引数はdef 関数名(*args)で可変長でタプルとして受け取れる※argsでなくてもよい
-　∟実引数に辞書(キー=値)→仮引数はdef 関数名(**kwargs)で可変長で辞書としてうけとれる※kwargsでなくてもよい
-　∟変数1,変数2 = 関数←　※関数の中身return 返し値1,返し値2で二つの返しをそれぞれに代入できる
-
-　return None　←Noneを返す…判定はif 変数 is None
-
-
-※関数呼び出しと関数オブジェクトの違い※呼び出しの際に()があるかないか
-　∟関数名()…関数呼び出し←値が返される
-　∟関数名…関数オブジェクト呼び出し←関数名と16進数のidentityを返す
-　∟id関数…10進数で返すid(関数名)※関数名後に()は不要
-　∟hex関数…0xから始まる16進数で返す hex(id(関数名))※関数名後に()は不要
-　∟関数を変数に代入→変数 = 関数※()なし 変数(実引数,実引数)←関数処理を実行する
-　∟リストの要素に関数を指定
-　　∟変数 = [len, sum, max, min] ←変数[0]…len関数（要素数を返す）変数[1]…sum関数
-     →for 仮変数 in 変数: print(仮変数(リスト変数))
-
-ラムダ式関数
-　∟変数 = lambda 仮引数1,仮引数2 : 式　※仮引数なしの場合はlambda:式
-　∟呼び出し方法1　変数(実引数1,実引数2)
-　∟呼び出し方法2　(lambda 仮引数1,仮引数2 : 式)(実引数1,実引数2)※後半が呼び出し
-
-map関数 リスト等の全ての要素に式を当てはめて処理を返す
-　∟list(map(lambda 仮引数: 式,実引数))※実引数はリスト([値1, 値2])※list関数は新しくリストを作成する関数
-　∟for 仮引数 in map(lambda 仮引数内 : 式, リスト変数)※繰り返し処理
-
-関数のネスト　
-　∟def 外関数名():def 内関数名():return 返し値　return 内関数名※()なし 
-　∟変数 = 外関数()
-　→　呼び出し　変数()※（）が必要
-
-デコレータ…関数に処理の追加を実施
-　∟def deco(仮引数)
-　∟@deco
-    def 関数名()
-
-　∟呼び出し…関数名(実引数) @decoが付いた関数に処理が移るが、すぐにdef deco(@deco付きの関数を仮引数に渡す)
-
-ジェネレータ
-　∟def 関数名(引数1)
-    	i = 1 ※初期値設定
-　　　　while True:
-           if i%2 == 0:
-              yield i ※return文と同一　ジェネレータはreturnの記述ができない
-           i = i+ 1
-  ∟呼び出し
-	変数 = ジェネレータ関数()
-　　　next(変数)
-
-
-【スコープ】
-　∟グローバル変数をローカル変数で代入しても、別物として扱われる※引数渡しとは異なる
-　∟同一として取り扱う場合はローカル内で　global 変数　※書き換わるので注意
-
-　∟locals()…名前空間に存在する変数と値を取得する関数
-　　∟print(locals())→変数名:値の辞書として返してくれる
-　∟globals()…グローバル名前空間に存在する変数と値を取得
-　　∟print(globals())※__付きの変数名は`pythonが使用する変数になるため無視
-
-【クラス】
-class クラス名:※クラス名は大文字開始
-    pass　※passは構文エラーを回避
-
-インスタンスの作成
-　∟変数名 = クラス名()
-
-データ属性が作成されていない場合でも変数名.データ属性名 = 値　←設定される
-self.データ属性名
-　∟selfは自分自身
-※_データ属性名は外部から変更してはいけない（ただし明示的な存在
-※__データ属性名は外部から変更できない(実行時エラーが発生する
-
-メソッド
-　∟def メソッド名(self,仮引数):※第一仮引数はself
-       self.データ属性名 = 仮引数
-※メソッド内でselfが付いてない変数はローカル変数になる
-
-クラスに紐付くクラス変数
-　∟変数名= 値　※クラス名配下に記述
-　∟呼び出し
-　　∟クラス名.クラスに紐付く変数名　もしくは　インスタンス変数名.クラスに紐付く変数名※インスタンス属性が作成されてしまう
-クラスに紐付くメソッド
-　∟@classmethod
-    def メソッド名(cls):※clsは自分を表すクラス変数
-　　　return cls.変数名←自分自身の暮らす変数名を返す
-　∟呼び出し
-　　　∟クラス名.クラスメソッド()
-
-
-コンストラクタ
-　∟def __init__(self,仮引数1,仮引数2）:
-　　　self.データ属性名 = 仮引数1
-      self.データ属性名 = 仮引数2
-
-ゲッターとセッター
-　∟get_プロパティ名(self)
-　∟set_プロパティ名(self, 仮引数)
-  ∟インスタンス名.データ属性名 = 値でset_を呼び出す
-
-もうひとつのゲッターとセッター
-　∟@property←ゲッター
-    def プロパティ名(self)
-　　retuern self.データ属性名
-　∟@property.setter
-    def プロパティ名(self,仮引数1)
-	self.データ属性名 = 仮引数1
-インスタンス変数名.dデータ属性名で代入呼び出し
-
-【継承】
-class サブクラス名(スーパークラス名)
-
-コンストラクタ
-def __init__(self,仮引数)
- super().__init__(仮引数)←親クラスのコンストラクタを呼び出すので、仮引数は親に渡す仮引数を記述する
-
-
-【クラスにまつわる組み込み関数】
-　∟print(type(インスタンス変数名))←__main__.の後がクラス名※__main__は内部的なスコープ名
-　∟print(isinstance(インスタンス名,クラス名))←bool値で返してくれる
-
-
-【オーバーライド】
-　∟定義方法　サブクラスでdef 親クラスのメソッド名(self):
-  ∟サブクラスから親クラスを呼び出す方法
-    　∟super().メソッド名()←スーパークラスのメソッドが呼び出される
-　　　∟コンストラクタはsuper().__init__(仮引数1,仮引数2）
-
-【モジュール】別ファイルにクラスや関数をまとめておく
-　∟ファイル名.py ※ファイル名がモジュール名になる
-　∟利用方法 使用する側のファイル先頭にimport モジュール名 as 別名
-　　　∟モジュール名.クラス名やモジュール名.関数名()で呼び出す
-※モジュール名を省略して記述する方法
-　　　∟from モジュール名 import クラス名や関数名※*は全てを呼び出す。カンマ区切りで記述可能
-
-【パッケージ】
-モジュールを1つのフォルダーでまとめたもの
-　∟import フォルダ.フォルダ. モジュール名（※パッケージ.パッケージ. モジュール名）
-　　→呼び出し方法 パッケージ.パッケージ. モジュール名.クラス名()
-　∟パッケージ名を省略する記述方法from パッケージ名.パッケージ名 import モジュール名
-　　　→呼び出し方法パッケージ.クラス名()※from句でモジュール名.メソッド名は記述できない
-★大切!
-　∟パッケージを構成するフォルダー全てに__init__.pyのファイルが必要→初期化が必要なくてもファイル自体は必要
-パッケージとして認識されない
-【標準ライブラリ】
-　∟import math
-    math.sqrt(2)→平方根を返す　
-　　∟etc.mathモジュール→log関数floor関数ceil関数
-　　∟osモジュール→listdir関数mkdir関数pathモジュール
-　∟datetimeモジュール→datetimeクラス、timedeltaクラス
-
-インストールして利用する
-　∟python -m pip install　パッケージ名←これでインターネットよりインストールする※PyPI…サービス名http;//pypi.org/
-
-
-【アトリビュート】
-　インスタンスが持つ変数や関数のこと
-　　∟dir(インスタンス変数名)　スーパークラスも全てリストに含まれる
-特殊メソッドもオーバーライドすれば挙動を変更可能
-＝＝　def __eq__():←引数self,other 
-< __lt__()
-> __gt__()
->= __ge__()
-+ __add__()
-- __sub__()
-
-str()   __str__()
-len() __len__()
-int() __int__()
-float() __float__()
-iter() __iter__()
-
-【エスケープシーケンス】※文字列として利用する
-　∟\n改行/ \tタブ/\rキャッシュリターン/\"ダブルクォーテーション/\'シングルクォーテーション/\\ yenまーく
-　∟raw文字（パスの出力等で使用）r又はR"c:\work\sample.py等"\を多く利用する場合に適応する※文字列の最後に\を記述する場合　+”\\”とすること
-
-【組み込み関数】
-　∟len(文字列) …文字数を取得
-　∟文字列.find(検索対象文字,開始位置,終了位置)※終了位置は-1のところまで→見つからない場合は-1が返る
-　∟文字列.replace(置換したい文字,置換後の文字,置換回数)※置換回数を省略すると全てが置換される。""だと削除される→戻り値にすると元の文字列は変更されない
-　∟文字列.split(区切り文字,区切り回数) ※区切り文字を省略すると、空白で区切る
-　∟区切り文字列.join(リスト) s = ",".join(リスト変数)→リストが,で区切った文字が格納される
-　∟文字列.lower()小文字に変換
-　∟文字列.upper()大文字に変換
-　∟文字列.swapcase()大文字→小文字、小文字→大文字
-　∟文字列.strip/lstrip（削除する文字列）先頭や末尾の文字を消去
-　∟文字列.ljust(文字列幅,埋め文字)文字幅で左寄せ、足りない幅分はうめもじで埋める※無い場合は空白で埋める
-
-　∟format関数　※{}の引数で書式を指定できる
-　　∟変数 = "{}年{}月",format(値,値)←値を順番通り当てはめる
-　　∟変数 = "{1}{2}{0}".format(値,値,値)←formatのインデックスの値が渡される
-　　∟変数 = "{キー1}{キー2}{キー3}".format(キー1=値,キー2=値,キー3=値)←キーに紐付く値が渡される
-　　∟:, カンマ区切り
-　　∟:数字 表示桁数※空白で埋められる 05なら0埋めされる
-　　∟:> 右揃え
-　　∟:< 左揃え
-　　∟:+ 数値に+-を記述
-　　∟:- -値にのみ-を記述
-　　∟:.数字% パーセンテージ
-　　∟:.数字f 小数点桁数の実数※四捨五入される 1fなら小数第1まで表示
-　∟f文字列　※変数を{}内部に渡すことができる
-　　∟f"文字列{変数名}"　※変数名:.等の書式指定も可能
-　　　
-
-【正規表現】メタ文字と文字を組み合わせて表現する方法
-　　∟.　改行を覗く任意の一文字　例_W.W…W開始と終了かつ3文字ならマッチ
-　　∟*　0回以上の繰り返し　例_WO*W…W　Oの0回以上の繰り返し　W
-　　∟+　1回以上の繰り返し　例_WO+W…W　Oの1回以上の繰り返し　W
-　　∟?　0か1回　　　　　　　例_WO?W…W　Oの0か1回の繰り返し　W
-　　∟^　文字の先頭　　　　　例_^WO+W…先頭がW Oが1回以上繰り返し W
-　　∟$　文字の末尾　　　　　例_^WO+W$…先頭がW Oが1回以上繰り返し W終了
-　　∟[]　文字の集合を表現 ※[]内のどれか一文字が一致 ただし^を記述すると否定になる!!　連続文字は-でつなげて記述可能A-Z　a-zA-Z大文字小文字
-　　∟{n}　n回の繰り返し     例_EX{2}E…E Xが2回　E
-　　∟{n,}　n回以上の繰り返し 例_EX{2,}E…E Xが2回以上　E　例_EX{2,5}E…E Xが2～5回　E
-　　∟{n,m}　n回以上m回以下の繰り返し
-　　∟|　or(左と右のどちらか)  例_ ABC|FKK…ABC か FKKならOK
-　　∟()　グループ化      例_(BC){2}…BCが2回繰り返し
-　　∟\記号 記号を文字として利用する
-　　　∟\.\* ※エスケープ文字 .*になる
-　　　∟\d　数字一文字 \d{3}…3桁の数字の意味になる
-      ∟\D　数字以外の一文字
-      ∟\w　英数字一文字（大文字小文字含む）\w{4}英数字4桁
-　　　∟\W　英数字以外の一文字
-      ∟\s　空白文字一文字
-      ∟\S　空白文字以外の一文字
-
-
-import re
-変数 = "LI.E"←正規表現※任意の一文字
-変数2 = 文字列※調べたい対象
-変数3 = re.compile(変数)←正規表現のオブジェクトを作成
-変数4 = 変数3.findall(変数2,開始位置のインデックス)←変数4にマッチした文字がリストで格納される※開始位置のインデックスは省略可能
-　∟変数3.search(変数2)←最初にマッチした文字列を返す。ないならnone　← 変数4.group()最初にマッチした文字列を取得する
-　∟変数3.sub("置換文字列",変数2)←マッチした場所を全て置換する
-
-<.*?>と<.*>←?があると0か1になる。?があるとないとではマッチの長さがかわってくる一番最短or最長
-
-　∟for match in 変数3.finditer(変数2):
-     print(match.group())←マッチした全てを取得するのでforと併せて利用する
-
-【ファイルの操作】
-開く
-　∟変数 = open(ファイルパス,モード,encoding="")
-モード
-　∟r 読み取り→ファイルがないと実行時エラー※モード省略時のデフォルト
-　∟w 新規作成→新規
-　∟a 追加
-　∟x 新規作成用
-　∟r+,w+,a+ 読み込み書き込み兼用
-　∟rb,wb バイナリファイルを開く　バイナリファイル…画像/動画/実行可能ファイル
-encoding
-　∟shift-jis
-　∟cp932
-　∟iso-2022-jp
-　∟euc-jp
-　∟utf-8　
-
-閉じる
-　∟変数.close()
-1行ずつ読み込む
-　∟for 仮変数 in 変数:
-       print(仮変数)←改行も含まれて表示される!
-   ※仮変数.strip()←先頭と末尾の空白文字を削除するため改行を削除できる
-
-書き込み
-　∟モードはwやa
-  ∟変数.write("文字列\n")※\nは改行
-
-with open(パス,"r",encoding="utf-8") as f←withを記述するとclose()を省略できる
-   for row in f:
-     print(row.strip())
-
-
-【csvファイルを読み込む】
-import csv
-ファイルオブジェクト変数 = open(パス,"r",encoding="utf-8")
-イテレータ変数 = csv.reader(ファイルオブジェクト変数)
-for 仮変数 in イテレータ変数:
-　　繰り返し処理←それぞれはリストとして出力される
-
-※
-for 仮変数 in イテレータ変数:
-　　for カリカリ変数 in 仮変数:←リストではなくなる
-        print(カリカリ変数,end=",")※end属性は末尾の文字を指定
-　　　　print()←改行になる
-
-csvに書き込む
-import csv
-ファイルオブジェクト変数 = open(パス,"r",encoding="utf-8")
-ライタオブジェクト変数 = csv.witer(ファイルオブジェクト変数,lineterminator="\n"※行終端文字,改行文字を1つにする)
-ライタオブジェクト変数.writerrow(仮引数)
-
-import csv
-書き込みよう変数 = [["","",""]],["","",""]]
-ファイルオブジェクト変数 = open(パス,"r",encoding="utf-8")
-ライタオブジェクト変数 = csv.writer(ファイルオブジェクト変数,lineterminator="\n",quoting=csv.QUOTE_NONUMERIC)※""で囲まれた値を書き込む　数字以外※記述しないと""なしで書き込まれる
-for 仮変数 in 書き込みよう変数:
-    ライタオブジェクト変数.writerow(仮変数)
-ファイルオブジェクト変数.close()
-
-
-
-【Jsonファイル】
-　∟キー:値で構成されたテキストデータ
-  {"外キー":{"キー":"値","キー":"値"},"外キー":{"キー":"値","キー":"値"}}
-
-読み込み
-import json
-ファイルオブジェクト変数 = open(パス,"r",encoding="utf-8")
-パイソンデータ型変数 = json.load(ファイルオブジェクト変数)
-print(パイソンデータ型変数)
-
-for 仮変数1,仮変数2 in パイソンデータ型変数.items():※キーと値を取り出す
-   
-書き込み
-json.dump(書き込みたい値,ファイルオブジェクト変数,ensure_ascii=False※日本語が含まれる場合,indent=2※インデントを挿入することで見やすく)
-
-【例外】
-例外クラス名
-BaceException　全ての例外クラスのスーパークラス
-Exception
-ArithmeticError 算術上のさまざまなエラー
-AttributeError　属性の参照や代入が失敗した場合に発生
-IndexError インデックスが範囲外の場合に発生
-KeyError 辞書のキーがない場合に発生
-NameError 名前が見つからなかった場合に発生
-ValueError 妥当でない引数を受け取った場合に発生
-FileNotFoundError ファイルやフォルダーが存在しない場合に発生する
-
-
-try:
-
-except 例外クラス名 as 例外オブジェクトの変数名:
-   処理
-except 例外クラス名:
-   処理
-except Exception:←最終的に例外をまとめて処理する
-　　処理
-else:
-    例外が発生しなかった場合の処理
-finally:
-　　必ず最後に実行される処理
-
-
-
-　∟例外オブジェクト変数.args←エラー情報のタプル
-    ∟print(変数名)__str__()←
-
-記述されていない例外クラスはプログラムが停止する
-※まとめる記述
-　∟except(例外クラスa,例外クラスb)
-
-
-例外を意図として発生させる
-　raise Exception("文字列実引数")
-except Exception as e:
-   print("エラー",e)
+    Set conn = Server.CreateObject("ADODB.Connection")
+    conn.Open connStr
+
+    sql = "SELECT * FROM kykms"
+    Set rs = conn.Execute(sql)
+
+If Not(openflg = 0) And Not(hen3 = "") Then
+sql_s = ""
+    page  = 0
+    sql_s = "SELECT * FROM hantr where emp_no = " & hen1
+
+    Set rs_hantr = Server.CreateObject("ADODB.Recordset")
+    rs_hantr.CursorLocation = 3 
+    rs_hantr.Open sql_s, conn, 3, 1 
+    s_count = rs_hantr.RecordCount
+    If s_count > 0 Then
+    totalPages = Int((s_count + pageSize - 1) / pageSize)
+        page = CInt(suPage)
+        If page < 1 Then page = 1
+        If page > totalPages Then page = totalPages
+        Dim startRecord
+        startRecord = (page - 1) * pageSize + 1
+        If s_count > 0 Then
+            rs_hantr.MoveFirst
+            rs_hantr.Move startRecord - 1
+        End If
+    End If
+End If
+
+Sub finalexe()
+    rs.Close
+    If Not(openflg = 0) And Not(hen3 = "") Then
+        rs_hantr.Close
+    End If
+    Set rs = Nothing
+    Set rs_hantr = Nothing
+    conn.Close
+    Set conn = Nothing
+End Sub
+
+Sub SerchPager()
+Dim s_cla, e_cla
+s_cla = ""
+e_cla = ""
+If s_count <= 0 Or totalPages = 1 Then
+    s_cla = "not"
+    e_cla = "not"
+Else
+    If page <= 1 Then
+        s_cla = "not"
+    ElseIf page >= totalPages Then
+        e_cla = "not"
+    End If
+
+End If
+
+                 %>
+                <button type="submit" name="supage" value="<%=page-1%>" class="<%=s_cla%>">前へ</button>
+                <button type="submit" name="supage" value="<%=page+1%>" class="<%=e_cla%>">次へ</button>
+                <% 
+                hyoji_count = 0
+                If s_count > 0 Then 
+                    hyoji_count = s_count
+                %>
+                    <span>件数:<%=hyoji_count%> 件 ページ <%=page%> / <%=totalPages%>）</span>
+                <%
+                Else
+                %>
+                    <span>件数: <%=hyoji_count%> 件</span>
+                <%
+                End If
+                %>
+                <%
+End Sub
+%>
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="style.css">
+<title>これはテストです</title>
+</head>
+<body>
+
+        <h1>ここから下はサーバーからの情報です編集してみました</h1>
+                <form  method="post">
+            <div class="div_f_container">
+                <input type="hidden" name="openflg" value=1>
+                <input type="hidden" name="edit_data" id="edit_data">
+                <input type="hidden" name="delete_data" id="delete_data">
+                <input type="hidden" name="insert_data" id="insert_data">
+                従業員番号: <input type="text" id="empno" name="empno" onblur="getName()" value="<%=Server.HTMLEncode(hen1)%>">
+                氏名: <input type="text" id="empname" readonly name="empname" value="<%=Server.HTMLEncode(hen3)%>"><br>
+                検索:<input type="submit" name="action" value="検索" style="width:150px; height:30px;"><br>   
+                登録:<button type="submit" name="action" value="登録" style="width:150px; height:30px;" onclick="update_value()">登録</button>
+                新規行追加:<button type="button" name="insert" value="新規" id="insert" style="width:150px; height:30px;">新規行追加</button><br>
+            </div>
+            <div class="pager"> 
+                <% Call SerchPager() %>
+            </div>
+            
+<% 
+                If s_count > 0 Then
+                %>
+                <table border="1">
+                    <colgroup>
+                    <col style="width: 50px;">
+                    <col style="width: 200px;">
+                    <col style="width: 300px;">
+                    <col style="width: 400px;">
+                    <col style="width: 50px;">
+                    </colgroup>
+                <tr><th>編集</th><th>ID</th><th>gk</th><th>bikou</th><th>削除</th></tr>
+                <%
+                    Dim i
+                    i = 0
+                    While Not rs_hantr.EOF And i < pageSize
+                %>
+                    <tr class="" id="tr_<%=i%>">
+                        <td><input type="checkbox" name="edit_id" data-num="<%=i%>" id="edit_<%=i%>" value="<%=i%>" onclick="toggleEdit(this)"></td>
+                        <td>
+                            <input type="text" class="readonly-style"
+                            name="id" 
+                            value="<%=rs_hantr("id")%>"
+                            readonly>
+                        </td>
+                        <td>
+                            <input type="text" class="readonly-style"
+                            name="gk" 
+                            value="<%=rs_hantr("gk")%>"
+                            readonly>
+                        </td>
+                        <td>
+                            <input type="text" class="readonly-style"
+                            name="bikou_<%=rs_hantr("id") & "_" & rs_hantr("gk")%>"
+                            data-bg="<%=i%>" 
+                            id="bikou_<%=i%>"
+                            value="<%=Server.HTMLEncode(rs_hantr("bikou"))%>"
+                            data-idn="<%=Server.HTMLEncode(rs_hantr("id"))%>"
+                            readonly>
+                        </td>
+                        <td><input type="checkbox" name="delete_id" data-num="<%=i%>"  class="accent_c" id="delete_<%=i%>" name="delete_id"  value="<%=i%>" onclick="toggleEdit(this)"></td>
+                    </tr>
+                <%
+                        rs_hantr.MoveNext
+                        i = i + 1
+                    Wend
+                %>
+                    </table>
+                </form>
+                <%
+                End If
+
+                    
+                Call finalexe()
+                If Not(errMsg = "") Then
+                %>
+                <p><%=errMsg%></p>
+                <%
+                End If
+        %>
+        <script src="default.js"></script>
+</body>
+</html>
+'use strict';
+
+    function getName() {
+        var empNo = document.getElementById("empno").value;
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                document.getElementById("empname").value = xhr.responseText;
+            }
+        };
+        xhr.open("GET", "get_name.asp?empno=" + encodeURIComponent(empNo), true);
+        xhr.send();
+    }
+    
+    function toggleEdit(obj){  
+        var key_num = obj.dataset.num;
+        var input = document.getElementById("bikou_" + key_num);
+        var edits = document.getElementById("edit_" + key_num);
+        var dels = document.getElementById("delete_" + key_num);
+        var tr = document.getElementById("tr_" + key_num);
+        if (obj.checked) {
+            input.removeAttribute("readonly");
+            input.classList.remove("readonly-style");
+            tr.classList.add("bg_color");
+        } else {
+            if (!dels.checked){
+                if(!edits.checked){
+                    input.setAttribute("readonly", true);
+                    input.classList.add("readonly-style");
+                    tr.classList.remove("bg_color");
+                }
+    
+            }
+        }
+    }
+    
+    function update_value(){
+        const checkedValues = Array.from(document.querySelectorAll('input[name="edit_id"]:checked'))
+        .map(el => el.value);
+        const checkedDelValues = Array.from(document.querySelectorAll('input[name="delete_id"]:checked'))
+        .map(el => el.value);
+        const checkedNewValues = Array.from(document.querySelectorAll('input[name="id"]'))
+        .filter(input => input.value.startsWith("new"));
+
+
+        let edit_result = [];
+        let del_result=[];
+        let insert_result = [];
+
+        checkedValues.forEach(value => {
+            let input = document.getElementById("bikou_" + value);
+            let ker = input.dataset.idn;
+            if (input) {
+                edit_result.push(ker + "_" + input.value);
+            }
+        });
+        checkedDelValues.forEach(value => {
+            let input = document.getElementById("bikou_" + value);
+            let ker = input.dataset.idn;
+            if (input) {
+                del_result.push(ker + "_" + input.value);
+            }
+        });
+        checkedNewValues.forEach(idInput => {
+            const row = idInput.closest("tr");
+            const id = idInput.value;
+            const gkInput = row.querySelector('input[name="gk"]');
+            const bikouInput = row.querySelector(`input[name="bikou_${id}"]`);
+            const empno = document.getElementById("empno");
+            const empname = document.getElementById("empname");
+
+            const gk = gkInput ? gkInput.value : "";
+            const bikou = bikouInput ? bikouInput.value : "";
+            if(isNaN(gk)){
+                alert("数字を入力してね");
+                return;
+            }
+
+            if (gk !== "" && bikou !== "" && empno.value !== "" && empname.value !== "") {
+                insert_result.push(`${empno.value}_${gk}_${bikou}`);
+            }
+        });
+
+        if(edit_result.length > 0 || del_result.length > 0 || insert_result.length > 0){
+            let result = confirm("本当にデータを更新しますか");
+            if(result){
+                if(edit_result.length > 0){
+                    document.getElementById("edit_data").value = edit_result.join("###");
+                }
+                if(del_result.length > 0){
+                    document.getElementById("delete_data").value = del_result.join("###");
+                }
+                if(insert_result.length > 0){
+                    document.getElementById("insert_data").value = insert_result.join("###");
+                }
+            }
+        }
+    }
+    
+    
+    function new_recorde_value(){
+        event.preventDefault();
+        const table = document.querySelector("table");
+        if (!table) return;
+        
+        const rowCount = table.rows.length;
+        const newRow = table.insertRow(1); 
+        
+        // ID, gkの自動仮番号（本来はサーバー採番ですが仮で）
+        const newId = "new";
+
+        // 編集チェックボックス
+        const editCell = newRow.insertCell(0);
+        editCell.innerHTML = `<input type="checkbox" onclick="toggleEdit(this)" checked disabled>`;
+        
+        // IDセル（readonly）
+        const idCell = newRow.insertCell(1);
+        idCell.innerHTML = `<input type="text" class="readonly-style" name="id" value="${newId}" readonly>`;
+        
+        // GKセル（readonly）
+        const gkCell = newRow.insertCell(2);
+        gkCell.innerHTML = `<input type="text" class="" name="gk" value="" inputmode="numeric" style="ime-mode:disabled;">`;
+        
+        // 備考入力欄（編集可能）
+        const bikouCell = newRow.insertCell(3);
+        bikouCell.innerHTML = `<input type="text" name="bikou_${newId}" id="bikou_${newId}" value="">`;
+        
+        // 削除チェック
+        const delCell = newRow.insertCell(4);
+        delCell.innerHTML = `<input type="checkbox" disabled>`;
+    }
+
+document.addEventListener("DOMContentLoaded", function() {
+  document.getElementById("insert").addEventListener("click", new_recorde_value);
+});
+
+
+
+
 
   </code>
 </pre>
