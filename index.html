@@ -11,6 +11,56 @@
   <p>新しい情報です</p>
 <pre>
   <code>
+Sub ChangeCircleTextColor()
+
+    Dim t As Shape, target_word As String
+    target_word = Range("C2").Value
+
+    Set t = ActiveSheet.Shapes("Circle1")
+    
+    Dim i As Long
+    Dim values As String, val As String
+    Dim count As Long
+    i = 1
+    
+    Do While Cells(i, "N").Value <> ""
+        If Cells(i, "N").Value = target_word Then
+            values = Cells(i, "N").Value
+            val = Cells(i, "O").Value
+        End If
+        count = count + 1
+        i = i + 1
+    Loop
+    
+    
+    For Each t In ActiveSheet.Shapes
+        ' 図形が楕円（丸）かどうかを判定
+        If t.AutoShapeType = msoShapeOval Then
+            t.Fill.ForeColor.RGB = RGB(255, 255, 255)
+        End If
+    Next t
+ 
+    For Each t In ActiveSheet.Shapes
+        If t.AutoShapeType = msoShapeOval Then
+            Dim tempArray() As String
+                tempArray = Split(val, ",")
+    
+                    If t.TextFrame2.TextRange.Text = target_word Then
+                        t.Fill.ForeColor.RGB = RGB(255, 255, 0)
+                    End If
+                
+                
+                For i = LBound(tempArray) To UBound(tempArray)
+                    If t.TextFrame2.TextRange.Text = tempArray(i) Then
+                        t.Fill.ForeColor.RGB = RGB(255, 0, 0)
+                    End If
+                Next i
+        
+      
+        End If
+    Next t
+
+End Sub
 
 
 
@@ -665,6 +715,7 @@ document.addEventListener("DOMContentLoaded", function() {
   
 </body>
 </html>
+
 
 
 
