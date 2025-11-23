@@ -11,56 +11,108 @@
   <p>新しい情報です</p>
 <pre>
   <code>
-Sub ChangeCircleTextColor()
-
-    Dim t As Shape, target_word As String
-    target_word = Range("C2").Value
-
-    Set t = ActiveSheet.Shapes("Circle1")
-    
-    Dim i As Long
-    Dim values As String, val As String
-    Dim count As Long
-    i = 1
-    
-    Do While Cells(i, "N").Value <> ""
-        If Cells(i, "N").Value = target_word Then
-            values = Cells(i, "N").Value
-            val = Cells(i, "O").Value
-        End If
-        count = count + 1
-        i = i + 1
-    Loop
-    
-    
+Sub clear()
     For Each t In ActiveSheet.Shapes
         ' 図形が楕円（丸）かどうかを判定
-        If t.AutoShapeType = msoShapeOval Then
+        If t.AutoShapeType <> msoShapeRectangle Then
             t.Fill.ForeColor.RGB = RGB(255, 255, 255)
         End If
     Next t
- 
-    For Each t In ActiveSheet.Shapes
-        If t.AutoShapeType = msoShapeOval Then
-            Dim tempArray() As String
-                tempArray = Split(val, ",")
+End Sub
+Sub make()
+
+    Dim i As Long, bef As String, aft As String
+    Dim selectedobj As Object, shapetext As String, kbn As Long
+    Dim sha As Shape
+
+    Set sha = ActiveSheet.Shapes("Circle1")
+
+
+Set selectedobj = Selection
+shapetext = selectedobj.ShapeRange(1).TextFrame2.TextRange.Text
+kbn = selectedobj.ShapeRange(1).AutoShapeType
+
+If kbn = 1 Then
+Call clear
+Exit Sub
+End If
+
+i = 1
+'処理に対して実行する
+If kbn = 9 Then
+    Do While Cells(i, "N").Value <> ""
+        If Cells(i, "N").Value = shapetext Then
+            bef = Cells(i, "M").Value
+            aft = Cells(i, "O").Value
+            GoTo N1
+        End If
+        i = i + 1
+    Loop
+N1:
+            If aft = "" Then
+            i = 1
+                Do While Cells(i, "O").Value <> ""
+                    If InStr(1, Cells(i, "O").Value, shapetext) > 0 Then
+                        bef = Cells(i, "N").Value
+                        GoTo N2
+                    End If
+                    i = i + 1
+                Loop
+            
+            End If
+N2:
     
-                    If t.TextFrame2.TextRange.Text = target_word Then
-                        t.Fill.ForeColor.RGB = RGB(255, 255, 0)
+    
+End If
+
+If kbn = 13 Then
+            i = 1
+                Do While Cells(i, "O").Value <> ""
+                    If InStr(1, Cells(i, "O").Value, shapetext) > 0 Then
+                        bef = Cells(i, "N").Value '複数形にしないといけない
+                        GoTo n3
+                    End If
+                    i = i + 1
+                Loop
+End If
+n3:
+'先行の処理
+    For Each sha In ActiveSheet.Shapes
+        If sha.AutoShapeType <> msoShapeRectangle Then
+            Dim tempArray() As String
+                tempArray = Split(aft, ",")
+    
+                    If sha.TextFrame2.TextRange.Text = shapetext Then
+                        sha.Fill.ForeColor.RGB = RGB(255, 255, 0)
                     End If
                 
                 
                 For i = LBound(tempArray) To UBound(tempArray)
-                    If t.TextFrame2.TextRange.Text = tempArray(i) Then
-                        t.Fill.ForeColor.RGB = RGB(255, 0, 0)
+                    If sha.TextFrame2.TextRange.Text = tempArray(i) Then
+                        sha.Fill.ForeColor.RGB = RGB(255, 0, 0)
                     End If
                 Next i
         
       
         End If
-    Next t
-
+    Next sha
+'後の処理
+    For Each sha In ActiveSheet.Shapes
+        If sha.AutoShapeType <> msoShapeRectangle Then
+            Dim tempArraybef() As String
+                tempArraybef = Split(bef, ",")
+    
+                For i = LBound(tempArraybef) To UBound(tempArraybef)
+                    If sha.TextFrame2.TextRange.Text = tempArraybef(i) Then
+                        sha.Fill.ForeColor.RGB = RGB(255, 0, 255)
+                    End If
+                Next i
+        
+      
+        End If
+    Next sha
 End Sub
+
 
 
 
@@ -715,6 +767,7 @@ document.addEventListener("DOMContentLoaded", function() {
   
 </body>
 </html>
+
 
 
 
