@@ -69,13 +69,398 @@ foreach ($files as $file) {
 
 echo "</table>";
 
+-----html
 
+		<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sweet Business</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: 'Kosugi Maru', sans-serif;
+    background: #fff6fb;
+    color: #5b4b5f;
+}
+
+/* ヘッダー */
+header {
+    background: linear-gradient(90deg, #f8c8dc, #e0c3fc);
+    color: white;
+    padding: 18px 30px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+}
+
+/* レイアウト */
+.wrapper {
+    display: flex;
+}
+
+/* サイドバー */
+.sidebar {
+    width: 220px;
+    background: #ffe4f2;
+    min-height: calc(100vh - 60px);
+    padding-top: 20px;
+}
+
+.sidebar a {
+    display: block;
+    padding: 12px 20px;
+    text-decoration: none;
+    color: #8a5a83;
+    transition: 0.3s;
+    border-radius: 20px;
+    margin: 5px 10px;
+}
+
+.sidebar a:hover {
+    background: #f8c8dc;
+    color: white;
+}
+
+/* メイン */
+.main {
+    flex: 1;
+    padding: 30px;
+}
+
+/* カード */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(255, 182, 193, 0.2);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card h3 {
+    margin: 0 0 10px;
+    font-size: 16px;
+    color: #c06c9b;
+}
+
+.card p {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* テーブル */
+.table-box {
+    margin-top: 40px;
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(255, 182, 193, 0.2);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #f0d6e4;
+}
+
+th {
+    color: #c06c9b;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div>🌸 すいーと業務システム</div>
+    <div>山下さん 💕</div>
+</header>
+
+<div class="wrapper">
+
+    <div class="sidebar">
+        <a href="#">🏠 ダッシュボード</a>
+        <a href="#">💰 売上</a>
+        <a href="#">🧾 請求</a>
+        <a href="#">🏦 入金</a>
+        <a href="#">📁 マスタ</a>
+        <a href="#">⚙ 設定</a>
+    </div>
+
+    <div class="main">
+        <h2>今日のまとめ ✨</h2>
+
+        <div class="cards">
+            <div class="card">
+                <h3>本日売上</h3>
+                <p>¥125,000</p>
+            </div>
+
+            <div class="card">
+                <h3>未請求</h3>
+                <p>12件</p>
+            </div>
+
+            <div class="card">
+                <h3>未入金</h3>
+                <p>5件</p>
+            </div>
+
+            <div class="card">
+                <h3>今月売上</h3>
+                <p>¥2,450,000</p>
+            </div>
+        </div>
+
+        <div class="table-box">
+            <h3>最近の取引 💗</h3>
+            <table>
+                <tr>
+                    <th>日付</th>
+                    <th>取引先</th>
+                    <th>金額</th>
+                    <th>状態</th>
+                </tr>
+                <tr>
+                    <td>2026-03-04</td>
+                    <td>株式会社ABC</td>
+                    <td>¥85,000</td>
+                    <td>請求済</td>
+                </tr>
+                <tr>
+                    <td>2026-03-03</td>
+                    <td>山田商事</td>
+                    <td>¥40,000</td>
+                    <td>未請求</td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sweet Business</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: 'Kosugi Maru', sans-serif;
+    background: #fff6fb;
+    color: #5b4b5f;
+}
+
+/* ヘッダー */
+header {
+    background: linear-gradient(90deg, #f8c8dc, #e0c3fc);
+    color: white;
+    padding: 18px 30px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+}
+
+/* レイアウト */
+.wrapper {
+    display: flex;
+}
+
+/* サイドバー */
+.sidebar {
+    width: 220px;
+    background: #ffe4f2;
+    min-height: calc(100vh - 60px);
+    padding-top: 20px;
+}
+
+.sidebar a {
+    display: block;
+    padding: 12px 20px;
+    text-decoration: none;
+    color: #8a5a83;
+    transition: 0.3s;
+    border-radius: 20px;
+    margin: 5px 10px;
+}
+
+.sidebar a:hover {
+    background: #f8c8dc;
+    color: white;
+}
+
+/* メイン */
+.main {
+    flex: 1;
+    padding: 30px;
+}
+
+/* カード */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(255, 182, 193, 0.2);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card h3 {
+    margin: 0 0 10px;
+    font-size: 16px;
+    color: #c06c9b;
+}
+
+.card p {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* テーブル */
+.table-box {
+    margin-top: 40px;
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(255, 182, 193, 0.2);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #f0d6e4;
+}
+
+th {
+    color: #c06c9b;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div>🌸 すいーと業務システム</div>
+    <div>山下さん 💕</div>
+</header>
+
+<div class="wrapper">
+
+    <div class="sidebar">
+        <a href="#">🏠 ダッシュボード</a>
+        <a href="#">💰 売上</a>
+        <a href="#">🧾 請求</a>
+        <a href="#">🏦 入金</a>
+        <a href="#">📁 マスタ</a>
+        <a href="#">⚙ 設定</a>
+    </div>
+
+    <div class="main">
+        <h2>今日のまとめ ✨</h2>
+
+        <div class="cards">
+            <div class="card">
+                <h3>本日売上</h3>
+                <p>¥125,000</p>
+            </div>
+
+            <div class="card">
+                <h3>未請求</h3>
+                <p>12件</p>
+            </div>
+
+            <div class="card">
+                <h3>未入金</h3>
+                <p>5件</p>
+            </div>
+
+            <div class="card">
+                <h3>今月売上</h3>
+                <p>¥2,450,000</p>
+            </div>
+        </div>
+
+        <div class="table-box">
+            <h3>最近の取引 💗</h3>
+            <table>
+                <tr>
+                    <th>日付</th>
+                    <th>取引先</th>
+                    <th>金額</th>
+                    <th>状態</th>
+                </tr>
+                <tr>
+                    <td>2026-03-04</td>
+                    <td>株式会社ABC</td>
+                    <td>¥85,000</td>
+                    <td>請求済</td>
+                </tr>
+                <tr>
+                    <td>2026-03-03</td>
+                    <td>山田商事</td>
+                    <td>¥40,000</td>
+                    <td>未請求</td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
 		
   </code>
 </pre>
   
 </body>
 </html>
+
 
 
 
